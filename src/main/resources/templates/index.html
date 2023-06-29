@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Index Page</title>
+	<style type="text/css">
+		@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700;900&display=swap');
+
+		* {
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+
+		}
+
+		body {
+			background-image: url(https://images.theconversation.com/files/96073/original/image-20150924-17103-54sgxy.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop);
+			font-family: 'Roboto', sans-serif;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: cover;
+			position: relative;
+		}
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+
+		}
+
+		.product-container {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			padding: 0.5em;
+		}
+
+		.product-container>* {
+			flex-basis: 50;
+		}
+
+		.product {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 20em;
+			margin: 1em;
+			background: rgba(255, 255, 255, 0.4);
+			padding: 1em;
+			border-radius: 12px;
+			backdrop-filter: blur(10px);
+		}
+
+		.product-img {
+			width: 40%;
+			border-radius: 12px;
+			margin: 0.5em;
+		}
+
+		h1 {
+			background-color: #fff;
+			text-align: center;
+			color: #b90b0be3;
+			padding: 0.5em;
+		}
+
+		h2 {
+			font-size: 1.4rem;
+			text-align: center;
+			padding: 0.3em;
+			margin: 0.1em;
+
+		}
+
+		.reviewHead {
+			color: rgb(105, 0, 0);
+		}
+
+		h3 {
+			font-size: 1.3rem;
+			text-align: center;
+			padding: 0.3em;
+			margin: 0.1em;
+		}
+
+		p {
+			font-size: 0.9rem;
+			padding: 1em;
+		}
+
+		.icon {
+			width: 2em;
+		}
+
+		.rating-selector {
+			display: flex;
+			justify-content: flex start;
+			align-items: center;
+			padding: 1em;
+		}
+
+		.empty-star {
+			color: #fff;
+			font-size: 2.2rem;
+			text-shadow: 1px 1px 2px black;
+			padding: 0 0.2em;
+			cursor: pointer;
+		}
+
+		input[type="checkbox"] {
+			display: none;
+		}
+
+		#star-btn-one:checked+label {
+			color: #fc0;
+		}
+
+		#star-btn-two:checked+label {
+			color: #fc0;
+		}
+
+		#star-btn-three:checked+label {
+			color: #fc0;
+		}
+
+		#star-btn-four:checked+label {
+			color: #fc0;
+		}
+
+		#star-btn-five:checked+label {
+			color: #fc0;
+		}
+
+		textarea {
+			max-width: 90%;
+			padding: 1em;
+			border: 2px solid #fff;
+			border-radius: 12px;
+		}
+
+		.review-input {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			width: 90%;
+			background: rgba(255, 255, 255, 0.4);
+			padding: 1.5em;
+			margin: 2em 0;
+			border-radius: 12px;
+			backdrop-filter: blur(10px);
+		}
+
+		.submit-btn {
+			background: #e11537;
+			color: #fff;
+			width: 8em;
+			padding: 0.6em;
+			margin-top: 0.5em;
+			border: 2px solid #fff;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.submit-btn:hover {
+			box-shadow: 2px 2px 12px #222;
+		}
+
+		.reviews {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.reviews>* {
+			flex-basis: 20%;
+		}
+
+		.review {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			background: rgba(255, 255, 255, 0.4);
+			padding: 1em;
+			margin: 1.5em;
+			border-radius: 12px;
+			backdrop-filter: blur(10px);
+		}
+
+		.review>* {
+			flex-basis: 100%;
+		}
+
+		.review-hero {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.review-content {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 100px;
+		}
+
+		.avatar {
+			width: 8em;
+			height: 8em;
+			object-fit: cover;
+			border-radius: 50%;
+			box-shadow: 2px 2px 8px #222;
+			margin: 1em;
+		}
+
+		.star-rating {
+			color: #fc0;
+			font-size: 2rem;
+			text-shadow: 1px 1px 2px #222;
+		}
+
+		.rating-label {
+			font-weight: bold;
+			font-size: 1.2em;
+		}
+
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: #000000;
+			width: 100%;
+		}
+
+		li a {
+			float: right;
+		}
+
+		li a {
+			align-items: center;
+			text-decoration: none;
+			color: #ffffff;
+			text-transform: uppercase;
+			font-size: 20px;
+			font-weight: 600;
+			padding: 14px 16px;
+		}
+
+		.logo {
+			float: left;
+		}
+
+		.logo {
+			font-size: larger;
+			display: block;
+			color: white;
+			padding: 14px 16px;
+			text-decoration: none;
+		}
+
+		.login a {
+			background-color: #c50a0a;
+			cursor: pointer;
+			font-size: 20px;
+			font-weight: 600;
+			color: #ffffff;
+			transition: all .5s;
+		}
+
+		li a:hover {
+			background-color: rgb(105, 0, 0);
+			cursor: pointer;
+			font-size: 20px;
+			font-weight: 600;
+			color: #ffd089;
+			transition: all .5s;
+		}
+
+		.login a:hover {
+			background-color: #000000;
+			cursor: pointer;
+			font-size: 20px;
+			font-weight: 600;
+			color: #F81818;
+			transition: all .5s;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<div class="navbar">
+			<nav>
+				<ul>
+					<li class="login"><a th:href="@{/login}">Login</a></li>
+					<li><a th:href="@{#}">About us</a></li>
+					<li><a th:href="@{#}">Home</a></li>
+					<li class="logo">logo</li>
+				</ul>
+			</nav>
+		</div>
+		<h1>WELCOME TO BRIGHT COLLEGE PORTAL</h1>
+	</header>
+	<div class="container">
+
+		
+
+		<div class="product-container">
+			<div class="product">
+
+				<h2>Academics</h2>
+				<p>"Teaching quality is good and teachers are too supportive and we also help students in extra
+					curricular
+					activities . we have a great support with students . There so many societies which also help
+					students to
+					learn in different field." </p>
+				<img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+			</div>
+
+			<div class="product">
+
+				<h2>College Infrastructure</h2>
+				<p>"In terms of infrastructure of our college it is top class. Since our college construction has
+					finished recently so our infrastructure from inside is very professional and high class. Lecture
+					halls are very large and all halls and classrooms are air conditioned. Even our corridors are very
+					cold during Summers. Also high-speed Wi-Fi is available for students use. Canteen, medical
+					facilities and sports room are average and do have adequate equipments required. Hostels even have
+					Wi-Fi and AC as well" </p>
+				<img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+			</div>
+
+			<div class="product">
+
+				<h2>Placements</h2>
+				<p>"Our college has a highly active placement unit. The placement cell maintains the placement reports
+					each year. Our college has a user-friendly website. Students can get all details regarding
+					placements on the website. Around 48 undergraduate students got placed in our college." </p>
+				<img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+			</div>
+		</div>
+
+		<div class="review-input">
+			<h3>Share Your Review</h3>
+			<textarea id="review-field" name="review-field" rows="5" cols="100"
+				placeholder="share your experience of this portal !">
+	</textarea>
+			<div class="rating-selector">
+				<h4>Rating: </h4>
+				<input type="checkbox" id="star-btn-one" onclick="enableStar()"></input>
+				<label for="star-btn-one" class="empty-star">&starf;</label>
+
+				<input type="checkbox" disabled="disabled" onclick="enableStar()" id="star-btn-two"></input>
+				<label for="star-btn-two" class="empty-star">&starf;</label>
+
+				<input type="checkbox" disabled="disabled" id="star-btn-three" onclick="enableStar()"></input>
+				<label for="star-btn-three" class="empty-star">&starf;</label>
+
+				<input type="checkbox" disabled="disabled" id="star-btn-four" onclick="enableStar()"></input>
+				<label for="star-btn-four" class="empty-star">&starf;</label>
+
+				<input type="checkbox" disabled="disabled" id="star-btn-five" onclick="enableStar()"></input>
+				<label for="star-btn-five" class="empty-star">&starf;</label>
+
+			</div>
+
+			<div class="review-submit">
+				<button class="submit-btn">submit</button>
+			</div>
+
+		</div>
+
+		<h2 class="reviewHead">Reviews</h2>
+
+		<div class="reviews">
+
+			<div class="review">
+				<div class="review-hero">
+					<img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+						class="avatar" alt="traveller">
+					<p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;&starf;&starf;</span>
+					</p>
+				</div>
+				<div class="review-content">
+					<h3>Perfect!</h3>
+					<p>"Really professional service with friendly and knowledgeable staff."</p>
+				</div>
+			</div>
+
+			<div class="review">
+				<div class="review-hero">
+					<img src="https://images.unsplash.com/photo-1654110455429-cf322b40a906?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80"
+						class="avatar" alt="traveller">
+					<p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
+				</div>
+				<div class="review-content">
+					<h3>Fantastic</h3>
+					<p>"Really professional service with friendly and knowledgeable staff."</p>
+				</div>
+			</div>
+
+
+			<div class="review">
+				<div class="review-hero">
+					<img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+						class="avatar" alt="traveller">
+					<p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
+				</div>
+				<div class="review-content">
+					<h3>OK</h3>
+					<p>"Really professional service with friendly and knowledgeable staff."</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			let starOne = document.getElementById('star-btn-one').disabled;
+
+			let starTwo = document.getElementById('star-btn-two').disabled;
+
+			let starThree = document.getElementById('star-btn-three').disabled;
+
+			let starFour = document.getElementById('star-btn-four').disabled;
+
+			let starFive = document.getElementById('star-btn-five').disabled;
+
+			const enableStar = () => {
+
+				if (starOne === false) {
+					starOne = document.getElementById('star-btn-one').disabled = true;
+					starTwo = document.getElementById('star-btn-two').disabled = false;
+				}
+
+				else if (starOne === true && starTwo === false) {
+					starTwo = document.getElementById('star-btn-two').disabled = true;
+					starThree = document.getElementById('star-btn-three').disabled = false;
+				}
+				else if (starTwo === true && starThree === false) {
+					starThree = document.getElementById('star-btn-three').disabled = true;
+					starFour = document.getElementById('star-btn-four').disabled
+						= false;
+				}
+				else if (starThree === true && starFour === false) {
+					starFour = document.getElementById('star-btn-four').disabled = true;
+					starFive = document.getElementById('star-btn-five').disabled = false;
+				}
+
+				else if (starFour === true) {
+					starFour = document.getElementById('star-btn-four');
+					starFour.removeAttribute("disabled");
+				}
+
+				else if (starThree === true && starTwo == true) {
+					starThree = document.getElementById('star-btn-three');
+					starThree.removeAttribute("disabled");
+				}
+
+				else if (starTwo === true && starOne == true) {
+					starTwo = document.getElementById('star-btn-two');
+					starTwo.removeAttribute("disabled");
+				}
+
+				else if (starOne == true) {
+					starOne = document.getElementById('star-btn-one');
+					starOne.removeAttribute("disabled");
+				}
+			}
+		</script>
+</body>
+
+</html>
