@@ -9,5 +9,4 @@ public class BrightCollegePortalApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BrightCollegePortalApplication.class, args);
 	}
-
 }

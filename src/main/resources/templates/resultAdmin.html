@@ -14,7 +14,6 @@
 			box-sizing: border-box;
 			-webkit-overflow-scrolling: touch;
 		}
-
 		html {
 			position: absolute;
 			top: 0;
@@ -168,12 +167,31 @@
     	<a th:href="@{/subjectDetails}">Subject Details</a>
 	</div>
 
+
+
 	<div style="height: 100%; box-sizing: border-box">
 		<div id="myGrid" style="height: 100%" class="ag-theme-alpine">
 		</div>
 	</div>
+	
+	<?php
+$data = '';
+$i = 0;
 
+$con = new mysqli('mysql', 'root', 'root', 'Bright_College_Portal');
+$sql = "select * from user where roll='student'";
+$sql_query = mysqli_query($con, $sql);
 
+while ($row = mysqli_fetch_array($sql_query)) {
+  $data .= '
+    data['.$i.'] = {
+    title: "'.$row['title'].'",
+    newcolumn: "'.$row['newcolumn'].'"
+    };
+  ';
+$i++;
+}
+?>
 
 	<script>
 		function openNav() {
@@ -184,6 +202,92 @@
 		function closeNav() {
 			document.getElementById("mySidenav").style.width = "0";
 		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
+	</script>
+	<script>
+		const gridOptions = {
+			// define grid columns
+			columnDefs: [
+				// using number column type
+				{ field: 'Roll Number', type: 'numberColumn' },
+
+				// using default ColDef
+				{ field: 'First Name' },
+				{ field: 'Last Name' },
+
+				{ field: 'Department' },
+
+				{ field: 'Semester', type: 'numberColumn' },
+				{ field: 'Mark', type: 'numberColumn' },
+
+			],
+
+			// default ColDef, gets applied to every column
+			defaultColDef: {
+				// set the default column width
+				width: 150,
+				// make every column editable
+				editable: true,
+				// make every column use 'text' filter by default
+				filter: 'agTextColumnFilter',
+				// enable floating filters by default
+				floatingFilter: true,
+				// make columns resizable
+				resizable: true,
+				// disable cell data types
+				cellDataType: false,
+			},
+
+			// default ColGroupDef, get applied to every column group
+			defaultColGroupDef: {
+				marryChildren: true,
+			},
+
+			// define specific column types
+			columnTypes: {
+				numberColumn: { width: 130, filter: 'agNumberColumnFilter' },
+				nonEditableColumn: { editable: false },
+				dateColumn: {
+					// specify we want to use the date filter
+					filter: 'agDateColumnFilter',
+
+					// add extra parameters for the date filter
+					filterParams: {
+						// provide comparator function
+						comparator: (filterLocalDateAtMidnight, cellValue) => {
+							// In the example application, dates are stored as dd/mm/yyyy
+							// We create a Date object for comparison against the filter date
+							const dateParts = cellValue.split('/');
+							const day = Number(dateParts[0]);
+							const month = Number(dateParts[1]) - 1;
+							const year = Number(dateParts[2]);
+							const cellDate = new Date(year, month, day);
+
+							// Now that both parameters are Date objects, we can compare
+							if (cellDate < filterLocalDateAtMidnight) {
+								return -1;
+							} else if (cellDate > filterLocalDateAtMidnight) {
+								return 1;
+							} else {
+								return 0;
+							}
+						},
+					},
+				},
+			},
+			rowData: null,
+		};
+
+		// setup the grid after the page has finished loading
+		document.addEventListener('DOMContentLoaded', () => {
+			const gridDiv = document.querySelector('#myGrid');
+			new agGrid.Grid(gridDiv, gridOptions);
+
+			fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
+				.then((response) => response.json())
+				.then((data) => gridOptions.api.setRowData(data));
+		});
 	</script>
 </body>
 

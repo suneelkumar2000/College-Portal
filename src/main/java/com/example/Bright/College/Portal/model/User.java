@@ -12,10 +12,11 @@ public class User {
 	private Date DOB;
 	private String gender;
 	private String roll;
+	private String status;
 	
 	public User() {}
 	
-	public User(int userId,String firstName,String lastName,String email,String password,Long phone,Date DOB,String gender,String roll) {
+	public User(int userId,String firstName,String lastName,String email,String password,Long phone,Date DOB,String gender,String roll,String status) {
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -25,6 +26,7 @@ public class User {
 		this.DOB = DOB;
 		this.gender = gender;
 		this.roll = roll;
+		this.setStatus(status);
 	}
 	
 	public int getUserId() {
@@ -91,13 +93,20 @@ public class User {
 	public void setRoll(String roll) {
 		this.roll = roll;
 	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", password=" + password + ", phone=" + phone + ", DOB=" + DOB + ", gender=" + gender + ", roll="
-				+ roll + "]";
+				+ roll +", status=" + status + "]";
 	}
-	
 	
 }

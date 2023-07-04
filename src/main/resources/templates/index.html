@@ -2,478 +2,766 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Index Page</title>
-	<style type="text/css">
-		@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700;900&display=swap');
+  <meta charset="ISO-8859-1">
+  <title>Index Page</title>
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700;900&display=swap');
 
-		* {
-			padding: 0;
-			margin: 0;
-			box-sizing: border-box;
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
 
-		}
+    body {
+      background-image: url(https://images.theconversation.com/files/96073/original/image-20150924-17103-54sgxy.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop);
+      font-family: 'Roboto', sans-serif;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    }
 
-		body {
-			background-image: url(https://images.theconversation.com/files/96073/original/image-20150924-17103-54sgxy.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop);
-			font-family: 'Roboto', sans-serif;
-			background-repeat: no-repeat;
-			background-position: center;
-			background-size: cover;
-			position: relative;
-		}
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
-		.container {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 0.5em;
+    }
+
+    .product-container>* {
+      flex-basis: 50;
+    }
+
+    .product {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 20em;
+      margin: 1em;
+      background: rgba(255, 255, 255, 0.4);
+      padding: 1em;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .product-img {
+      width: 40%;
+      border-radius: 12px;
+      margin: 0.5em;
+    }
+
+    h1 {
+      background-color: rgb(246, 251, 253);
+      text-align: center;
+      color: #2379b3;
+      padding: 0.5em;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      text-align: center;
+      padding: 0.3em;
+      margin: 0.1em;
+
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      text-align: center;
+      padding: 0.3em;
+      margin: 0.1em;
+    }
+
+    p {
+      font-size: 0.9rem;
+      padding: 1em;
+    }
+
+    .icon {
+      width: 2em;
+    }
 
 
-		}
+    .reviewHead {
+      color: rgb(207, 26, 26);
+      font-size: 1.6rem;
+    }
 
-		.product-container {
-			display: flex;
-			flex-wrap: wrap;
-			align-items: center;
-			padding: 0.5em;
-		}
+    /*  rating */
+    .rating-selector {
+      display: flex;
+      justify-content: flex start;
+      align-items: center;
+      padding: 1em;
+    }
 
-		.product-container>* {
-			flex-basis: 50;
-		}
+    textarea {
+      max-width: 90%;
+      padding: 1em;
+      border: 2px solid #fff;
+      border-radius: 12px;
+    }
 
-		.product {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			width: 20em;
-			margin: 1em;
-			background: rgba(255, 255, 255, 0.4);
-			padding: 1em;
-			border-radius: 12px;
-			backdrop-filter: blur(10px);
-		}
+    .review-input {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 90%;
+      background: rgba(255, 255, 255, 0.4);
+      padding: 1.5em;
+      margin: 2em 0;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
 
-		.product-img {
-			width: 40%;
-			border-radius: 12px;
-			margin: 0.5em;
-		}
+    .star-rating {
+      display: flex;
+    }
 
-		h1 {
-			background-color: #fff;
-			text-align: center;
-			color: #b90b0be3;
-			padding: 0.5em;
-		}
+    .star {
+      width: 50px;
+      height: 50px;
+      position: relative;
+      cursor: pointer;
+      background-color: rgb(100, 98, 98);
+      transition: transform 0.3s;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
 
-		h2 {
-			font-size: 1.4rem;
-			text-align: center;
-			padding: 0.3em;
-			margin: 0.1em;
+    .star:hover {
+      transform: scale(1.2, 1.2)
+    }
 
-		}
+    .selected {
+      background-color: gold;
+    }
 
-		.reviewHead {
-			color: rgb(105, 0, 0);
-		}
+    .reviewed-star {
+      width: 35px;
+      height: 35px;
+      cursor: default;
+    }
 
-		h3 {
-			font-size: 1.3rem;
-			text-align: center;
-			padding: 0.3em;
-			margin: 0.1em;
-		}
+    .reviewed-star:hover {
+      transform: none;
+    }
 
-		p {
-			font-size: 0.9rem;
-			padding: 1em;
-		}
+    .submit-button {
+      background: #e11537;
+      color: #fff;
+      width: 8em;
+      padding: 0.6em;
+      margin-top: 0.5em;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-		.icon {
-			width: 2em;
-		}
+    .submit-button:hover {
+      box-shadow: 2px 2px 12px #222;
+    }
 
-		.rating-selector {
-			display: flex;
-			justify-content: flex start;
-			align-items: center;
-			padding: 1em;
-		}
+    .reviews {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-		.empty-star {
-			color: #fff;
-			font-size: 2.2rem;
-			text-shadow: 1px 1px 2px black;
-			padding: 0 0.2em;
-			cursor: pointer;
-		}
+    .reviews>* {
+      flex-basis: 20%;
+    }
 
-		input[type="checkbox"] {
-			display: none;
-		}
+    .review {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.4);
+      padding: 1em;
+      margin: 1.5em;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
 
-		#star-btn-one:checked+label {
-			color: #fc0;
-		}
+    .review>* {
+      flex-basis: 100%;
+    }
 
-		#star-btn-two:checked+label {
-			color: #fc0;
-		}
+    .review-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
-		#star-btn-three:checked+label {
-			color: #fc0;
-		}
+    .review-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100px;
+    }
 
-		#star-btn-four:checked+label {
-			color: #fc0;
-		}
+    .avatar {
+      width: 8em;
+      height: 8em;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 2px 2px 8px #222;
+      margin: 1em;
+    }
 
-		#star-btn-five:checked+label {
-			color: #fc0;
-		}
+    .rating-label {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
 
-		textarea {
-			max-width: 90%;
-			padding: 1em;
-			border: 2px solid #fff;
-			border-radius: 12px;
-		}
+    /* rating end */
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #000000;
+      width: 100%;
+      position: static;
+    }
 
-		.review-input {
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			width: 90%;
-			background: rgba(255, 255, 255, 0.4);
-			padding: 1.5em;
-			margin: 2em 0;
-			border-radius: 12px;
-			backdrop-filter: blur(10px);
-		}
+    li a {
+      float: right;
+    }
 
-		.submit-btn {
-			background: #e11537;
-			color: #fff;
-			width: 8em;
-			padding: 0.6em;
-			margin-top: 0.5em;
-			border: 2px solid #fff;
-			border-radius: 8px;
-			cursor: pointer;
-			transition: all 0.3s ease;
-		}
+    li a {
+      align-items: center;
+      text-decoration: none;
+      color: #ffffff;
+      text-transform: uppercase;
+      font-size: 20px;
+      font-weight: 600;
+      padding: 14px 16px;
+    }
 
-		.submit-btn:hover {
-			box-shadow: 2px 2px 12px #222;
-		}
+    .logo {
+      float: left;
+    }
 
-		.reviews {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			align-items: center;
-		}
+    .logo {
+      font-size: larger;
+      display: block;
+      color: white;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
 
-		.reviews>* {
-			flex-basis: 20%;
-		}
+    .login a {
+      background-color: #c50a0a;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
+      transition: all .5s;
+    }
 
-		.review {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: center;
-			align-items: center;
-			background: rgba(255, 255, 255, 0.4);
-			padding: 1em;
-			margin: 1.5em;
-			border-radius: 12px;
-			backdrop-filter: blur(10px);
-		}
+    li a:hover {
+      background-color: rgb(105, 0, 0);
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffd089;
+      transition: all .5s;
+    }
 
-		.review>* {
-			flex-basis: 100%;
-		}
+    .login a:hover {
+      background-color: #000000;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 600;
+      color: #F81818;
+      transition: all .5s;
+    }
 
-		.review-hero {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		}
+    /* login popup */
 
-		.review-content {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			width: 100px;
-		}
+    .popup .content {
+      width: 400px;
+      z-index: 2;
+      text-align: center;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -150%) scale(0);
+      padding: 20px;
+      border-radius: 20px;
+      background: #ffffff;
+      position: fixed;
+      box-shadow: 0 5px 30px rgba(0, 0, 0, .30);
+      z-index: 1;
+    }
 
-		.avatar {
-			width: 8em;
-			height: 8em;
-			object-fit: cover;
-			border-radius: 50%;
-			box-shadow: 2px 2px 8px #222;
-			margin: 1em;
-		}
+    .content h1 {
+      background-color: #000000;
+      color: #2691d9;
+      text-align: center;
+      padding: 0 0 20px 0;
+      border-bottom: 1px solid silver;
+    }
 
-		.star-rating {
-			color: #fc0;
-			font-size: 2rem;
-			text-shadow: 1px 1px 2px #222;
-		}
+    .content form {
+      padding: 0 40px;
+      box-sizing: border-box;
+    }
 
-		.rating-label {
-			font-weight: bold;
-			font-size: 1.2em;
-		}
+    form .txt_field {
+      position: relative;
+      border-bottom: 2px solid #adadad;
+      margin: 30px 0;
+    }
 
-		ul {
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-			background-color: #000000;
-			width: 100%;
-		}
+    .txt_field input {
+      color: white;
+      width: 100%;
+      padding: 0 5px;
+      height: 40px;
+      font-size: 16px;
+      border: none;
+      background: none;
+      outline: none;
+    }
 
-		li a {
-			float: right;
-		}
+    .txt_field label {
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      color: #adadad;
+      transform: translateY(-50%);
+      font-size: 16px;
+      pointer-events: none;
+      transition: .5s;
+    }
 
-		li a {
-			align-items: center;
-			text-decoration: none;
-			color: #ffffff;
-			text-transform: uppercase;
-			font-size: 20px;
-			font-weight: 600;
-			padding: 14px 16px;
-		}
+    .txt_field span::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #2691d9;
+      transition: .5s;
+    }
 
-		.logo {
-			float: left;
-		}
+    .txt_field input:focus~label,
+    .txt_field input:valid~label {
+      top: -5px;
+      color: #2691d9;
+    }
 
-		.logo {
-			font-size: larger;
-			display: block;
-			color: white;
-			padding: 14px 16px;
-			text-decoration: none;
-		}
+    .txt_field input:focus~span::before,
+    .txt_field input:valid~span::before {
+      width: 100%;
+    }
 
-		.login a {
-			background-color: #c50a0a;
-			cursor: pointer;
-			font-size: 20px;
-			font-weight: 600;
-			color: #ffffff;
-			transition: all .5s;
-		}
+    .pass {
+      margin: -5px 0 20px 5px;
+      color: #b4b4b4;
+      cursor: pointer;
+    }
 
-		li a:hover {
-			background-color: rgb(105, 0, 0);
-			cursor: pointer;
-			font-size: 20px;
-			font-weight: 600;
-			color: #ffd089;
-			transition: all .5s;
-		}
+    .pass:hover {
+      text-decoration: underline;
+    }
 
-		.login a:hover {
-			background-color: #000000;
-			cursor: pointer;
-			font-size: 20px;
-			font-weight: 600;
-			color: #F81818;
-			transition: all .5s;
-		}
-	</style>
+    input[type="submit"] {
+      width: 100%;
+      height: 50px;
+      border: 1px solid;
+      background: #2691d9;
+      border-radius: 25px;
+      font-size: 18px;
+      color: #e9f4fb;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+    }
+
+    input[type="submit"]:hover {
+      border-color: #2691d9;
+      transition: .5s;
+    }
+
+    .signup_link {
+      margin: 30px 0;
+      text-align: center;
+      font-size: 16px;
+      color: #b4b4b4;
+    }
+
+    .signup_link a {
+      color: #2691d9;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .signup_link a:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Popup active */
+
+    .popup.active .content {
+      transition: all 300ms ease-in-out;
+      transform: translate(-50%, -50%) scale(1);
+      background-color: #000000;
+    }
+
+    .popup .close-btn {
+      text-align: center;
+      color: white;
+      font-size: 20px;
+      border-radius: 50%;
+      background: #302f2f;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 30px;
+      padding: 2px 5px 7px 5px;
+      height: 30px;
+      cursor: pointer;
+      box-shadow: 0 5px 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .popup .close-btn:hover {
+      background: #c50a0a;
+    }
+
+    .container#blur.active {
+      filter: blur(20px);
+      pointer-events: none;
+      user-select: none;
+    }
+    
+    .error {
+		color: rgb(242, 18, 18);
+		font-size: 16px;
+		margin-top: 5px;
+	}
+  </style>
 </head>
 
 <body>
-	<header>
-		<div class="navbar">
-			<nav>
-				<ul>
-					<li class="login"><a th:href="@{/login}">Login</a></li>
-					<li><a th:href="@{#}">About us</a></li>
-					<li><a th:href="@{#}">Home</a></li>
-					<li class="logo">logo</li>
-				</ul>
-			</nav>
-		</div>
-		<h1>WELCOME TO BRIGHT COLLEGE PORTAL</h1>
-	</header>
-	<div class="container">
+  <div class="popup" id="popup-1">
+    <div class="content">
+      <div class="close-btn" onclick="togglePopup()">x
+      </div>
+      <h1>Login</h1>
+      <form action="login" th:action="@{/login-submit}" th:object="${loginForm}" method="GET">
+        <div class="txt_field">
+          <input type="text" id="email" name="email" required> <span></span>
+          <label>Email</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" id="password" name="password" required>
+          <span></span> <label>Password</label>
+        </div>
+        <div class="pass"><a onclick="togglePopup1()">Forgot Password?</a></div>
+        <input type="submit" value="Login">
+        <div class="signup_link">
+          Not a member? <a th:href="@{/register}">Signup</a>
+        </div>
+      </form>
+    </div>
+  </div>
 
-		
+  <div class="popup" id="popup-2">
+    <div class="content">
+      <div class="close-btn" onclick="togglePopup1()">x
+      </div>
+      <h1>Forgot Password</h1>
+      <form action="forgotPassword" th:action="@{/forgotPassword}" th:object="${forgotPasswordForm}" method="GET">
+        <div class="txt_field">
+          <input type="email" id="email" name="email" required> <span></span>
+          <label>Email</label>
+          <div class="error"></div>
+        </div>
+        <div class="txt_field">
+          <input type="tel" pattern='^\+?\d{10,12}' id="phone" name="phone" required>
+          <span></span> <label>Phone Number</label>
+          <div class="error"></div>
+        </div>
+        <div class="txt_field">
+          <input type="password" id="password" name="password" required>
+          <span></span> <label>New Password</label>
+          <div class="error"></div>
+        </div>
+        <div class="txt_field">
+          <input type="password" id="cpassword" name="cpassword" required>
+          <span></span> <label>Confirm Password</label>
+          <div class="error"></div>
+        </div>
+        <input type="submit" onclick="validateInputs()" value="Next">
+      </form>
+    </div>
+  </div>
 
-		<div class="product-container">
-			<div class="product">
+  <header>
+    <div class="navbar">
+      <nav>
+        <ul>
+          <li class="login"><a onclick="togglePopup()">Login</a></li>
+          <li><a th:href="@{#}">About us</a></li>
+          <li><a th:href="@{#}">Home</a></li>
+          <li class="logo">logo</li>
+        </ul>
+      </nav>
+    </div>
+    <h1>WELCOME TO BRIGHT COLLEGE PORTAL</h1>
+  </header>
 
-				<h2>Academics</h2>
-				<p>"Teaching quality is good and teachers are too supportive and we also help students in extra
-					curricular
-					activities . we have a great support with students . There so many societies which also help
-					students to
-					learn in different field." </p>
-				<img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
-			</div>
+  <div class="container" id="blur">
+    <div class="product-container">
+      <div class="product">
 
-			<div class="product">
+        <h2>Academics</h2>
+        <p>"Teaching quality is good and teachers are too supportive and we also help students in extra
+          curricular
+          activities . we have a great support with students . There so many societies which also help
+          students to
+          learn in different field." </p>
+        <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+      </div>
 
-				<h2>College Infrastructure</h2>
-				<p>"In terms of infrastructure of our college it is top class. Since our college construction has
-					finished recently so our infrastructure from inside is very professional and high class. Lecture
-					halls are very large and all halls and classrooms are air conditioned. Even our corridors are very
-					cold during Summers. Also high-speed Wi-Fi is available for students use. Canteen, medical
-					facilities and sports room are average and do have adequate equipments required. Hostels even have
-					Wi-Fi and AC as well" </p>
-				<img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
-			</div>
+      <div class="product">
 
-			<div class="product">
+        <h2>College Infrastructure</h2>
+        <p>"In terms of infrastructure of our college it is top class. Since our college construction has
+          finished recently so our infrastructure from inside is very professional and high class. Lecture
+          halls are very large and all halls and classrooms are air conditioned. Even our corridors are very
+          cold during Summers. Also high-speed Wi-Fi is available for students use. Canteen, medical
+          facilities and sports room are average and do have adequate equipments required. Hostels even have
+          Wi-Fi and AC as well" </p>
+        <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+      </div>
 
-				<h2>Placements</h2>
-				<p>"Our college has a highly active placement unit. The placement cell maintains the placement reports
-					each year. Our college has a user-friendly website. Students can get all details regarding
-					placements on the website. Around 48 undergraduate students got placed in our college." </p>
-				<img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
-			</div>
-		</div>
+      <div class="product">
 
-		<div class="review-input">
-			<h3>Share Your Review</h3>
-			<textarea id="review-field" name="review-field" rows="5" cols="100"
-				placeholder="share your experience of this portal !">
-	</textarea>
-			<div class="rating-selector">
-				<h4>Rating: </h4>
-				<input type="checkbox" id="star-btn-one" onclick="enableStar()"></input>
-				<label for="star-btn-one" class="empty-star">&starf;</label>
+        <h2>Placements</h2>
+        <p>"Our college has a highly active placement unit. The placement cell maintains the placement reports
+          each year. Our college has a user-friendly website. Students can get all details regarding
+          placements on the website. Around 48 undergraduate students got placed in our college." </p>
+        <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+      </div>
+    </div>
 
-				<input type="checkbox" disabled="disabled" onclick="enableStar()" id="star-btn-two"></input>
-				<label for="star-btn-two" class="empty-star">&starf;</label>
+    <div class="review-input">
+      <h3>Share Your Review</h3>
+      <p class="rating-text"><b>Rating: </b></p>
+      <div class="star-rating">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+      </div>
+      <br>
+      <textarea id="review-title" rows="1" cols="80" maxlength="50"
+        placeholder="what's the gist of your review?"></textarea>
+      <br>
+      <textarea id="review-field" rows="5" cols="80" placeholder="tell me what you think about this website"></textarea>
+      <div class="review-submit">
+        <button class="submit-button" id="submit-button">Submit</button>
+      </div>
+    </div>
 
-				<input type="checkbox" disabled="disabled" id="star-btn-three" onclick="enableStar()"></input>
-				<label for="star-btn-three" class="empty-star">&starf;</label>
+    <h2 class="reviewHead">Reviews</h2>
+    <div class="reviews">
 
-				<input type="checkbox" disabled="disabled" id="star-btn-four" onclick="enableStar()"></input>
-				<label for="star-btn-four" class="empty-star">&starf;</label>
+      <div class="review">
+        <div class="review-hero">
+          <img
+            src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+            class="avatar" alt="traveller">
+          <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;&starf;&starf;</span>
+          </p>
+        </div>
+        <div class="review-content">
+          <h3>Perfect!</h3>
+          <p>"Really professional service with friendly and knowledgeable staff."</p>
+        </div>
+      </div>
 
-				<input type="checkbox" disabled="disabled" id="star-btn-five" onclick="enableStar()"></input>
-				<label for="star-btn-five" class="empty-star">&starf;</label>
-
-			</div>
-
-			<div class="review-submit">
-				<button class="submit-btn">submit</button>
-			</div>
-
-		</div>
-
-		<h2 class="reviewHead">Reviews</h2>
-
-		<div class="reviews">
-
-			<div class="review">
-				<div class="review-hero">
-					<img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
-						class="avatar" alt="traveller">
-					<p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;&starf;&starf;</span>
-					</p>
-				</div>
-				<div class="review-content">
-					<h3>Perfect!</h3>
-					<p>"Really professional service with friendly and knowledgeable staff."</p>
-				</div>
-			</div>
-
-			<div class="review">
-				<div class="review-hero">
-					<img src="https://images.unsplash.com/photo-1654110455429-cf322b40a906?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80"
-						class="avatar" alt="traveller">
-					<p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
-				</div>
-				<div class="review-content">
-					<h3>Fantastic</h3>
-					<p>"Really professional service with friendly and knowledgeable staff."</p>
-				</div>
-			</div>
+      <div class="review">
+        <div class="review-hero">
+          <img
+            src="https://images.unsplash.com/photo-1654110455429-cf322b40a906?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80"
+            class="avatar" alt="traveller">
+          <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
+        </div>
+        <div class="review-content">
+          <h3>Fantastic</h3>
+          <p>"Really professional service with friendly and knowledgeable staff."</p>
+        </div>
+      </div>
 
 
-			<div class="review">
-				<div class="review-hero">
-					<img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
-						class="avatar" alt="traveller">
-					<p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
-				</div>
-				<div class="review-content">
-					<h3>OK</h3>
-					<p>"Really professional service with friendly and knowledgeable staff."</p>
-				</div>
-			</div>
-		</div>
-		<script>
-			let starOne = document.getElementById('star-btn-one').disabled;
+      <div class="review">
+        <div class="review-hero">
+          <img
+            src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+            class="avatar" alt="traveller">
+          <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
+        </div>
+        <div class="review-content">
+          <h3>OK</h3>
+          <p>"Really professional service with friendly and knowledgeable staff."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script> /* Rating Script*/
+    reviewTitle = document.querySelector("#review-title")
+    reviewField = document.querySelector("#review-field")
+    submitButton = document.querySelector("#submit-button")
+    theReviewsContainer = document.querySelector(".reviews")
+    stars = document.querySelectorAll(".star")
+    starBox = document.querySelector(".star-rating")
 
-			let starTwo = document.getElementById('star-btn-two').disabled;
+    let starRating = 0
 
-			let starThree = document.getElementById('star-btn-three').disabled;
+    stars.forEach((element, index) => {
+      element.addEventListener("click", () => {
+        for (let i of stars) {
+          i.classList.remove("selected")
+        }
+        for (let i = 0; i < index + 1; i++) {
+          stars[i].classList.add("selected")
+        }
+        starRating = index + 1
+      })
+    })
 
-			let starFour = document.getElementById('star-btn-four').disabled;
+    submitButton.addEventListener("click", () => {
+      if (starRating != 0 && reviewTitle.value != "" && reviewField.value != "") {
+        appendReview(starRating, reviewTitle.value, reviewField.value)
+        resetReview()
 
-			let starFive = document.getElementById('star-btn-five').disabled;
+      } else {
+        toastr("You need to fill out all the inputs before you can review")
+      }
+    })
+    function resetReview() {
+      starRating = 0
+      for (let i of stars) {
+        i.classList.remove("selected")
+      }
+      reviewTitle.value = ""
+      reviewField.value = ""
+    }
 
-			const enableStar = () => {
+    function appendStars(rating, parent) {
+      const starContainer = document.createElement("div")
+      starContainer.classList.add("star-rating")
+      for (let i = 0; i < 5; i++) {
+        const newStar = document.createElement("div")
+        newStar.classList.add("star")
+        newStar.classList.add("reviewed-star")
+        if (i < rating) {
+          newStar.classList.add("selected")
+        }
+        starContainer.appendChild(newStar)
+      }
 
-				if (starOne === false) {
-					starOne = document.getElementById('star-btn-one').disabled = true;
-					starTwo = document.getElementById('star-btn-two').disabled = false;
-				}
+      parent.appendChild(starContainer)
+    }
 
-				else if (starOne === true && starTwo === false) {
-					starTwo = document.getElementById('star-btn-two').disabled = true;
-					starThree = document.getElementById('star-btn-three').disabled = false;
-				}
-				else if (starTwo === true && starThree === false) {
-					starThree = document.getElementById('star-btn-three').disabled = true;
-					starFour = document.getElementById('star-btn-four').disabled
-						= false;
-				}
-				else if (starThree === true && starFour === false) {
-					starFour = document.getElementById('star-btn-four').disabled = true;
-					starFive = document.getElementById('star-btn-five').disabled = false;
-				}
+    function appendReview(rating, title, review) {
+      const newReviewContainer = document.createElement("div")
+      newReviewContainer.classList.add("review")
+      const newReviewTitle = document.createElement("h3")
+      newReviewTitle.innerHTML = title
+      const newReviewText = document.createElement("p")
+      newReviewText.innerHTML = review
+      theReviewsContainer.appendChild(newReviewContainer)
+      newReviewContainer.appendChild(newReviewTitle)
+      appendStars(rating, newReviewContainer)
+      newReviewContainer.appendChild(newReviewText)
+    }
+  </script>
+  
+  /* popup script*/
+  <script> 
+    function togglePopup() {
+      document.getElementById("popup-1")
+        .classList.toggle("active");
+      var blur = document.getElementById('blur');
+      blur.classList.toggle('active');
+    }
+    function togglePopup1() {
+      document.getElementById("popup-2")
+        .classList.toggle("active");
+        blur.classList.toggle('active');
+    }
+  </script>
+  
+  <script> 
 
-				else if (starFour === true) {
-					starFour = document.getElementById('star-btn-four');
-					starFour.removeAttribute("disabled");
-				}
+	function validateInputs(){
+    	let emailValue = email.value.trim();
+    	let passwordValue = password.value.trim();
+    	let cpasswordValue = cpassword.value.trim();
+    	let phoneValue = phone.value.trim();
+    	let success = true
 
-				else if (starThree === true && starTwo == true) {
-					starThree = document.getElementById('star-btn-three');
-					starThree.removeAttribute("disabled");
-				}
+    	if(!validateEmail(emailValue)){
+        	success = false;
+        	setError(email,'Please Enter Valid Email')}
+    	else{
+        	setSuccess(email)}
 
-				else if (starTwo === true && starOne == true) {
-					starTwo = document.getElementById('star-btn-two');
-					starTwo.removeAttribute("disabled");
-				}
+    	if(passwordValue.length<8){
+        	success = false;
+        	setError(password,'Password must be atleast 8 characters long')}
+    	else{
+        	setSuccess(password)}
+    
 
-				else if (starOne == true) {
-					starOne = document.getElementById('star-btn-one');
-					starOne.removeAttribute("disabled");
-				}
-			}
-		</script>
+    	if(cpasswordValue!== passwordValue){
+        	success = false;
+        	setError(cpassword,'Password does not match')}
+    	else{
+        	setSuccess(cpassword)}
+    
+    	return success;
+	}
+	function setError(element,message){
+    	let inputGroup = element.parentElement;
+    	let errorElement = inputGroup.querySelector('.error')
+
+    	errorElement.innerText = message;
+    	inputGroup.classList.add('error')
+    	inputGroup.classList.remove('success')
+	}
+
+	function setSuccess(element){
+    	let inputGroup = element.parentElement;
+    	let errorElement = inputGroup.querySelector('.error')
+
+    	errorElement.innerText = '';
+    	inputGroup.classList.add('success')
+    	inputGroup.classList.remove('error')
+	}
+    </script>
+
 </body>
 
 </html>

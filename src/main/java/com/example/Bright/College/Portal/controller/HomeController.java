@@ -24,6 +24,7 @@ public class HomeController {
 	UserDao userDao;
 	@Autowired
 	StaffDao staffDao;
+
 	// method to get index page
 	@GetMapping(path = "/index")
 	public String index() {
@@ -42,14 +43,13 @@ public class HomeController {
 		return "signup";
 	}
 
-	// method to get success details
+	// method to save register details
 	@GetMapping(path = "/signup-submit")
-	public String saveUser(@RequestParam("userId") int userId, @RequestParam("firstName") String firstName,
-			@RequestParam("lastName") String lastName, @RequestParam("email") String email,
-			@RequestParam("password") String password, @RequestParam("phone") Long phone,
-			@RequestParam("gender") String gender, @RequestParam("roll") String roll, @RequestParam("DOB") Date DOB) {
+	public String saveUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
+			@RequestParam("email") String email, @RequestParam("password") String password,
+			@RequestParam("phone") Long phone, @RequestParam("gender") String gender, @RequestParam("roll") String roll,
+			@RequestParam("DOB") Date DOB) {
 		User user = new User();
-		user.setUserId(userId);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setEmail(email);
@@ -61,7 +61,7 @@ public class HomeController {
 		int value = userDao.save(user);
 		try {
 			if (value == 1) {
-				return "login";
+				return "index";
 			} else {
 				throw new ExistMailIdException("Exist Email Exception");
 			}
@@ -81,24 +81,78 @@ public class HomeController {
 		int value = userDao.login(user);
 		if (value == 1) {
 			return "home";
-		}else if (value == 2) {
+		} else if (value == 2) {
 			return "adminHome";
-		}else
-			return "login";
+		} else
+			return "index";
 	}
-	
-	@GetMapping(path ="/listofusers")
+
+	@GetMapping(path = "/listofusers")
 	public String getAllUser(Model model) {
 		System.out.println("getting datas");
 		List<User> users = staffDao.studentList();
 		model.addAttribute("USER_LIST", users);
 		return "listusers";
 	}
-	
+
 	// method to get admin home
-	@GetMapping(path ="/adminHome")
+	@GetMapping(path = "/adminHome")
 	public String adminHome() {
 		return "adminHome";
 	}
-	
+
+	// method to get logout
+	@GetMapping(path = "/logout")
+	public String logout() {
+		return "index";
+	}
+
+	// method to get Attendance Admin page
+	@GetMapping(path = "/attendanceAdmin")
+	public String adminAttendance() {
+		return "attendanceAdmin";
+	}
+
+	// method to get result Admin page
+	@GetMapping(path = "/resultAdmin")
+	public String adminResult() {
+		return "resultAdmin";
+	}
+
+	// method to get Subject Details
+	@GetMapping(path = "/subjectDetails")
+	public String subjectDetails() {
+		return "subjectDetails";
+	}
+
+	// method to insert Attendance
+	@GetMapping(path = "/insertAttendance")
+	public String insertAttendance() {
+		return "insertAttendance";
+	}
+
+	// method to approve student
+	@GetMapping(path = "")
+	public String approve(@RequestParam("userID") int userID) {
+		User user = new User();
+		user.setUserId(userID);
+		int value = staffDao.approve(user);
+		if (value == 1) {
+			return null;
+		}
+		return null;
+	}
+
+	// method to get forgot password
+	@GetMapping(path = "/forgotPassword")
+	public String forgotPassword(@RequestParam("") int userID) {
+		User user = new User();
+		user.setUserId(userID);
+		int value = staffDao.approve(user);
+		if (value == 1) {
+			return null;
+		}
+		return null;
+	}
+
 }

@@ -14,7 +14,6 @@
 			box-sizing: border-box;
 			-webkit-overflow-scrolling: touch;
 		}
-
 		html {
 			position: absolute;
 			top: 0;
@@ -42,6 +41,7 @@
 			padding: 0;
 			overflow: hidden;
 			background-color: #000000;
+			width: 100%;
 		}
 
 		li a {
@@ -153,7 +153,7 @@
 	<div class="navbar">
 		<nav>
 			<ul>
-				<li><a th:href="@{#}">Logout</a></li>
+				<li><a th:href="@{/logout}">Logout</a></li>
 				<li class="menu"><span onclick="openNav()">Menu</span></li>
 			</ul>
 		</nav>
@@ -161,10 +161,10 @@
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<a th:href="@{/adminHome}">Home</a>
-		<a th:href="@{/listofusers}">Student List</a>
-		<a th:href="@{#}">Attendance</a>
-		<a th:href="@{#}">Result</a>
-		<a th:href="@{#}">Contact</a>
+    	<a th:href="@{/listofusers}">Student List</a>
+    	<a th:href="@{/attendanceAdmin}">Attendance</a>
+    	<a th:href="@{/resultAdmin}">Result</a>
+    	<a th:href="@{/subjectDetails}">Subject Details</a>
 	</div>
 
 
@@ -173,25 +173,6 @@
 		<div id="myGrid" style="height: 100%" class="ag-theme-alpine">
 		</div>
 	</div>
-	
-	<?php
-$data = '';
-$i = 0;
-
-$con = new mysqli('mysql', 'root', 'root', 'Bright_College_Portal');
-$sql = "select * from user where roll='student'";
-$sql_query = mysqli_query($con, $sql);
-
-while ($row = mysqli_fetch_array($sql_query)) {
-  $data .= '
-    data['.$i.'] = {
-    title: "'.$row['title'].'",
-    newcolumn: "'.$row['newcolumn'].'"
-    };
-  ';
-$i++;
-}
-?>
 
 	<script>
 		function openNav() {
@@ -210,7 +191,7 @@ $i++;
 			// define grid columns
 			columnDefs: [
 				// using number column type
-				{ field: 'Roll Number', type: 'numberColumn' },
+				{ field: 'User ID', type: 'numberColumn' },
 
 				// using default ColDef
 				{ field: 'First Name' },

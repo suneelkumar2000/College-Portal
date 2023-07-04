@@ -24,6 +24,7 @@ public class UserMapper implements RowMapper<User>{
 		Date DOB = rs.getDate("DOB");
 		String gender = rs.getString("gender");
 		String roll = rs.getString("roll");
+		String status = rs.getString("status");
 		user.setUserId(userId);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -33,6 +34,8 @@ public class UserMapper implements RowMapper<User>{
 		user.setDOB(DOB);
 		user.setGender(gender);
 		user.setRoll(roll);
+		user.setStatus(status);
 		return user;
 	}
 }
+
