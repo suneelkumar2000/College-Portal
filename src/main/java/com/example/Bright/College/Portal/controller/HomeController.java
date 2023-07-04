@@ -145,14 +145,19 @@ public class HomeController {
 
 	// method to get forgot password
 	@GetMapping(path = "/forgotPassword")
-	public String forgotPassword(@RequestParam("") int userID) {
+	public String forgotPassword(@RequestParam("email") String email, @RequestParam("password") String password,
+			@RequestParam("phone") Long phone) {
 		User user = new User();
-		user.setUserId(userID);
-		int value = staffDao.approve(user);
+		user.setEmail(email);
+		user.setPhone(phone);
+		user.setPassword(password);
+		int value = userDao.forgotPassword(user);
 		if (value == 1) {
-			return null;
-		}
-		return null;
+			return "home";
+		} else if (value == 2) {
+			return "adminHome";
+		} else
+			return "index";
 	}
 
 }

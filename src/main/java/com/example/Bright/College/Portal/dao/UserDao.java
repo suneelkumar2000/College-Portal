@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.Bright.College.Portal.model.User;
 import com.example.Bright.College.Portal.validation.Validation;
 import com.example.Bright.College.Portal.mapper.UserMapper;
 import com.example.Bright.College.Portal.mapper.LoginMapper;
+import com.example.Bright.College.Portal.mapper.ForgotPasswordMapper;
 
 @Repository
 public class UserDao {
@@ -22,6 +24,10 @@ public class UserDao {
 	JdbcTemplate jdbcTemplate;
 
 	public int save(User saveUser) {
+		String password = saveUser.getPassword();
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String encodedPassword = encoder.encode(password);
+
 		Validation val = new Validation();
 		List<User> listUsers = listUsers();
 		System.out.println(listUsers);
@@ -37,7 +43,7 @@ public class UserDao {
 		} else {
 			String sql = "insert into user(first_name,last_name,DOB,gender,phone_number,Email,Password,roll) values(?,?,?,?,?,?,?,?)";
 			Object[] params = { saveUser.getFirstName(), saveUser.getLastName(), saveUser.getDOB(),
-					saveUser.getGender(), saveUser.getPhone(), saveUser.getEmail(), saveUser.getPassword(),
+					saveUser.getGender(), saveUser.getPhone(), saveUser.getEmail(), encodedPassword,
 					saveUser.getRoll() };
 
 			boolean emailval = val.emailValidation(saveUser.getEmail());
@@ -57,33 +63,35 @@ public class UserDao {
 	}
 
 	public int login(User loginUser) {
-		Validation val = new Validation();
-		List<User> listUsers = listUsers();
-
-		String userList = listUsers.toString();
 		String email = loginUser.getEmail();
 
 		String password = loginUser.getPassword();
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 		String login = "Select Email,Password,roll from user";
 		List<User> userLogin = jdbcTemplate.query(login, new LoginMapper());
 
 		List<User> user1 = userLogin.stream().filter(email1 -> email1.getEmail().equals(email))
-				.filter(password1 -> password1.getPassword().equals(password))
 				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
+
 		List<User> user2 = userLogin.stream().filter(email2 -> email2.getEmail().equals(email))
-				.filter(password2 -> password2.getPassword().equals(password))
 				.filter(roll2 -> roll2.getRoll().equals("staff")).collect(Collectors.toList());
-		
+
 		for (User userModel1 : user1) {
 			if (userModel1 != null) {
-				return 1;
+				String dbpass = userModel1.getPassword();
+				boolean match = encoder.matches(password, dbpass);
+				if (match)
+					return 1;
 			}
 
 		}
 		for (User userModel2 : user2) {
 			if (userModel2 != null) {
-				return 2;
+				String dbpass = userModel2.getPassword();
+				boolean match = encoder.matches(password, dbpass);
+				if (match)
+					return 2;
 			}
 
 		}
@@ -95,5 +103,47 @@ public class UserDao {
 		List<User> userList = jdbcTemplate.query(sql, new UserMapper());
 		System.out.println(userList);
 		return userList;
+	}
+
+	public int forgotPassword(User user) {
+		// TODO Auto-generated method stub
+		String email = user.getEmail();
+		long phone = user.getPhone();
+		String password = user.getPassword();
+
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String encodePassword = encoder.encode(password);
+
+		String select = "Select Email,Password,phone_number,roll from user";
+		List<User> userLogin = jdbcTemplate.query(select, new ForgotPasswordMapper());
+
+		List<User> user1 = userLogin.stream().filter(email1 -> email1.getEmail().equals(email))
+				.filter(phone1 -> phone1.getPhone().equals(phone)).filter(roll1 -> roll1.getRoll().equals("student"))
+				.collect(Collectors.toList());
+
+		List<User> user2 = userLogin.stream().filter(email2 -> email2.getEmail().equals(email))
+				.filter(phone2 -> phone2.getPhone().equals(phone)).filter(roll2 -> roll2.getRoll().equals("staff"))
+				.collect(Collectors.toList());
+
+		for (User userModel1 : user1) {
+			if (userModel1 != null) {
+				String changePassword = "update user set Password =?  where Email=?";
+				Object[] params = { encodePassword, email };
+				int noOfRows = jdbcTemplate.update(changePassword, params);
+				System.out.println(noOfRows + "Saved");
+				return 1;
+			}
+		}
+		for (User userModel2 : user2) {
+			if (userModel2 != null) {
+				String changePassword = "update user set Password =?  where email=?";
+				Object[] params = { encodePassword, email };
+				int noOfRows = jdbcTemplate.update(changePassword, params);
+				System.out.println(noOfRows + "Saved");
+				return 2;
+			}
+
+		}
+		return 0;
 	}
 }
