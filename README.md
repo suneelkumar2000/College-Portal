@@ -13,18 +13,22 @@
 <ul>
 <li><h3>Front-End Development:</h3>
 <ul>
-<li>Jsp</li>
-<li>Html</li>
-<li>Css</li></ul>
+<li>JSP</li>
+<li>HTML</li>
+<li>CSS</li></ul>
 <li><h3>Back-End Development:</h3>
 <ul>
-<li>Java(JDK 11)</li>
+<li>Java(JDK 17)</li>
 <li>JDBC</li>
 <li>Spring Boot</li></ul>
 <li><h3>DataBase:</h3>
 <ul>
 <li>MYSql</li></ul>
 </ul>
-<h3>Software And Tools Required:- </h3> <p>Eclipse[IDE]-Java[JDK 11]-Apache Tomcat-MySql</p>
+<h3>Software And Tools Required:- </h3> <p>Eclipse[IDE]-Java[JDK 17]-Apache Tomcat-MySql</p>
 <h3>Features :</h3>
-<h3 align="center">staff Panel</h3>
+<h3 align="center">Staff Panel</h3>
+- [] Staff login
+- [] Manage student list
+
+
