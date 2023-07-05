@@ -27,8 +27,16 @@
 </ul>
 <h3>Software And Tools Required:- </h3> <p>Eclipse[IDE]-Java[JDK 17]-Apache Tomcat-MySql</p>
 <h3>Features :</h3>
-<h3 align="center">Staff Panel</h3>
-- [ ] Staff login
-- [ ] Manage student list
+### Solar System Exploration, 1950s – 1960s
+
+- [ ] Mercury
+- [x] Venus
+- [x] Earth (Orbit/Moon)
+- [x] Mars
+- [ ] Jupiter
+- [ ] Saturn
+- [ ] Uranus
+- [ ] Neptune
+- [ ] Comet Haley
 
 
