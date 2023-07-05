@@ -36,7 +36,7 @@ days_attended integer not null,
 days_leave integer not null,
 attendance integer,
 is_active boolean default true,
-FOREIGN KEY (User_id) REFERENCES user(id)
+FOREIGN KEY (user_id) REFERENCES user(id)
 );
 select * from attendance;
 drop table attendance;
@@ -93,7 +93,7 @@ user_id integer not null,
 marks integer not null,
 is_active boolean default true,
 FOREIGN KEY (exam_id) REFERENCES exam(id),
-FOREIGN KEY (User_id) REFERENCES user(id)
+FOREIGN KEY (user_id) REFERENCES user(id)
 );
 select * from result;
 drop table result;
