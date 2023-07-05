@@ -4,9 +4,9 @@
 <br>
 <ul>
 <li> Easy sign-up and Login</li>
-<li>Student Page</li>
-<li>Staff Page</li>
-<li>Rating</li></ul>
+<li> Student Page</li>
+<li> Staff Page</li>
+<li> Rating</li></ul>
 <br>
 <br>
 <h3>Technologies used:-</h3>
@@ -27,16 +27,22 @@
 </ul>
 <h3>Software And Tools Required:- </h3> <p>Eclipse[IDE]-Java[JDK 17]-Apache Tomcat-MySql</p>
 <h3>Features :</h3>
-### Solar System Exploration, 1950s – 1960s
+<h3>Admin Panel</h3>
 
-- [ ] Mercury
-- [x] Venus
-- [x] Earth (Orbit/Moon)
-- [x] Mars
-- [ ] Jupiter
-- [ ] Saturn
-- [ ] Uranus
-- [ ] Neptune
-- [ ] Comet Haley
+- [x] Admin login
+- [ ] View Students list
+- [ ] Approve Students
+- [ ] Manage Student Attendence
+- [ ] Manage Student Result
+- [ ] Manage subjects
+      
+<h3>Student Panel</h3>
+
+- [x] Student login
+- [ ] Manage Student Profile
+- [ ] View Attendence
+- [ ] View Result
+      
+
 
 
