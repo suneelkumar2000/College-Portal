@@ -27,9 +27,9 @@
 </ul>
 <h3>Software And Tools Required:- </h3> <p>Eclipse[IDE]-Java[JDK 17]-Apache Tomcat-MySql</p>
 <h3>Features :</h3>
-<h3>Admin Panel</h3>
+<h3>Staff Panel</h3>
 
-- [x] Admin login
+- [x] Staff login
 - [ ] View Students list
 - [ ] Approve Students
 - [ ] Manage Student Attendence
