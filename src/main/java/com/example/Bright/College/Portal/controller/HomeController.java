@@ -159,5 +159,11 @@ public class HomeController {
 		} else
 			return "index";
 	}
+	
+	// method to get student profile
+		@GetMapping(path = "")
+		public String studentProfile() {
+			return "studentProfile";
+		}
 
 }
