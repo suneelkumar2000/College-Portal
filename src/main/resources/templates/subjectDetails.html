@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>JavaScript example</title>
+	<title>Subject Details</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<style media="only screen">
@@ -170,9 +170,8 @@
     	<a th:href="@{/resultAdmin}">Result</a>
     	<a th:href="@{/subjectDetails}">Subject Details</a>
 	</div>
-
-
-
+	
+	<button><a th:href="@{/departmentList}">View Departments</a></button>
 	<div style="height: 100%; box-sizing: border-box">
 		<div id="myGrid" style="height: 100%" class="ag-theme-alpine">
 		</div>
@@ -195,10 +194,10 @@
 			// define grid columns
 			columnDefs: [
 				// using number column type
-				{ field: 'Semester', type: 'numberColumn' },
-				{ field: 'Department' },
-				{ field: 'Total Number of Subjects', type: 'numberColumn' },
+				{ field: 'Subject ID', type: 'numberColumn' },
 				{ field: 'Subject Name' },
+				{ field: 'Department' },
+				{ field: 'Semester', type: 'numberColumn' },
 			],
 
 			// default ColDef, gets applied to every column

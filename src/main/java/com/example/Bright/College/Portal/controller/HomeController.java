@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.Bright.College.Portal.dao.StaffDao;
 import com.example.Bright.College.Portal.dao.UserDao;
 import com.example.Bright.College.Portal.exception.ExistMailIdException;
+import com.example.Bright.College.Portal.model.Department;
 import com.example.Bright.College.Portal.model.User;
+
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 
 @Controller
 public class HomeController {
@@ -87,6 +90,7 @@ public class HomeController {
 			return "index";
 	}
 
+	// method to get all users
 	@GetMapping(path = "/listofusers")
 	public String getAllUser(Model model) {
 		System.out.println("getting datas");
@@ -132,15 +136,11 @@ public class HomeController {
 	}
 
 	// method to approve student
-	@GetMapping(path = "")
-	public String approve(@RequestParam("userID") int userID) {
+	@GetMapping(path = "/approve")
+	public void approve(@RequestParam("userID") int userID) {
 		User user = new User();
 		user.setUserId(userID);
-		int value = staffDao.approve(user);
-		if (value == 1) {
-			return null;
-		}
-		return null;
+		staffDao.approve(user);
 	}
 
 	// method to get forgot password
@@ -159,11 +159,36 @@ public class HomeController {
 		} else
 			return "index";
 	}
-	
+
 	// method to get student profile
-		@GetMapping(path = "")
-		public String studentProfile() {
-			return "studentProfile";
-		}
+	@GetMapping(path = "")
+	public String studentProfile() {
+		return "studentProfile";
+	}
+
+	// method to get department list
+	@GetMapping(path = "/departmentList")
+	public String departmentList(Model model) {
+		model.addAttribute("departmentList",staffDao.departmentList());
+		return "department";
+	}
+
+	// method to get department form
+	@GetMapping(path = "/insertDepartmentForm")
+	public String departmentForm() {
+		return "departmentForm";
+	}
+
+	// method to add department
+	@GetMapping(path = "/insertDepartment")
+	public String addDepartment(@RequestParam("department") String department) {
+		Department depart = new Department();
+		depart.setDepartment(department);
+		int value = staffDao.addDepartment(depart);
+		if (value == 1) {
+			return "department";
+		} else
+			return "departmentForm";
+	}
 
 }

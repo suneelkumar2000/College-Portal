@@ -41,17 +41,23 @@ public class UserDao {
 			System.out.println("Email Already Exist");
 			return 0;
 		} else {
-			String sql = "insert into user(first_name,last_name,DOB,gender,phone_number,Email,Password,roll) values(?,?,?,?,?,?,?,?)";
+			String sql = "insert into user(first_name,last_name,dob,gender,phone_number,email,Password,roll) values(?,?,?,?,?,?,?,?)";
 			Object[] params = { saveUser.getFirstName(), saveUser.getLastName(), saveUser.getDOB(),
-					saveUser.getGender(), saveUser.getPhone(), saveUser.getEmail(), encodedPassword,
-					saveUser.getRoll() };
+					saveUser.getGender(), saveUser.getPhone(), email, encodedPassword, saveUser.getRoll() };
 
-			boolean emailval = val.emailValidation(saveUser.getEmail());
+			boolean emailval = val.emailValidation(email);
 			boolean phoneval = val.phoneNumberValidation(saveUser.getPhone());
 			boolean firstNameVal = val.nameValidation(saveUser.getFirstName());
+			boolean adminval = val.adminEmailValidation(email);
 			if (emailval == true && phoneval == true && firstNameVal == true) {
-
 				int noOfRows = jdbcTemplate.update(sql, params);
+				if (adminval == true) {
+					String approve = "update user set status ='approved'  where email=?";
+					Object[] params1 = { email };
+					int noOfRows1 = jdbcTemplate.update(approve, params1);
+					System.out.println(noOfRows1 + " Hod Saved");
+					return 1;
+				}
 				System.out.println(noOfRows + "Saved");
 				return 1;
 			} else {
@@ -99,7 +105,7 @@ public class UserDao {
 	}
 
 	public List<User> listUsers() {
-		String sql = "select * from user";
+		String sql = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user";
 		List<User> userList = jdbcTemplate.query(sql, new UserMapper());
 		System.out.println(userList);
 		return userList;

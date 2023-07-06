@@ -34,4 +34,14 @@ public class Validation {
 		else
 			return false;
 	}
+	
+	public boolean adminEmailValidation(String email) {
+		Pattern p = Pattern.compile("^(.+)(hod)@(brightcollege)(.+)$");
+		Matcher m = p.matcher(email);
+		boolean mail = m.matches();
+		if (mail)
+			return true;
+		else
+			return false;
+	}
 }
