@@ -29,7 +29,7 @@
             border-radius: 5px;
             box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
             overflow: hidden;
-            width: 600px;
+            width: 500px;
             max-width: 100%;
         }
 
@@ -141,7 +141,7 @@
         <div class="header">
             <h2>Department Insertion Form</h2>
         </div>
-        <form id="form" action="signup" th:action="@{/signup-submit}" th:object="${signUpForm}" method="GET"
+        <form id="form" th:action="@{/insertDepartment}" th:object="${departmentForm}" method="GET"
             class="form">
             <br>
 
@@ -153,10 +153,10 @@
                 </label>
             </div>
 
-            <input type="submit" onclick="clearText()" value="Register">
+            <input type="submit" onclick="clearText()" value="ADD">
             <br>
             <div class="cancel_link">
-                <a th:href="@{#}" class="cancel">Cancel</a>
+                <a th:href="@{/departmentList}" class="cancel">Cancel</a>
             </div>
         </form>
     </div>
@@ -186,7 +186,7 @@
 
             if (departmentValue === '') {
                 success = false;
-                setError(department, 'First Name is required')
+                setError(department, 'This Field is required')
             }
             else {
                 setSuccess(department)

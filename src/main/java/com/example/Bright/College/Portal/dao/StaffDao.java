@@ -10,12 +10,17 @@ import org.springframework.stereotype.Repository;
 import com.example.Bright.College.Portal.mapper.UserMapper;
 import com.example.Bright.College.Portal.mapper.ApprovingMapper;
 import com.example.Bright.College.Portal.mapper.DepartmentMapper;
+import com.example.Bright.College.Portal.mapper.AttendanceMapper;
 import com.example.Bright.College.Portal.mapper.SubjectMapper;
 import com.example.Bright.College.Portal.mapper.SubjectNameMapper;
 import com.example.Bright.College.Portal.mapper.UserDepartmentMapper;
 import com.example.Bright.College.Portal.mapper.SemesterMapper;
+import com.example.Bright.College.Portal.mapper.ExamMapper;
+import com.example.Bright.College.Portal.mapper.ResultMapper;
+import com.example.Bright.College.Portal.model.Attendance;
 import com.example.Bright.College.Portal.model.Department;
 import com.example.Bright.College.Portal.model.Exam;
+import com.example.Bright.College.Portal.model.Result;
 import com.example.Bright.College.Portal.model.Semester;
 import com.example.Bright.College.Portal.model.Subject;
 import com.example.Bright.College.Portal.model.User;
@@ -26,30 +31,16 @@ public class StaffDao {
 	JdbcTemplate jdbcTemplate;
 
 	// --------- Students methods ------------
-	
+
 	public User findDepartmentById(User user) {
 		String select = "select department from user where (roll='student' and id=?)";
-		User userDepartment = jdbcTemplate.queryForObject(select, new UserDepartmentMapper (),user.getUserId());
+		User userDepartment = jdbcTemplate.queryForObject(select, new UserDepartmentMapper(), user.getUserId());
 		System.out.println(userDepartment);
 		return userDepartment;
 	}
 
 	public List<User> studentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and is_active ='true')";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		System.out.println(userList);
-		return userList;
-	}
-
-	public List<User> approvedStudentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and status='approved' and is_active ='true')";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		System.out.println(userList);
-		return userList;
-	}
-
-	public List<User> notApprovedStudentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and status='not approved' and is_active ='true')";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		System.out.println(userList);
 		return userList;
@@ -73,34 +64,43 @@ public class StaffDao {
 		return 0;
 	}
 
-	public int deactivateStudent(User deactivateUser) {
+	public List<User> approvedStudentList() {
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and status='approved' and is_active =true)";
+		List<User> userList = jdbcTemplate.query(select, new UserMapper());
+		System.out.println(userList);
+		return userList;
+	}
+
+	public List<User> notApprovedStudentList() {
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and status='not approved' and is_active =true)";
+		List<User> userList = jdbcTemplate.query(select, new UserMapper());
+		System.out.println(userList);
+		return userList;
+	}
+
+	public int activateOrDeactivateStudent(User User) {
 		// TODO Auto-generated method stub
 		String select = "Select id,roll from user";
 		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
-		List<User> user1 = user.stream().filter(id -> id.getUserId() == (deactivateUser.getUserId()))
-				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
-		for (User userModel : user1) {
-			if (userModel != null) {
-				String deactivate = "update user set is_active ='false'  where (roll='student' and id=?)";
-				Object[] params = { deactivateUser.getUserId() };
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
+				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (true))
+				.collect(Collectors.toList());
+		List<User> user2 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
+				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (false))
+				.collect(Collectors.toList());
+		for (User userModel1 : user1) {
+			if (userModel1 != null) {
+				String deactivate = "update user set is_active = false  where (roll='student' and id=?)";
+				Object[] params = { User.getUserId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
 				System.out.println(noOfRows + " student are deactivated");
 				return 1;
 			}
 		}
-		return 0;
-	}
-
-	public int activateStudent(User activateUser) {
-		// TODO Auto-generated method stub
-		String select = "Select id,roll from user";
-		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
-		List<User> user1 = user.stream().filter(id -> id.getUserId() == (activateUser.getUserId()))
-				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
-		for (User userModel : user1) {
-			if (userModel != null) {
-				String activate = "update user set is_active ='true'  where (roll='student' and id=?)";
-				Object[] params = { activateUser.getUserId() };
+		for (User userModel2 : user2) {
+			if (userModel2 != null) {
+				String activate = "update user set is_active = true where (roll='student' and id=?)";
+				Object[] params = { User.getUserId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				System.out.println(noOfRows + " student are activated");
 				return 1;
@@ -109,8 +109,8 @@ public class StaffDao {
 		return 0;
 	}
 
-	public List<User> deactivatedStudentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and is_active ='false')";
+	public List<User> inactiveStudentList() {
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and is_active =false)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		System.out.println(userList);
 		return userList;
@@ -129,36 +129,29 @@ public class StaffDao {
 			return 0;
 	}
 
-	public int deactivateDepartment(Department deactivateDepartment) {
+	public int activateOrDeactivateDepartment(Department Department) {
 		// TODO Auto-generated method stub
 		String select = "Select id,department,is_active from classroom";
 		List<Department> department = jdbcTemplate.query(select, new DepartmentMapper());
 		List<Department> department1 = department.stream()
-				.filter(dep -> dep.getDepartment().equals(deactivateDepartment.getDepartment()))
-				.collect(Collectors.toList());
-		for (Department departmentModel : department1) {
-			if (departmentModel != null) {
-				String deactivate = "update classroom set is_active ='false' where department=?";
-				Object[] params = { deactivateDepartment.getDepartment() };
+				.filter(dep -> dep.getDepartment().equals(Department.getDepartment()))
+				.filter(isActive -> isActive.isIsActive() == (true)).collect(Collectors.toList());
+		List<Department> department2 = department.stream()
+				.filter(dep -> dep.getDepartment().equals(Department.getDepartment()))
+				.filter(isActive -> isActive.isIsActive() == (false)).collect(Collectors.toList());
+		for (Department departmentModel1 : department1) {
+			if (departmentModel1 != null) {
+				String deactivate = "update classroom set is_active =false where department=?";
+				Object[] params = { Department.getDepartment() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
 				System.out.println(noOfRows + " department are deactivated");
 				return 1;
 			}
 		}
-		return 0;
-	}
-
-	public int activateDepartment(Department activateDepartment) {
-		// TODO Auto-generated method stub
-		String select = "Select id,department,is_active from classroom";
-		List<Department> department = jdbcTemplate.query(select, new DepartmentMapper());
-		List<Department> department1 = department.stream()
-				.filter(dep -> dep.getDepartment().equals(activateDepartment.getDepartment()))
-				.collect(Collectors.toList());
-		for (Department departmentModel : department1) {
-			if (departmentModel != null) {
-				String activate = "update classroom set is_active ='true' where department=?";
-				Object[] params = { activateDepartment.getDepartment() };
+		for (Department departmentModel2 : department2) {
+			if (departmentModel2 != null) {
+				String activate = "update classroom set is_active =true where department=?";
+				Object[] params = { Department.getDepartment() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				System.out.println(noOfRows + " department are activated");
 				return 1;
@@ -174,11 +167,122 @@ public class StaffDao {
 		return departmentList;
 	}
 
-	public List<Department> deactivatedDepartmentList() {
+	public List<Department> inactiveDepartmentList() {
 		String select = "select id,department,is_active from classroom where (is_active =false)";
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		System.out.println(departmentList);
 		return departmentList;
+	}
+
+	// --------- Attendance methods ------------
+
+	public int addOrUpdatePresentByOne(Attendance attendance) {
+		int userId = attendance.getUserId();
+		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
+		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+		List<Attendance> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		for (Attendance attendanceModel1 : attendanceList1) {
+			if (attendanceModel1 != null) {
+				int daysAttended = attendanceModel1.getDaysAttended() + 1;
+				int daysLeave = attendanceModel1.getDaysLeave();
+				int totalDays = daysAttended + daysLeave;
+				int attendancePercentage = (daysAttended / totalDays) * 100;
+				String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
+				Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
+				int noOfRows = jdbcTemplate.update(update, params);
+				System.out.println(noOfRows + " updated");
+				return 1;
+			} else {
+				int daysAttended = 1;
+				int daysLeave = 0;
+				int totalDays = daysAttended + daysLeave;
+				int attendancePercentage = (daysAttended / totalDays) * 100;
+				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
+				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
+				int noOfRows = jdbcTemplate.update(add, params);
+				System.out.println(noOfRows + " updated");
+				return 2;
+			}
+		}
+		return 0;
+	}
+
+	public int addOrUpdateAbsentByOne(Attendance attendance) {
+		int userId = attendance.getUserId();
+		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
+		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+		List<Attendance> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		for (Attendance attendanceModel1 : attendanceList1) {
+			if (attendanceModel1 != null) {
+				int daysAttended = attendanceModel1.getDaysAttended();
+				int daysLeave = attendanceModel1.getDaysLeave() + 1;
+				int totalDays = daysAttended + daysLeave;
+				int attendancePercentage = (daysAttended / totalDays) * 100;
+				String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
+				Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
+				int noOfRows = jdbcTemplate.update(update, params);
+				System.out.println(noOfRows + " updated");
+				return 1;
+			} else {
+				int daysAttended = 0;
+				int daysLeave = 1;
+				int totalDays = daysAttended + daysLeave;
+				int attendancePercentage = (daysAttended / totalDays) * 100;
+				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
+				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
+				int noOfRows = jdbcTemplate.update(add, params);
+				System.out.println(noOfRows + " updated");
+				return 2;
+			}
+		}
+		return 0;
+	}
+
+	public int activateOrDeactivateAttendance(Attendance attendance) {
+		// TODO Auto-generated method stub
+		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
+		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+		List<Attendance> attendanceList1 = attendanceList.stream()
+				.filter(userid -> userid.getUserId() == (attendance.getUserId()))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		List<Attendance> attendanceList2 = attendanceList.stream()
+				.filter(userid -> userid.getUserId() == (attendance.getUserId()))
+				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
+		for (Attendance attendanceModel1 : attendanceList1) {
+			if (attendanceModel1 != null) {
+				String deactivate = "update attendance set is_active =false where user_id=?";
+				Object[] params = { attendance.getUserId() };
+				int noOfRows = jdbcTemplate.update(deactivate, params);
+				System.out.println(noOfRows + " user attendance are deactivated");
+				return 1;
+			}
+		}
+		for (Attendance attendanceModel2 : attendanceList2) {
+			if (attendanceModel2 != null) {
+				String activate = "update attendance set is_active =true where user_id=?";
+				Object[] params = { attendance.getUserId() };
+				int noOfRows = jdbcTemplate.update(activate, params);
+				System.out.println(noOfRows + " user attendance are activated");
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	public List<Attendance> attendanceList() {
+		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =true)";
+		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+		System.out.println(attendanceList);
+		return attendanceList;
+	}
+
+	public List<Attendance> inactiveAttendanceList() {
+		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =false)";
+		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+		System.out.println(attendanceList);
+		return attendanceList;
 	}
 
 	// --------- Semester methods ------------
@@ -194,34 +298,27 @@ public class StaffDao {
 			return 0;
 	}
 
-	public int deactivateSemester(Semester deactivateSemester) {
+	public int activateOrDeactivateSemester(Semester Semester) {
 		// TODO Auto-generated method stub
 		String select = "Select id,is_active from semester";
 		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
-		List<Semester> semester1 = semester.stream().filter(id -> id.getId() == (deactivateSemester.getId()))
-				.collect(Collectors.toList());
-		for (Semester semesterModel : semester1) {
-			if (semesterModel != null) {
-				String deactivate = "update semester set is_active ='false' where id=?";
-				Object[] params = { deactivateSemester.getId() };
+		List<Semester> semester1 = semester.stream().filter(id -> id.getId() == (Semester.getId()))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		List<Semester> semester2 = semester.stream().filter(id -> id.getId() == (Semester.getId()))
+				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
+		for (Semester semesterModel1 : semester1) {
+			if (semesterModel1 != null) {
+				String deactivate = "update semester set is_active =false where id=?";
+				Object[] params = { Semester.getId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
 				System.out.println(noOfRows + " Semester are deactivated");
 				return 1;
 			}
 		}
-		return 0;
-	}
-
-	public int activateSemester(Semester activateSemester) {
-		// TODO Auto-generated method stub
-		String select = "Select id,is_active from semester";
-		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
-		List<Semester> semester1 = semester.stream().filter(id -> id.getId() == (activateSemester.getId()))
-				.collect(Collectors.toList());
-		for (Semester semesterModel : semester1) {
-			if (semesterModel != null) {
-				String activate = "update semester set is_active ='true' where id=?";
-				Object[] params = { activateSemester.getId() };
+		for (Semester semesterModel2 : semester2) {
+			if (semesterModel2 != null) {
+				String activate = "update semester set is_active =true where id=?";
+				Object[] params = { Semester.getId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				System.out.println(noOfRows + " Semester are activated");
 				return 1;
@@ -231,14 +328,14 @@ public class StaffDao {
 	}
 
 	public List<Semester> semesterList() {
-		String select = "Select id,is_active from semester where (is_active ='true')";
+		String select = "Select id,is_active from semester where (is_active =true)";
 		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		System.out.println(semesterList);
 		return semesterList;
 	}
 
-	public List<Semester> deactivatedSemesterList() {
-		String select = "Select id,is_active from semester where (is_active ='false')";
+	public List<Semester> inactiveSemesterList() {
+		String select = "Select id,is_active from semester where (is_active =false)";
 		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		System.out.println(semesterList);
 		return semesterList;
@@ -257,34 +354,27 @@ public class StaffDao {
 			return 0;
 	}
 
-	public int deactivateSubject(Subject deactivateSubject) {
+	public int activateOrDeactivateSubject(Subject Subject) {
 		// TODO Auto-generated method stub
 		String select = "Select id,name,semester_id,department,is_active from subjects";
 		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
-		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (deactivateSubject.getId()))
-				.collect(Collectors.toList());
-		for (Subject subjectModel : subject1) {
-			if (subjectModel != null) {
-				String deactivate = "update subjects set is_active ='false' where id=?";
-				Object[] params = { deactivateSubject.getId() };
+		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (Subject.getId()))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		List<Subject> subject2 = subject.stream().filter(id -> id.getId() == (Subject.getId()))
+				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
+		for (Subject subjectModel1 : subject1) {
+			if (subjectModel1 != null) {
+				String deactivate = "update subjects set is_active =false where id=?";
+				Object[] params = { Subject.getId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
 				System.out.println(noOfRows + " subjects are deactivated");
 				return 1;
 			}
 		}
-		return 0;
-	}
-
-	public int activateSubject(Subject activateSubject) {
-		// TODO Auto-generated method stub
-		String select = "Select id,name,semester_id,department,is_active from subjects";
-		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
-		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (activateSubject.getId()))
-				.collect(Collectors.toList());
-		for (Subject subjectModel : subject1) {
-			if (subjectModel != null) {
-				String activate = "update subjects set is_active ='true' where id=?";
-				Object[] params = { activateSubject.getId() };
+		for (Subject subjectModel2 : subject2) {
+			if (subjectModel2 != null) {
+				String activate = "update subjects set is_active =true where id=?";
+				Object[] params = { Subject.getId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				System.out.println(noOfRows + " subjects are activated");
 				return 1;
@@ -292,47 +382,161 @@ public class StaffDao {
 		}
 		return 0;
 	}
+
 	public Subject findByID(Subject subject) {
-		String find = "select id,name,semester_id,department,is_active from subjects where (is_active ='true' and id =?)";
-		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectMapper(),subject.getId());
+		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and id =?)";
+		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectMapper(), subject.getId());
 		System.out.println(subjectNameList);
 		return subjectNameList;
 	}
-	
+
 	public Subject findSubjectNameByDepartment(Subject subject) {
-		String find = "select name from subjects where (is_active ='true' and department =?)";
-		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectNameMapper(),subject.getDepartment());
+		String find = "select name from subjects where (is_active =true and department =?)";
+		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectNameMapper(), subject.getDepartment());
 		System.out.println(subjectNameList);
 		return subjectNameList;
 	}
 
 	public List<Subject> subjectList() {
-		String select = "select id,name,semester_id,department,is_active from subjects where (is_active ='true')";
+		String select = "select id,name,semester_id,department,is_active from subjects where (is_active =true)";
 		List<Subject> subjectList = jdbcTemplate.query(select, new SubjectMapper());
 		System.out.println(subjectList);
 		return subjectList;
 	}
 
-	public List<Subject> deactivatedsubjectList() {
-		String select = "select id,name,semester_id,department,is_active from subjects where (is_active ='false')";
+	public List<Subject> inactivesubjectList() {
+		String select = "select id,name,semester_id,department,is_active from subjects where (is_active =false)";
 		List<Subject> subjectList = jdbcTemplate.query(select, new SubjectMapper());
 		System.out.println(subjectList);
 		return subjectList;
 	}
-	
-	
 
 	// --------- Exam methods ------------
-	
+
 	public int addExam(Exam exam) {
 		String add = "insert into exam(id,subject_id,name,type) values(?,?,?,?)";
-		Object[] params = { exam.getId(), exam.getSubjectId(),exam.getName(), exam.getType() };
+		Object[] params = { exam.getId(), exam.getSubjectId(), exam.getName(), exam.getType() };
 		int noOfRows = jdbcTemplate.update(add, params);
 		if (noOfRows > 0) {
 			System.out.println(noOfRows + "Saved");
 			return 1;
 		} else
 			return 0;
+	}
+
+	public int activateOrDeactivateExam(Exam Exam) {
+		// TODO Auto-generated method stub
+		String select = "Select id,subject_id,name,type,is_active from exam";
+		List<Exam> exam = jdbcTemplate.query(select, new ExamMapper());
+		List<Exam> exam1 = exam.stream().filter(id -> id.getId() == (Exam.getId()))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		List<Exam> exam2 = exam.stream().filter(id -> id.getId() == (Exam.getId()))
+				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
+		for (Exam examModel1 : exam1) {
+			if (examModel1 != null) {
+				String deactivate = "update exam set is_active =false where id=?";
+				Object[] params = { Exam.getId() };
+				int noOfRows = jdbcTemplate.update(deactivate, params);
+				System.out.println(noOfRows + " Exams are deactivated");
+				return 1;
+			}
+		}
+		for (Exam examModel2 : exam2) {
+			if (examModel2 != null) {
+				String activate = "update exam set is_active =true where id=?";
+				Object[] params = { Exam.getId() };
+				int noOfRows = jdbcTemplate.update(activate, params);
+				System.out.println(noOfRows + " Exams are activated");
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	public List<Exam> examList() {
+		String select = "select id,subject_id,name,type,is_active from exam where (is_active =true)";
+		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
+		System.out.println(examList);
+		return examList;
+	}
+
+	public List<Exam> inactiveExamList() {
+		String select = "select id,subject_id,name,type,is_active from exam where (is_active =false)";
+		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
+		System.out.println(examList);
+		return examList;
+	}
+
+	// --------- Result methods ------------
+
+	public int addOrUpdateResult(Result Result) {
+		String select = "Select exam_id,user_id,marks,is_active from result";
+		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
+		List<Result> result1 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
+				.filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		for (Result resultModel1 : result1) {
+			if (resultModel1 != null) {
+				System.out.println("Result already exist");
+				String update = "update result set marks =? where (exam_id=? and user_id=?)";
+				Object[] params = { Result.getExamId(), Result.getUserId() };
+				int noOfRows = jdbcTemplate.update(update, params);
+				System.out.println(noOfRows + " updated");
+				return 1;
+			} else {
+				String add = "insert into result(exam_id,user_id,marks) values(?,?,?)";
+				Object[] params = { Result.getExamId(), Result.getUserId(), Result.getMarks() };
+				int noOfRows = jdbcTemplate.update(add, params);
+				System.out.println(noOfRows + " Saved");
+				return 2;
+			}
+		}
+		return 0;
+	}
+
+	public int activateOrDeactivateResult(Result Result) {
+		// TODO Auto-generated method stub
+		String select = "Select exam_id,user_id,marks,is_active from result";
+		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
+		List<Result> result1 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
+				.filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		List<Result> result2 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
+				.filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
+		for (Result resultModel1 : result1) {
+			if (resultModel1 != null) {
+				String deactivate = "update result set is_active =false where (exam_id=? and user_id=?)";
+				Object[] params = { Result.getExamId(), Result.getUserId() };
+				int noOfRows = jdbcTemplate.update(deactivate, params);
+				System.out.println(noOfRows + " Results are deactivated");
+				return 1;
+			}
+		}
+		for (Result resultModel2 : result2) {
+			if (resultModel2 != null) {
+				String activate = "update result set is_active =true where exam_id=? and user_id=?";
+				Object[] params = { Result.getExamId(), Result.getUserId() };
+				int noOfRows = jdbcTemplate.update(activate, params);
+				System.out.println(noOfRows + " Results are activated");
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	public List<Result> resultList() {
+		String select = "select exam_id,user_id,marks,is_active from result where (is_active =true)";
+		List<Result> resultList = jdbcTemplate.query(select, new ResultMapper());
+		System.out.println(resultList);
+		return resultList;
+	}
+
+	public List<Result> inactiveResultList() {
+		String select = "select exam_id,user_id,marks,is_active from result where (is_active =false)";
+		List<Result> resultList = jdbcTemplate.query(select, new ResultMapper());
+		System.out.println(resultList);
+		return resultList;
 	}
 
 }

@@ -169,14 +169,18 @@
     	<a th:href="@{/attendanceAdmin}">Attendance</a>
     	<a th:href="@{/resultAdmin}">Result</a>
     	<a th:href="@{/subjectDetails}">Subject Details</a>
+    	<a th:href="@{/departmentList}">Department</a>
 	</div>
+	<br>
 	
 	<div class="container">
-	<h1>Department List</h1>
+	
 
-        <a th:href="@{/insertDepartmentForm}" class="btn btn-primary btn-sm mb-3"> Add Department </a>
-
+        <button><a th:href="@{/insertDepartmentForm}" class="btn btn-primary btn-sm mb-3"> Add Department </a></button>
+        <button><a th:href="@{/departmentList}"class="btn btn-primary btn-sm mb-3">Active Departments</a></button>
+        <button><a th:href="@{/inactiveDepartmentList}" class="btn btn-primary btn-sm mb-3"> Inactive Departments</a></button>
         <table border="1" class="table table-striped table-responsive-md">
+        <h1>Department List</h1>
             <thead>
                 <tr>
                     <th>Department ID</th>
@@ -189,12 +193,12 @@
                     <td th:text="${department.id}"></td>
                     <td th:text="${department.department}"></td>
                     <td> 
-                        <a th:href="@{#}" class="btn btn-danger">Deactivate</a>
+                        <a th:href="@{/activateOrDeactivateDepartment/{name}(name=${department.department})}" class="btn btn-danger">Activate/Deactivate</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div>
+	<div>
 
 	<script>
 		function openNav() {
