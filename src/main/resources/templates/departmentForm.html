@@ -141,7 +141,7 @@
         <div class="header">
             <h2>Department Insertion Form</h2>
         </div>
-        <form id="form" th:action="@{/insertDepartment}" th:object="${departmentForm}" method="GET"
+        <form id="form" th:action="@{/insertdepartment}" th:object="${departmentForm}" method="GET"
             class="form">
             <br>
 
@@ -156,7 +156,7 @@
             <input type="submit" onclick="clearText()" value="ADD">
             <br>
             <div class="cancel_link">
-                <a th:href="@{/departmentList}" class="cancel">Cancel</a>
+                <a th:href="@{/departmentlist}" class="cancel">Cancel</a>
             </div>
         </form>
     </div>

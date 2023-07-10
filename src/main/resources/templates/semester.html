@@ -168,10 +168,10 @@
     	<a th:href="@{/listofusers}">Student List</a>
     	<a th:href="@{/attendanceAdmin}">Attendance</a>
     	<a th:href="@{/resultAdmin}">Result</a>
-    	<a th:href="@{/departmentList}">Department</a>
-    	<a th:href="@{/semesterList}">Semester List</a>
+    	<a th:href="@{/departmentlist}">Department</a>
+    	<a th:href="@{/semesterlist}">Semester List</a>
     	<a th:href="@{/subjectDetails}">Subject Details</a>
-    	<a th:href="@{/examList}">Exam Details</a>
+    	<a th:href="@{/examlist}">Exam Details</a>
 	</div>
 	<br>
 	
@@ -179,8 +179,8 @@
 	
 
         <button><a th:href="@{#}" class="btn btn-primary btn-sm mb-3"> Add Semester</a></button>
-        <button><a th:href="@{/semesterList}"class="btn btn-primary btn-sm mb-3">Active Semester</a></button>
-        <button><a th:href="@{/inactiveSemesterList}" class="btn btn-primary btn-sm mb-3"> Inactive Semester</a></button>
+        <button><a th:href="@{/semesterlist}"class="btn btn-primary btn-sm mb-3">Active Semester</a></button>
+        <button><a th:href="@{/inactive-semesterlist}" class="btn btn-primary btn-sm mb-3"> Inactive Semester</a></button>
         <table border="1" class="table table-striped table-responsive-md">
         <h1>Semester List</h1>
             <thead>
@@ -195,7 +195,7 @@
                     <td th:text="${semester.id}"></td>
                     <td th:text="${semester.isActive}"></td>
                     <td> 
-                        <a th:href="@{/activateOrDeactivateSemester/{semesterId}(semesterId=${semester.id})}" class="btn btn-danger">Activate/Deactivate</a>
+                        <a th:href="@{/activate-deactivate-semester/{semesterId}(semesterId=${semester.id})}" class="btn btn-danger">Activate/Deactivate</a>
                     </td>
                 </tr>
             </tbody>

@@ -46,21 +46,21 @@ public class StaffController {
 	// --------- Department methods ------------
 
 	// method to get department list
-	@GetMapping(path = "/departmentList")
+	@GetMapping(path = "/departmentlist")
 	public String departmentList(Model model) {
 		model.addAttribute("departmentList", staffDao.departmentList());
 		return "department";
 	}
 
 	// method to get inactiveDepartment list
-	@GetMapping(path = "/inactiveDepartmentList")
+	@GetMapping(path = "/inactive-departmentlist")
 	public String inactiveDepartmentList(Model model) {
 		model.addAttribute("departmentList", staffDao.inactiveDepartmentList());
 		return "department";
 	}
 
 	// method to add department
-	@GetMapping(path = "/insertDepartment")
+	@GetMapping(path = "/insertdepartment")
 	public String addDepartment(@RequestParam("department") String department, Model model) {
 		Department depart = new Department();
 		depart.setDepartment(department);
@@ -73,7 +73,7 @@ public class StaffController {
 	}
 
 	// method to activate/Deactivate Department
-	@GetMapping(path = "/activateOrDeactivateDepartment/{name}")
+	@GetMapping(path = "/activate-deactivate-department/{name}")
 	public String activateOrDeactivateDepartment(@PathVariable(value = "name") String name, Model model) {
 		Department department = new Department();
 		department.setDepartment(name);
@@ -91,21 +91,21 @@ public class StaffController {
 	// --------- Attendance methods ------------
 
 	// method to get attendance List
-	@GetMapping(path = "/attendanceList")
+	@GetMapping(path = "/attendancelist")
 	public String attendanceList(Model model) {
 		model.addAttribute("attendanceList", staffDao.attendanceList());
 		return "attendancAdmin";
 	}
 
 	// method to get inactiveAttendance List
-	@GetMapping(path = "/inactiveAttendanceList")
+	@GetMapping(path = "/inactive-attendancelist")
 	public String inactiveAttendanceList(Model model) {
 		model.addAttribute("attendanceList", staffDao.inactiveAttendanceList());
 		return "attendancAdmin";
 	}
 
 	// method to add present
-	@GetMapping(path = "/addOrUpdatePresentByOne")
+	@GetMapping(path = "/add-update-present-by-one")
 	public String addOrUpdatePresentByOne(@RequestParam("present") int present, Model model) {
 		Attendance attendance = new Attendance();
 		attendance.setDaysAttended(present);
@@ -118,7 +118,7 @@ public class StaffController {
 	}
 
 	// method to add absent
-	@GetMapping(path = "/addOrUpdateAbsentByOne")
+	@GetMapping(path = "/add-update-absent-by-one")
 	public String addOrUpdateAbsentByOne(@RequestParam("absent") int absent, Model model) {
 		Attendance attendance = new Attendance();
 		attendance.setDaysLeave(absent);
@@ -131,7 +131,7 @@ public class StaffController {
 	}
 
 	// method to activate Or Deactivate Attendance
-	@GetMapping(path = "/activateOrDeactivateAttendance/{userId}")
+	@GetMapping(path = "/activate-deactivate-attendance/{userId}")
 	public String activateOrDeactivateAttendance(@PathVariable(value = "userId") int userId, Model model) {
 		Attendance attendance = new Attendance();
 		attendance.setUserId(userId);
@@ -146,21 +146,21 @@ public class StaffController {
 	// --------- Semester methods ------------
 
 	// method to get Semester List
-	@GetMapping(path = "/semesterList")
+	@GetMapping(path = "/semesterlist")
 	public String semesterList(Model model) {
 		model.addAttribute("semesterList", staffDao.semesterList());
 		return "semester";
 	}
 
 	// method to get inactive Semester List
-	@GetMapping(path = "/inactiveSemesterList")
+	@GetMapping(path = "/inactive-semesterlist")
 	public String inactiveSemesterList(Model model) {
 		model.addAttribute("semesterList", staffDao.inactiveSemesterList());
 		return "semester";
 	}
 
 	// method to add Semester
-	@GetMapping(path = "/addSemester")
+	@GetMapping(path = "/addsemester")
 	public String addSemester(@RequestParam("semesterId") int semesterId, Model model) {
 		Semester semester = new Semester();
 		semester.setId(semesterId);
@@ -173,7 +173,7 @@ public class StaffController {
 	}
 
 	// method to activate Or Deactivate Semester
-	@GetMapping(path = "/activateOrDeactivateSemester/{semesterId}")
+	@GetMapping(path = "/activate-deactivate-semester/{semesterId}")
 	public String activateOrDeactivateSemester(@PathVariable(value = "semesterId") int semesterId, Model model) {
 		Semester semester = new Semester();
 		semester.setId(semesterId);
@@ -188,21 +188,21 @@ public class StaffController {
 	// --------- Subject methods ------------
 
 	// method to get subject list
-	@GetMapping(path = "/subjectList")
+	@GetMapping(path = "/subjectlist")
 	public String subjectList(Model model) {
 		model.addAttribute("subjectList", staffDao.subjectList());
 		return "subjectDetails";
 	}
 
 	// method to get inactive subject list
-	@GetMapping(path = "/inactivesubjectList")
+	@GetMapping(path = "/inactive-subjectlist")
 	public String inactivesubjectList(Model model) {
 		model.addAttribute("subjectList", staffDao.inactivesubjectList());
 		return "subjectDetails";
 	}
 
 	// method to add subject
-	@GetMapping(path = "/addSubject")
+	@GetMapping(path = "/addsubject")
 	public String addSubject(@RequestParam("subjectId") int subjectId, @RequestParam("name") String name,
 			@RequestParam("semesterId") int semesterId, @RequestParam("department") String department, Model model) {
 		Subject subject = new Subject();
@@ -221,7 +221,7 @@ public class StaffController {
 	// method to find Subject By ID
 
 	// method to activate/Deactivate Subject
-	@GetMapping(path = "/activateOrDeactivateSubject/{subjectId}")
+	@GetMapping(path = "/activate-deactivate-subject/{subjectId}")
 	public String activateOrDeactivateSubject(@PathVariable(value = "subjectId") int subjectId, Model model) {
 		Subject subject = new Subject();
 		subject.setId(subjectId);
@@ -239,21 +239,21 @@ public class StaffController {
 	// --------- Exam methods ------------
 
 	// method to get exam list
-	@GetMapping(path = "/examList")
+	@GetMapping(path = "/examlist")
 	public String examList(Model model) {
 		model.addAttribute("examList", staffDao.examList());
 		return "examDetails";
 	}
 
 	// method to get inactive exam list
-	@GetMapping(path = "/inactiveExamList")
+	@GetMapping(path = "/inactive-examlist")
 	public String inactiveExamList(Model model) {
 		model.addAttribute("inactiveExamList", staffDao.inactiveExamList());
 		return "examDetails";
 	}
 
 	// method to add exam
-	@GetMapping(path = "/addExam")
+	@GetMapping(path = "/addexam")
 	public String addExam(@RequestParam("examId") int examId, @RequestParam("name") String name,
 			@RequestParam("subjectId") int subjectId, @RequestParam("type") String type, Model model) {
 		Exam exam = new Exam();
@@ -270,7 +270,7 @@ public class StaffController {
 	}
 
 	// method to activate Or Deactivate Exam
-	@GetMapping(path = "/activateOrDeactivateExam/{examId}")
+	@GetMapping(path = "/activate-deactivate-exam/{examId}")
 	public String activateOrDeactivateExam(@PathVariable(value = "examId") int examId, Model model) {
 		Exam exam = new Exam();
 		exam.setId(examId);
@@ -288,21 +288,21 @@ public class StaffController {
 	// --------- Result methods ------------
 
 	// method to get result List
-	@GetMapping(path = "/resultList")
+	@GetMapping(path = "/resultlist")
 	public String resultList(Model model) {
 		model.addAttribute("resultList", staffDao.resultList());
 		return "resultAdmin";
 	}
 
 	// method to get inactive Result List
-	@GetMapping(path = "/inactiveResultList")
+	@GetMapping(path = "/inactive-resultlist")
 	public String inactiveResultList(Model model) {
 		model.addAttribute("inactiveResultList", staffDao.inactiveResultList());
 		return "resultAdmin";
 	}
 
 	// method to Add Or Update Result
-	@GetMapping(path = "/addOrUpdateResult")
+	@GetMapping(path = "/add-update-result")
 	public String addOrUpdateResult(@RequestParam("examId") int examId, @RequestParam("userId") int userId,
 			@RequestParam("marks") int marks, Model model) {
 		Result result = new Result();
@@ -318,7 +318,7 @@ public class StaffController {
 	}
 
 	// method to Activate Or Deactivate one Result of particular exam and user
-	@GetMapping(path = "/activateOrDeactivateOneResult/{examId}/{userId}")
+	@GetMapping(path = "/activate-deactivate-one-result/{examId}/{userId}")
 	public String activateOrDeactivateOneResult(@PathVariable(value = "examId") int examId,
 			@PathVariable(value = "userId") int userId, Model model) {
 		Result result = new Result();
@@ -336,7 +336,7 @@ public class StaffController {
 	}
 
 	// method to Activate Or Deactivate Result of one whole exam
-	@GetMapping(path = "/activateOrDeactivateWholeExamResult/{examId}")
+	@GetMapping(path = "/activate-deactivate-whole-examresult/{examId}")
 	public String activateOrDeactivateWholeExamResult(@PathVariable(value = "examId") int examId, Model model) {
 		Result result = new Result();
 		result.setExamId(examId);
@@ -352,7 +352,7 @@ public class StaffController {
 	}
 
 	// method to Activate Or Deactivate one Result of one whole user
-	@GetMapping(path = "/activateOrDeactivateWholeUserResult/{userId}")
+	@GetMapping(path = "/activate-deactivate-whole-userresult/{userId}")
 	public String activateOrDeactivateWholeUserResult(@PathVariable(value = "userId") int userId, Model model) {
 		Result result = new Result();
 		result.setUserId(userId);

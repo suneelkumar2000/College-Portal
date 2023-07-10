@@ -140,7 +140,7 @@
     <div class="header">
       <h2>Attendance Insertion Form</h2>
     </div>
-    <form id="form" action="signup" th:action="@{/signup-submit}" th:object="${signUpForm}" method="GET" class="form">
+    <form id="form" action="signup" th:action="@{#}" th:object="${signUpForm}" method="GET" class="form">
       <br>
       <div class="form-control">
         <label for="userId" class="text"><b>User ID</b><span class="required">*</span></label><input type="number"
