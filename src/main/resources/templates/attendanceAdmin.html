@@ -165,14 +165,16 @@
 
 <body>
   <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a th:href="@{/adminHome}">Home</a>
-    <a th:href="@{/listofusers}">Student List</a>
-    <a th:href="@{/attendanceAdmin}">Attendance</a>
-    <a th:href="@{/resultAdmin}">Result</a>
-    <a th:href="@{/subjectDetails}">Subject Details</a>
-    <a th:href="@{/departmentList}">Department</a>
-  </div>
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a th:href="@{/adminHome}">Home</a>
+    	<a th:href="@{/listofusers}">Student List</a>
+    	<a th:href="@{/attendanceAdmin}">Attendance</a>
+    	<a th:href="@{/resultAdmin}">Result</a>
+    	<a th:href="@{/departmentList}">Department</a>
+    	<a th:href="@{/semesterList}">Semester List</a>
+    	<a th:href="@{/subjectDetails}">Subject Details</a>
+    	<a th:href="@{/examList}">Exam Details</a>
+	</div>
   <br>
   <div>
     <button><a th:href="@{/insertAttendance}">Insert</a></button>

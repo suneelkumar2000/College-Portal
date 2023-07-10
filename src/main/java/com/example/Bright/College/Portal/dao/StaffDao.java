@@ -154,7 +154,7 @@ public class StaffDao {
 				Object[] params = { Department.getDepartment() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				System.out.println(noOfRows + " department are activated");
-				return 1;
+				return 2;
 			}
 		}
 		return 0;
@@ -377,7 +377,7 @@ public class StaffDao {
 				Object[] params = { Subject.getId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				System.out.println(noOfRows + " subjects are activated");
-				return 1;
+				return 2;
 			}
 		}
 		return 0;
@@ -447,7 +447,7 @@ public class StaffDao {
 				Object[] params = { Exam.getId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				System.out.println(noOfRows + " Exams are activated");
-				return 1;
+				return 2;
 			}
 		}
 		return 0;
@@ -494,7 +494,7 @@ public class StaffDao {
 		return 0;
 	}
 
-	public int activateOrDeactivateResult(Result Result) {
+	public int activateOrDeactivateOneResult(Result Result) {
 		// TODO Auto-generated method stub
 		String select = "Select exam_id,user_id,marks,is_active from result";
 		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
@@ -515,11 +515,69 @@ public class StaffDao {
 		}
 		for (Result resultModel2 : result2) {
 			if (resultModel2 != null) {
-				String activate = "update result set is_active =true where exam_id=? and user_id=?";
+				String activate = "update result set is_active =true where (exam_id=? and user_id=?)";
 				Object[] params = { Result.getExamId(), Result.getUserId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				System.out.println(noOfRows + " Results are activated");
+				return 2;
+			}
+		}
+		return 0;
+	}
+
+	public int activateOrDeactivateWholeExamResult(Result Result) {
+		// TODO Auto-generated method stub
+		String select = "Select exam_id,user_id,marks,is_active from result";
+		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
+		List<Result> result1 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		List<Result> result2 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
+				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
+		for (Result resultModel1 : result1) {
+			if (resultModel1 != null) {
+				String deactivate = "update result set is_active =false where exam_id=?";
+				Object[] params = { Result.getExamId() };
+				int noOfRows = jdbcTemplate.update(deactivate, params);
+				System.out.println(noOfRows + " Results are deactivated");
 				return 1;
+			}
+		}
+		for (Result resultModel2 : result2) {
+			if (resultModel2 != null) {
+				String activate = "update result set is_active =true where exam_id=?";
+				Object[] params = { Result.getExamId() };
+				int noOfRows = jdbcTemplate.update(activate, params);
+				System.out.println(noOfRows + " Results are activated");
+				return 2;
+			}
+		}
+		return 0;
+	}
+
+	public int activateOrDeactivateWholeUserResult(Result Result) {
+		// TODO Auto-generated method stub
+		String select = "Select exam_id,user_id,marks,is_active from result";
+		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
+		List<Result> result1 = result.stream().filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		List<Result> result2 = result.stream().filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
+		for (Result resultModel1 : result1) {
+			if (resultModel1 != null) {
+				String deactivate = "update result set is_active =false where user_id=?";
+				Object[] params = { Result.getUserId() };
+				int noOfRows = jdbcTemplate.update(deactivate, params);
+				System.out.println(noOfRows + " Results are deactivated");
+				return 1;
+			}
+		}
+		for (Result resultModel2 : result2) {
+			if (resultModel2 != null) {
+				String activate = "update result set is_active =true where user_id=?";
+				Object[] params = { Result.getUserId() };
+				int noOfRows = jdbcTemplate.update(activate, params);
+				System.out.println(noOfRows + " Results are activated");
+				return 2;
 			}
 		}
 		return 0;

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Subject Details</title>
+	<title>Exam Details</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<style media="only screen">
@@ -173,11 +173,6 @@
     	<a th:href="@{/subjectDetails}">Subject Details</a>
     	<a th:href="@{/examList}">Exam Details</a>
 	</div>
-	
-	<div style="height: 100%; box-sizing: border-box">
-		<div id="myGrid" style="height: 100%" class="ag-theme-alpine">
-		</div>
-	</div>
 
 	<script>
 		function openNav() {
@@ -188,59 +183,6 @@
 		function closeNav() {
 			document.getElementById("mySidenav").style.width = "0";
 		}
-	</script>
-	<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
-	</script>
-	<script>
-		const gridOptions = {
-			// define grid columns
-			columnDefs: [
-				// using number column type
-				{ field: 'Subject ID', type: 'numberColumn' },
-				{ field: 'Subject Name' },
-				{ field: 'Department' },
-				{ field: 'Semester', type: 'numberColumn' },
-			],
-
-			// default ColDef, gets applied to every column
-			defaultColDef: {
-				// set the default column width
-				width: 200,
-				// make every column editable
-				editable: true,
-				// make every column use 'text' filter by default
-				filter: 'agTextColumnFilter',
-				// enable floating filters by default
-				floatingFilter: true,
-				// make columns resizable
-				resizable: true,
-				// disable cell data types
-				cellDataType: false,
-			},
-
-			// default ColGroupDef, get applied to every column group
-			defaultColGroupDef: {
-				marryChildren: true,
-			},
-
-			// define specific column types
-			columnTypes: {
-				numberColumn: { width:175, filter: 'agNumberColumnFilter' },
-				nonEditableColumn: { editable: false },
-				
-			},
-			rowData: null,
-		};
-
-		// setup the grid after the page has finished loading
-		document.addEventListener('DOMContentLoaded', () => {
-			const gridDiv = document.querySelector('#myGrid');
-			new agGrid.Grid(gridDiv, gridOptions);
-
-			fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
-				.then((response) => response.json())
-				.then((data) => gridOptions.api.setRowData(data));
-		});
 	</script>
 </body>
 

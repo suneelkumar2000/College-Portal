@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Subject Details</title>
+	<title>Department List</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<style media="only screen">
@@ -168,8 +168,10 @@
     	<a th:href="@{/listofusers}">Student List</a>
     	<a th:href="@{/attendanceAdmin}">Attendance</a>
     	<a th:href="@{/resultAdmin}">Result</a>
-    	<a th:href="@{/subjectDetails}">Subject Details</a>
     	<a th:href="@{/departmentList}">Department</a>
+    	<a th:href="@{/semesterList}">Semester List</a>
+    	<a th:href="@{/subjectDetails}">Subject Details</a>
+    	<a th:href="@{/examList}">Exam Details</a>
 	</div>
 	<br>
 	
@@ -185,6 +187,7 @@
                 <tr>
                     <th>Department ID</th>
                     <th>Department Name</th>
+                    <th>Status</th>
                     <th> Actions </th>
                 </tr>
             </thead>
@@ -192,13 +195,16 @@
                 <tr th:each="department : ${departmentList}">
                     <td th:text="${department.id}"></td>
                     <td th:text="${department.department}"></td>
+                    <td th:text="${department.isActive}"></td>
                     <td> 
                         <a th:href="@{/activateOrDeactivateDepartment/{name}(name=${department.department})}" class="btn btn-danger">Activate/Deactivate</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-	<div>
+	</div>
+	
+	
 
 	<script>
 		function openNav() {
