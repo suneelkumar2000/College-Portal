@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.college_portal.dao.StaffDao;
+import com.project.college_portal.exception.ExamIdException;
+import com.project.college_portal.exception.ExistDepartmentNameException;
+import com.project.college_portal.exception.MarkException;
+import com.project.college_portal.exception.SemesterIdException;
+import com.project.college_portal.exception.SubjectIdException;
+import com.project.college_portal.exception.UserIdException;
 import com.project.college_portal.model.Attendance;
 import com.project.college_portal.model.Department;
 import com.project.college_portal.model.Exam;
@@ -59,7 +65,7 @@ public class StaffController {
 
 	// method to add department
 	@GetMapping(path = "/insertdepartment")
-	public String addDepartment(@RequestParam("department") String department, Model model) {
+	public String addDepartment(@RequestParam("department") String department, Model model) throws ExistDepartmentNameException {
 		Department depart = new Department();
 		depart.setDepartment(department);
 		int value = staffDao.addDepartment(depart);
@@ -111,7 +117,7 @@ public class StaffController {
 
 	// method to add present
 	@GetMapping(path = "/add-update-present-by-one/{userId}")
-	public String addOrUpdatePresentByOne(@PathVariable(value = "userId") int userId, Model model) {
+	public String addOrUpdatePresentByOne(@PathVariable(value = "userId") int userId, Model model) throws UserIdException {
 		int value = staffDao.addOrUpdatePresentByOne(userId);
 		if (value == 1) {
 			model.addAttribute("studentList", staffDao.studentList());
@@ -122,7 +128,7 @@ public class StaffController {
 
 	// method to add absent
 	@GetMapping(path = "/add-update-absent-by-one/{userId}")
-	public String addOrUpdateAbsentByOne(@PathVariable(value = "userId") int userId, Model model) {
+	public String addOrUpdateAbsentByOne(@PathVariable(value = "userId") int userId, Model model) throws UserIdException {
 		
 		int value = staffDao.addOrUpdateAbsentByOne(userId);
 		if (value == 1) {
@@ -206,7 +212,7 @@ public class StaffController {
 	// method to add subject
 	@GetMapping(path = "/addsubject")
 	public String addSubject(@RequestParam("subjectId") int subjectId, @RequestParam("name") String name,
-			@RequestParam("semesterId") int semesterId, @RequestParam("department") String department, Model model) {
+			@RequestParam("semesterId") int semesterId, @RequestParam("department") String department, Model model) throws SemesterIdException, ExistDepartmentNameException {
 		Subject subject = new Subject();
 		subject.setId(subjectId);
 		subject.setName(name);
@@ -257,7 +263,7 @@ public class StaffController {
 	// method to add exam
 	@GetMapping(path = "/addexam")
 	public String addExam(@RequestParam("examId") int examId, @RequestParam("name") String name,
-			@RequestParam("subjectId") int subjectId, @RequestParam("type") String type, Model model) {
+			@RequestParam("subjectId") int subjectId, @RequestParam("type") String type, Model model) throws SubjectIdException {
 		Exam exam = new Exam();
 		exam.setId(examId);
 		exam.setName(name);
@@ -306,7 +312,7 @@ public class StaffController {
 	// method to Add Or Update Result
 	@GetMapping(path = "/add-update-result")
 	public String addOrUpdateResult(@RequestParam("examId") int examId, @RequestParam("userId") int userId,
-			@RequestParam("marks") int marks, Model model) {
+			@RequestParam("marks") int marks, Model model) throws MarkException, UserIdException, ExamIdException {
 		Result result = new Result();
 		result.setExamId(examId);
 		result.setUserId(userId);

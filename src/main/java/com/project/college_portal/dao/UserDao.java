@@ -6,11 +6,12 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 
+import com.project.college_portal.connection.ConnectionUtil;
+import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
 import com.project.college_portal.mapper.UserMapper;
@@ -21,10 +22,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Repository
 public class UserDao {
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-
-	public int save(User saveUser) {
+	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
+	
+	public int save(User saveUser) throws ExistMailIdException {
 		String password = saveUser.getPassword();
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String encodedPassword = encoder.encode(password);
@@ -39,8 +39,7 @@ public class UserDao {
 		System.out.println(emailContains);
 
 		if (emailContains == true) {
-			System.out.println("Email Already Exist");
-			return 0;
+			throw new ExistMailIdException("Exist Email Exception");
 		} else {
 			String sql = "insert into user(first_name,last_name,dob,gender,phone_number,email,Password,roll) values(?,?,?,?,?,?,?,?)";
 			Object[] params = { saveUser.getFirstName(), saveUser.getLastName(), saveUser.getDOB(),

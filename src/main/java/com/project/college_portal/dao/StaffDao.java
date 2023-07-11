@@ -2,11 +2,20 @@ package com.project.college_portal.dao;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.project.college_portal.connection.ConnectionUtil;
+import com.project.college_portal.exception.ExamIdException;
+import com.project.college_portal.exception.ExistDepartmentNameException;
+import com.project.college_portal.exception.ExistMailIdException;
+import com.project.college_portal.exception.MarkException;
+import com.project.college_portal.exception.SemesterIdException;
+import com.project.college_portal.exception.SubjectIdException;
+import com.project.college_portal.exception.UserIdException;
 import com.project.college_portal.mapper.ApprovingMapper;
 import com.project.college_portal.mapper.AttendanceMapper;
 import com.project.college_portal.mapper.DepartmentMapper;
@@ -27,28 +36,26 @@ import com.project.college_portal.model.User;
 
 @Repository
 public class StaffDao {
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
+	Logger logger = LoggerFactory.getLogger(StaffDao.class);
 
 	// --------- Students methods ------------
 
 	public User findDepartmentById(User user) {
 		String select = "select department from user where (roll='student' and id=?)";
 		User userDepartment = jdbcTemplate.queryForObject(select, new UserDepartmentMapper(), user.getUserId());
-		System.out.println(userDepartment);
 		return userDepartment;
 	}
 
 	public List<User> studentList() {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		System.out.println(userList);
 		return userList;
 	}
 
 	public int approve(User approveUser) {
 		// TODO Auto-generated method stub
-		String select = "Select id,roll from user";
+		String select = "Select id,roll,is_active from user";
 		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (approveUser.getUserId()))
 				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
@@ -57,7 +64,7 @@ public class StaffDao {
 				String approve = "update user set status='approved'  where (roll='student' and id=?)";
 				Object[] params = { approveUser.getUserId() };
 				int noOfRows = jdbcTemplate.update(approve, params);
-				System.out.println(noOfRows + " student are approved");
+				logger.info(noOfRows + " student are approved");
 				return 1;
 			}
 		}
@@ -74,13 +81,12 @@ public class StaffDao {
 	public List<User> notApprovedStudentList() {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and status='not approved' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		System.out.println(userList);
 		return userList;
 	}
 
 	public int activateOrDeactivateStudent(User User) {
 		// TODO Auto-generated method stub
-		String select = "Select id,roll from user";
+		String select = "Select id,roll,is_active from user";
 		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
 				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (true))
@@ -93,7 +99,7 @@ public class StaffDao {
 				String deactivate = "update user set is_active = false  where (roll='student' and id=?)";
 				Object[] params = { User.getUserId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " student are deactivated");
+				logger.warn(noOfRows + " student are deactivated");
 				return 1;
 			}
 		}
@@ -102,7 +108,7 @@ public class StaffDao {
 				String activate = "update user set is_active = true where (roll='student' and id=?)";
 				Object[] params = { User.getUserId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " student are activated");
+				logger.info(noOfRows + " student are activated");
 				return 1;
 			}
 		}
@@ -112,18 +118,27 @@ public class StaffDao {
 	public List<User> inactiveStudentList() {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and is_active =false)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		System.out.println(userList);
 		return userList;
 	}
 
 	// --------- Department methods ------------
 
-	public int addDepartment(Department department) {
+	public int addDepartment(Department department) throws ExistDepartmentNameException {
+		String name = department.getDepartment();
+		String select = "Select id,department,is_active from classroom";
+		List<Department> depart = jdbcTemplate.query(select, new DepartmentMapper());
+		List<Department> department1 = depart.stream().filter(dep -> dep.getDepartment().equals(name))
+				.collect(Collectors.toList());
+		for (Department departmentModel1 : department1) {
+			if (departmentModel1 != null) {
+				throw new ExistDepartmentNameException("Exist Department Exception");
+			}
+		}
 		String add = "insert into classroom(department) values(?)";
-		Object[] params = { department.getDepartment() };
+		Object[] params = { name };
 		int noOfRows = jdbcTemplate.update(add, params);
 		if (noOfRows > 0) {
-			System.out.println(noOfRows + "Saved");
+			logger.info(noOfRows + "Saved");
 			return 1;
 		} else
 			return 0;
@@ -144,7 +159,7 @@ public class StaffDao {
 				String deactivate = "update classroom set is_active =false where department=?";
 				Object[] params = { Department.getDepartment() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " department are deactivated");
+				logger.warn(noOfRows + " department are deactivated");
 				return 1;
 			}
 		}
@@ -153,7 +168,7 @@ public class StaffDao {
 				String activate = "update classroom set is_active =true where department=?";
 				Object[] params = { Department.getDepartment() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " department are activated");
+				logger.info(noOfRows + " department are activated");
 				return 2;
 			}
 		}
@@ -163,76 +178,97 @@ public class StaffDao {
 	public List<Department> departmentList() {
 		String select = "select id,department,is_active from classroom where (is_active =true)";
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
-		System.out.println(departmentList);
 		return departmentList;
 	}
 
 	public List<Department> inactiveDepartmentList() {
 		String select = "select id,department,is_active from classroom where (is_active =false)";
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
-		System.out.println(departmentList);
 		return departmentList;
 	}
 
 	// --------- Attendance methods ------------
 
-	public int addOrUpdatePresentByOne(int userId) {
-		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
-		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-		List<Attendance> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
-				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		for (Attendance attendanceModel1 : attendanceList1) {
-			if (attendanceModel1 != null) {
-				int daysAttended = attendanceModel1.getDaysAttended() + 1;
-				int daysLeave = attendanceModel1.getDaysLeave();
+	public int addOrUpdatePresentByOne(int userId) throws UserIdException {
+		String select1 = "Select id,roll,is_active from user";
+		List<User> user = jdbcTemplate.query(select1, new ApprovingMapper());
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == userId)
+				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (true))
+				.collect(Collectors.toList());
+		for (User userModel1 : user1) {
+			if (userModel1 != null) {
+
+				String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
+				List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+				List<Attendance> attendanceList1 = attendanceList.stream()
+						.filter(userid -> userid.getUserId() == (userId))
+						.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+				for (Attendance attendanceModel1 : attendanceList1) {
+					if (attendanceModel1 != null) {
+						int daysAttended = attendanceModel1.getDaysAttended() + 1;
+						int daysLeave = attendanceModel1.getDaysLeave();
+						int totalDays = daysAttended + daysLeave;
+						double attendancePercentage = (daysAttended / totalDays) * 100;
+						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
+						Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
+						int noOfRows = jdbcTemplate.update(update, params);
+						logger.info(noOfRows + " updated");
+						return 1;
+					}
+				}
+				int daysAttended = 1;
+				int daysLeave = 0;
 				int totalDays = daysAttended + daysLeave;
 				double attendancePercentage = (daysAttended / totalDays) * 100;
-				String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
-				Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
-				int noOfRows = jdbcTemplate.update(update, params);
-				System.out.println(noOfRows + " updated");
+				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
+				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
+				int noOfRows = jdbcTemplate.update(add, params);
+				logger.info(noOfRows + " inserted");
 				return 1;
 			}
 		}
-		int daysAttended = 1;
-		int daysLeave = 0;
-		int totalDays = daysAttended + daysLeave;
-		double attendancePercentage = (daysAttended / totalDays) * 100;
-		String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
-		Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
-		int noOfRows = jdbcTemplate.update(add, params);
-		System.out.println(noOfRows + " updated");
-		return 1;
-
+		throw new UserIdException("User Id dosen't exist");
 	}
 
-	public int addOrUpdateAbsentByOne(int userId) {
-		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
-		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-		List<Attendance> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
-				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		for (Attendance attendanceModel1 : attendanceList1) {
-			if (attendanceModel1 != null) {
-				int daysAttended = attendanceModel1.getDaysAttended();
-				int daysLeave = attendanceModel1.getDaysLeave() + 1;
+	public int addOrUpdateAbsentByOne(int userId) throws UserIdException {
+		String select1 = "Select id,roll,is_active from user";
+		List<User> user = jdbcTemplate.query(select1, new ApprovingMapper());
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == userId)
+				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (true))
+				.collect(Collectors.toList());
+		for (User userModel1 : user1) {
+			if (userModel1 != null) {
+
+				String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
+				List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+				List<Attendance> attendanceList1 = attendanceList.stream()
+						.filter(userid -> userid.getUserId() == (userId))
+						.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+				for (Attendance attendanceModel1 : attendanceList1) {
+					if (attendanceModel1 != null) {
+						int daysAttended = attendanceModel1.getDaysAttended();
+						int daysLeave = attendanceModel1.getDaysLeave() + 1;
+						int totalDays = daysAttended + daysLeave;
+						double attendancePercentage = (daysAttended / totalDays) * 100;
+						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
+						Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
+						int noOfRows = jdbcTemplate.update(update, params);
+						logger.info(noOfRows + " updated");
+						return 1;
+					}
+				}
+				int daysAttended = 0;
+				int daysLeave = 1;
 				int totalDays = daysAttended + daysLeave;
 				double attendancePercentage = (daysAttended / totalDays) * 100;
-				String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
-				Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
-				int noOfRows = jdbcTemplate.update(update, params);
-				System.out.println(noOfRows + " updated");
+				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
+				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
+				int noOfRows = jdbcTemplate.update(add, params);
+				logger.info(noOfRows + " insert");
 				return 1;
 			}
 		}
-		int daysAttended = 0;
-		int daysLeave = 1;
-		int totalDays = daysAttended + daysLeave;
-		double attendancePercentage = (daysAttended / totalDays) * 100;
-		String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
-		Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
-		int noOfRows = jdbcTemplate.update(add, params);
-		System.out.println(noOfRows + " updated");
-		return 1;
+		throw new UserIdException("User Id dosen't exist");
 	}
 
 	public int activateOrDeactivateAttendance(Attendance attendance) {
@@ -250,7 +286,7 @@ public class StaffDao {
 				String deactivate = "update attendance set is_active =false where user_id=?";
 				Object[] params = { attendance.getUserId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " user attendance are deactivated");
+				logger.info(noOfRows + " user attendance are deactivated");
 				return 1;
 			}
 		}
@@ -259,7 +295,7 @@ public class StaffDao {
 				String activate = "update attendance set is_active =true where user_id=?";
 				Object[] params = { attendance.getUserId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " user attendance are activated");
+				logger.info(noOfRows + " user attendance are activated");
 				return 1;
 			}
 		}
@@ -269,14 +305,12 @@ public class StaffDao {
 	public List<Attendance> attendanceList() {
 		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =true)";
 		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-		System.out.println(attendanceList);
 		return attendanceList;
 	}
 
 	public List<Attendance> inactiveAttendanceList() {
 		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =false)";
 		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-		System.out.println(attendanceList);
 		return attendanceList;
 	}
 
@@ -287,7 +321,7 @@ public class StaffDao {
 		Object[] params = { semester.getId() };
 		int noOfRows = jdbcTemplate.update(add, params);
 		if (noOfRows > 0) {
-			System.out.println(noOfRows + "Saved");
+			logger.info(noOfRows + "Saved");
 			return 1;
 		} else
 			return 0;
@@ -306,7 +340,7 @@ public class StaffDao {
 				String deactivate = "update semester set is_active =false where id=?";
 				Object[] params = { Semester.getId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " Semester are deactivated");
+				logger.info(noOfRows + " Semester are deactivated");
 				return 1;
 			}
 		}
@@ -315,7 +349,7 @@ public class StaffDao {
 				String activate = "update semester set is_active =true where id=?";
 				Object[] params = { Semester.getId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " Semester are activated");
+				logger.info(noOfRows + " Semester are activated");
 				return 1;
 			}
 		}
@@ -325,28 +359,48 @@ public class StaffDao {
 	public List<Semester> semesterList() {
 		String select = "Select id,is_active from semester where (is_active =true)";
 		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
-		System.out.println(semesterList);
 		return semesterList;
 	}
 
 	public List<Semester> inactiveSemesterList() {
 		String select = "Select id,is_active from semester where (is_active =false)";
 		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
-		System.out.println(semesterList);
 		return semesterList;
 	}
 
 	// --------- Subject methods ------------
 
-	public int addSubject(Subject subject) {
-		String add = "insert into subjects(id,name,semester_id,department) values(?,?,?,?)";
-		Object[] params = { subject.getId(), subject.getName(), subject.getSemesterId(), subject.getDepartment() };
-		int noOfRows = jdbcTemplate.update(add, params);
-		if (noOfRows > 0) {
-			System.out.println(noOfRows + "Saved");
-			return 1;
-		} else
-			return 0;
+	public int addSubject(Subject subject) throws SemesterIdException, ExistDepartmentNameException {
+		int semesterId = subject.getSemesterId();
+		String select = "Select id,is_active from semester";
+		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
+		List<Semester> semester1 = semester.stream().filter(id -> id.getId() == (semesterId))
+				.collect(Collectors.toList());
+		for (Semester semesterModel1 : semester1) {
+			if (semesterModel1 != null) {
+
+				String department = subject.getDepartment();
+				String select1 = "Select id,department,is_active from classroom";
+				List<Department> depart = jdbcTemplate.query(select1, new DepartmentMapper());
+				List<Department> department1 = depart.stream().filter(dep -> dep.getDepartment().equals(department))
+						.collect(Collectors.toList());
+				for (Department departmentModel1 : department1) {
+					if (departmentModel1 != null) {
+
+						String add = "insert into subjects(id,name,semester_id,department) values(?,?,?,?)";
+						Object[] params = { subject.getId(), subject.getName(), semesterId, department };
+						int noOfRows = jdbcTemplate.update(add, params);
+						if (noOfRows > 0) {
+							logger.info(noOfRows + "Saved");
+							return 1;
+						} else
+							return 0;
+					}
+				}
+				throw new ExistDepartmentNameException("Department dosen't exist");
+			}
+		}
+		throw new SemesterIdException("Semester Id dosen't exist");
 	}
 
 	public int activateOrDeactivateSubject(Subject Subject) {
@@ -362,7 +416,7 @@ public class StaffDao {
 				String deactivate = "update subjects set is_active =false where id=?";
 				Object[] params = { Subject.getId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " subjects are deactivated");
+				logger.info(noOfRows + " subjects are deactivated");
 				return 1;
 			}
 		}
@@ -371,7 +425,7 @@ public class StaffDao {
 				String activate = "update subjects set is_active =true where id=?";
 				Object[] params = { Subject.getId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " subjects are activated");
+				logger.info(noOfRows + " subjects are activated");
 				return 2;
 			}
 		}
@@ -381,42 +435,48 @@ public class StaffDao {
 	public Subject findByID(int id) {
 		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and id =?)";
 		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectMapper(), id);
-		System.out.println(subjectNameList);
 		return subjectNameList;
 	}
 
 	public Subject findSubjectNameByDepartment(String department) {
 		String find = "select name from subjects where (is_active =true and department =?)";
 		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectNameMapper(), department);
-		System.out.println(subjectNameList);
 		return subjectNameList;
 	}
 
 	public List<Subject> subjectList() {
 		String select = "select id,name,semester_id,department,is_active from subjects where (is_active =true)";
 		List<Subject> subjectList = jdbcTemplate.query(select, new SubjectMapper());
-		System.out.println(subjectList);
 		return subjectList;
 	}
 
 	public List<Subject> inactivesubjectList() {
 		String select = "select id,name,semester_id,department,is_active from subjects where (is_active =false)";
 		List<Subject> subjectList = jdbcTemplate.query(select, new SubjectMapper());
-		System.out.println(subjectList);
 		return subjectList;
 	}
 
 	// --------- Exam methods ------------
 
-	public int addExam(Exam exam) {
-		String add = "insert into exam(id,subject_id,name,type) values(?,?,?,?)";
-		Object[] params = { exam.getId(), exam.getSubjectId(), exam.getName(), exam.getType() };
-		int noOfRows = jdbcTemplate.update(add, params);
-		if (noOfRows > 0) {
-			System.out.println(noOfRows + "Saved");
-			return 1;
-		} else
-			return 0;
+	public int addExam(Exam exam) throws SubjectIdException {
+		int subjectId = exam.getSubjectId();
+		String select = "Select id,name,semester_id,department,is_active from subjects";
+		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
+		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (subjectId))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		for (Subject subjectModel1 : subject1) {
+			if (subjectModel1 != null) {
+				String add = "insert into exam(id,subject_id,name,type) values(?,?,?,?)";
+				Object[] params = { exam.getId(), subjectId, exam.getName(), exam.getType() };
+				int noOfRows = jdbcTemplate.update(add, params);
+				if (noOfRows > 0) {
+					System.out.println(noOfRows + "Saved");
+					return 1;
+				} else
+					return 0;
+			}
+		}
+		throw new SubjectIdException("Subject Id dosen't exist");
 	}
 
 	public int activateOrDeactivateExam(Exam Exam) {
@@ -432,7 +492,7 @@ public class StaffDao {
 				String deactivate = "update exam set is_active =false where id=?";
 				Object[] params = { Exam.getId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " Exams are deactivated");
+				logger.info(noOfRows + " Exams are deactivated");
 				return 1;
 			}
 		}
@@ -441,7 +501,7 @@ public class StaffDao {
 				String activate = "update exam set is_active =true where id=?";
 				Object[] params = { Exam.getId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " Exams are activated");
+				logger.info(noOfRows + " Exams are activated");
 				return 2;
 			}
 		}
@@ -451,42 +511,67 @@ public class StaffDao {
 	public List<Exam> examList() {
 		String select = "select id,subject_id,name,type,is_active from exam where (is_active =true)";
 		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
-		System.out.println(examList);
 		return examList;
 	}
 
 	public List<Exam> inactiveExamList() {
 		String select = "select id,subject_id,name,type,is_active from exam where (is_active =false)";
 		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
-		System.out.println(examList);
 		return examList;
 	}
 
 	// --------- Result methods ------------
 
-	public int addOrUpdateResult(Result Result) {
-		String select = "Select exam_id,user_id,marks,is_active from result";
-		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
-		List<Result> result1 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
-				.filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+	public int addOrUpdateResult(Result Result) throws MarkException, UserIdException, ExamIdException {
+		int examid = Result.getUserId();
+		String select = "Select id,subject_id,name,type,is_active from exam";
+		List<Exam> exam = jdbcTemplate.query(select, new ExamMapper());
+		List<Exam> exam1 = exam.stream().filter(id -> id.getId() == (examid))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		for (Result resultModel1 : result1) {
-			if (resultModel1 != null) {
-				System.out.println("Result already exist");
-				String update = "update result set marks =? where (exam_id=? and user_id=?)";
-				Object[] params = { Result.getExamId(), Result.getUserId() };
-				int noOfRows = jdbcTemplate.update(update, params);
-				System.out.println(noOfRows + " updated");
-				return 1;
-			} else {
-				String add = "insert into result(exam_id,user_id,marks) values(?,?,?)";
-				Object[] params = { Result.getExamId(), Result.getUserId(), Result.getMarks() };
-				int noOfRows = jdbcTemplate.update(add, params);
-				System.out.println(noOfRows + " Saved");
-				return 2;
+		for (Exam examModel1 : exam1) {
+			if (examModel1 != null) {
+
+				int userId = Result.getUserId();
+				String select1 = "Select id,roll,is_active from user";
+				List<User> user = jdbcTemplate.query(select1, new ApprovingMapper());
+				List<User> user1 = user.stream().filter(id -> id.getUserId() == userId)
+						.filter(roll1 -> roll1.getRoll().equals("student"))
+						.filter(isActive -> isActive.isIsActive() == (true)).collect(Collectors.toList());
+				for (User userModel1 : user1) {
+					if (userModel1 != null) {
+
+						int marks = Result.getMarks();
+						if (marks >= 0 && marks <= 100) {
+							String select2 = "Select exam_id,user_id,marks,is_active from result";
+							List<Result> result = jdbcTemplate.query(select2, new ResultMapper());
+							List<Result> result1 = result.stream()
+									.filter(examId -> examId.getExamId() == (Result.getExamId()))
+									.filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+									.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+							for (Result resultModel1 : result1) {
+								if (resultModel1 != null) {
+									System.out.println("Result already exist");
+									String update = "update result set marks =? where (exam_id=? and user_id=?)";
+									Object[] params = { marks, Result.getExamId(), userId };
+									int noOfRows = jdbcTemplate.update(update, params);
+									logger.info(noOfRows + " updated");
+									return 1;
+								}
+							}
+							String add = "insert into result(exam_id,user_id,marks) values(?,?,?)";
+							Object[] params = { Result.getExamId(), Result.getUserId(), marks };
+							int noOfRows = jdbcTemplate.update(add, params);
+							logger.info(noOfRows + " Saved");
+							return 2;
+						} else {
+							throw new MarkException("Invalid Marks");
+						}
+					}
+				}
+				throw new UserIdException("User Id dosen't exist");
 			}
 		}
-		return 0;
+		throw new ExamIdException("Exam Id dosen't exist");
 	}
 
 	public int activateOrDeactivateOneResult(Result Result) {
@@ -504,7 +589,7 @@ public class StaffDao {
 				String deactivate = "update result set is_active =false where (exam_id=? and user_id=?)";
 				Object[] params = { Result.getExamId(), Result.getUserId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " Results are deactivated");
+				logger.info(noOfRows + " Results are deactivated");
 				return 1;
 			}
 		}
@@ -513,7 +598,7 @@ public class StaffDao {
 				String activate = "update result set is_active =true where (exam_id=? and user_id=?)";
 				Object[] params = { Result.getExamId(), Result.getUserId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " Results are activated");
+				logger.info(noOfRows + " Results are activated");
 				return 2;
 			}
 		}
@@ -533,7 +618,7 @@ public class StaffDao {
 				String deactivate = "update result set is_active =false where exam_id=?";
 				Object[] params = { Result.getExamId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " Results are deactivated");
+				logger.info(noOfRows + " Results are deactivated");
 				return 1;
 			}
 		}
@@ -542,7 +627,7 @@ public class StaffDao {
 				String activate = "update result set is_active =true where exam_id=?";
 				Object[] params = { Result.getExamId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " Results are activated");
+				logger.info(noOfRows + " Results are activated");
 				return 2;
 			}
 		}
@@ -562,7 +647,7 @@ public class StaffDao {
 				String deactivate = "update result set is_active =false where user_id=?";
 				Object[] params = { Result.getUserId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
-				System.out.println(noOfRows + " Results are deactivated");
+				logger.info(noOfRows + " Results are deactivated");
 				return 1;
 			}
 		}
@@ -571,7 +656,7 @@ public class StaffDao {
 				String activate = "update result set is_active =true where user_id=?";
 				Object[] params = { Result.getUserId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
-				System.out.println(noOfRows + " Results are activated");
+				logger.info(noOfRows + " Results are activated");
 				return 2;
 			}
 		}
@@ -581,14 +666,12 @@ public class StaffDao {
 	public List<Result> resultList() {
 		String select = "select exam_id,user_id,marks,is_active from result where (is_active =true)";
 		List<Result> resultList = jdbcTemplate.query(select, new ResultMapper());
-		System.out.println(resultList);
 		return resultList;
 	}
 
 	public List<Result> inactiveResultList() {
 		String select = "select exam_id,user_id,marks,is_active from result where (is_active =false)";
 		List<Result> resultList = jdbcTemplate.query(select, new ResultMapper());
-		System.out.println(resultList);
 		return resultList;
 	}
 

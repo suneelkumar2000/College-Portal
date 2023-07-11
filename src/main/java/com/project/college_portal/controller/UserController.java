@@ -14,7 +14,7 @@ import com.project.college_portal.model.User;
 
 @Controller
 public class UserController {
-	
+
 	UserDao userDao = new UserDao();
 
 	// method to save register details
@@ -22,7 +22,7 @@ public class UserController {
 	public String saveUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
 			@RequestParam("email") String email, @RequestParam("password") String password,
 			@RequestParam("phone") Long phone, @RequestParam("gender") String gender, @RequestParam("roll") String roll,
-			@RequestParam("DOB") Date DOB) {
+			@RequestParam("DOB") Date DOB) throws ExistMailIdException {
 		User user = new User();
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -33,16 +33,11 @@ public class UserController {
 		user.setGender(gender);
 		user.setRoll(roll);
 		int value = userDao.save(user);
-		try {
-			if (value == 1) {
-				return "index";
-			} else {
-				throw new ExistMailIdException("Exist Email Exception");
-			}
-		} catch (ExistMailIdException e) {
-			System.out.println("Exception: Email Id Already Exist");
-			return "signup";
+
+		if (value == 1) {
+			return "index";
 		}
+		return "signup";
 
 	}
 
