@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExistMailIdException;
+import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
 import com.project.college_portal.mapper.UserMapper;
@@ -23,6 +24,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Repository
 public class UserDao {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
+	
+	//--------- user method --------- 
 	
 	public int save(User saveUser) throws ExistMailIdException {
 		String password = saveUser.getPassword();
@@ -68,7 +71,7 @@ public class UserDao {
 
 	}
 
-	public int login(User loginUser) {
+	public int login(User loginUser) throws InvalidMailIdException  {
 		String email = loginUser.getEmail();
 
 		String password = loginUser.getPassword();
@@ -101,7 +104,7 @@ public class UserDao {
 			}
 
 		}
-		return 0;
+		throw new InvalidMailIdException("Email dosen't exist");
 	}
 
 	public List<User> listUsers() {
@@ -152,4 +155,8 @@ public class UserDao {
 		}
 		return 0;
 	}
+	
+	//--------- student method --------- 
+	
+	
 }

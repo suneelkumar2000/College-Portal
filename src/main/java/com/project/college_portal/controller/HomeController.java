@@ -59,10 +59,11 @@ public class HomeController {
 	}
 
 	// method to get student profile
-	/*
-	 * @GetMapping(path = "") public String studentProfile() { return
-	 * "studentProfile"; }
-	 */
+
+	@GetMapping(path = "/studentprofile")
+	public String studentProfile() {
+		return "studentProfile";
+	}
 
 	// method to get department form
 	@GetMapping(path = "/insertDepartmentForm")

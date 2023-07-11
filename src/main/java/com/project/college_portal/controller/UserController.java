@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.college_portal.dao.UserDao;
 import com.project.college_portal.exception.ExistMailIdException;
+import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.model.User;
 
 @Controller
@@ -17,6 +18,8 @@ public class UserController {
 
 	UserDao userDao = new UserDao();
 
+	//--------- user method --------- 
+	
 	// method to save register details
 	@GetMapping(path = "/signup-submit")
 	public String saveUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
@@ -43,7 +46,7 @@ public class UserController {
 
 	// method to get Login success
 	@GetMapping(path = "/login-submit")
-	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password) {
+	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password) throws InvalidMailIdException {
 		User user = new User();
 		user.setEmail(email);
 		user.setPassword(password);
@@ -72,4 +75,8 @@ public class UserController {
 		} else
 			return "index";
 	}
+	
+	//--------- student method --------- 
+	
+	
 }

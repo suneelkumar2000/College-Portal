@@ -127,7 +127,7 @@ public class StaffDao {
 		String name = department.getDepartment();
 		String select = "Select id,department,is_active from classroom";
 		List<Department> depart = jdbcTemplate.query(select, new DepartmentMapper());
-		List<Department> department1 = depart.stream().filter(dep -> dep.getDepartment().equals(name))
+		List<Department> department1 = depart.stream().filter(dep -> ((dep.getDepartment()).toLowerCase()).equals((name).toLowerCase()))
 				.collect(Collectors.toList());
 		for (Department departmentModel1 : department1) {
 			if (departmentModel1 != null) {
