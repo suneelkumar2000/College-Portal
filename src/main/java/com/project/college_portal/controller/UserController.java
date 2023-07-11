@@ -14,10 +14,8 @@ import com.project.college_portal.model.User;
 
 @Controller
 public class UserController {
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-	@Autowired
-	UserDao userDao;
+	
+	UserDao userDao = new UserDao();
 
 	// method to save register details
 	@GetMapping(path = "/signup-submit")

@@ -21,10 +21,8 @@ import com.project.college_portal.model.User;
 
 @Controller
 public class StaffController {
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-	@Autowired
-	StaffDao staffDao;
+	
+	StaffDao staffDao = new StaffDao();
 
 	// method to get student list
 	@GetMapping(path = "/listofusers")

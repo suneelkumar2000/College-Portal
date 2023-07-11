@@ -1,31 +1,14 @@
 package com.project.college_portal.controller;
 
-import java.sql.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.project.college_portal.dao.StaffDao;
 import com.project.college_portal.dao.UserDao;
-import com.project.college_portal.exception.ExistMailIdException;
-import com.project.college_portal.model.Department;
-import com.project.college_portal.model.User;
-
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 
 @Controller
 public class HomeController {
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-	@Autowired
-	UserDao userDao;
+
+	UserDao userDao = new UserDao();
 
 	// method to get index page
 	@GetMapping(path = "/index")
@@ -56,8 +39,6 @@ public class HomeController {
 	public String logout() {
 		return "index";
 	}
-
-	
 
 	// method to get result Admin page
 	@GetMapping(path = "/resultAdmin")

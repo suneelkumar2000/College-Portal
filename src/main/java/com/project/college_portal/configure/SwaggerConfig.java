@@ -10,14 +10,14 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 //@EnableSwagger2
 public class SwaggerConfig {
-	 @Bean
 	 
-	    public Docket api() {
+	    /*public Docket api() {
 	        return new Docket(DocumentationType.SWAGGER_2)
 	                .select()
 	                .apis(RequestHandlerSelectors.basePackage("com.project.college_portal.controller"))
@@ -40,5 +40,13 @@ public class SwaggerConfig {
 	    
 	    private ApiKey apiKey() {
 	        return new ApiKey("apiKey", "apiKey", "header");
-	    }
-}
+	    }*/
+	@Bean
+    public Docket swaggerConfiguration() {
+         return new Docket(DocumentationType.SWAGGER_2)
+        		 .select()                                  
+                 .apis(RequestHandlerSelectors.any())              
+                 .paths(PathSelectors.any())                          
+                 .build();
+	    
+}}
