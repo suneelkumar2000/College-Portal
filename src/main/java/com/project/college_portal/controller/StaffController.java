@@ -21,8 +21,10 @@ import com.project.college_portal.model.User;
 
 @Controller
 public class StaffController {
-	JdbcTemplate jdbcTemplate = new JdbcTemplate();
-	StaffDao staffDao = new StaffDao();
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	@Autowired
+	StaffDao staffDao;
 
 	// method to get student list
 	@GetMapping(path = "/listofusers")
@@ -87,45 +89,49 @@ public class StaffController {
 	}
 
 	// --------- Attendance methods ------------
+	
+	// method to get Attendance Admin page
+		@GetMapping(path = "/attendanceAdmin")
+		public String adminAttendance(Model model) {
+			model.addAttribute("studentList", staffDao.studentList());
+			return "attendanceAdmin";
+		}
 
 	// method to get attendance List
 	@GetMapping(path = "/attendancelist")
 	public String attendanceList(Model model) {
 		model.addAttribute("attendanceList", staffDao.attendanceList());
-		return "attendancAdmin";
+		return "attendanceAdmin";
 	}
 
 	// method to get inactiveAttendance List
 	@GetMapping(path = "/inactive-attendancelist")
 	public String inactiveAttendanceList(Model model) {
 		model.addAttribute("attendanceList", staffDao.inactiveAttendanceList());
-		return "attendancAdmin";
+		return "attendanceAdmin";
 	}
 
 	// method to add present
-	@GetMapping(path = "/add-update-present-by-one")
-	public String addOrUpdatePresentByOne(@RequestParam("present") int present, Model model) {
-		Attendance attendance = new Attendance();
-		attendance.setDaysAttended(present);
-		int value = staffDao.addOrUpdatePresentByOne(attendance);
+	@GetMapping(path = "/add-update-present-by-one/{userId}")
+	public String addOrUpdatePresentByOne(@PathVariable(value = "userId") int userId, Model model) {
+		int value = staffDao.addOrUpdatePresentByOne(userId);
 		if (value == 1) {
-			model.addAttribute("attendanceList", staffDao.attendanceList());
-			return "attendancAdmin";
+			model.addAttribute("studentList", staffDao.studentList());
+			return "attendanceAdmin";
 		} else
-			return "attendancAdmin";
+			return "attendanceAdmin";
 	}
 
 	// method to add absent
-	@GetMapping(path = "/add-update-absent-by-one")
-	public String addOrUpdateAbsentByOne(@RequestParam("absent") int absent, Model model) {
-		Attendance attendance = new Attendance();
-		attendance.setDaysLeave(absent);
-		int value = staffDao.addOrUpdateAbsentByOne(attendance);
+	@GetMapping(path = "/add-update-absent-by-one/{userId}")
+	public String addOrUpdateAbsentByOne(@PathVariable(value = "userId") int userId, Model model) {
+		
+		int value = staffDao.addOrUpdateAbsentByOne(userId);
 		if (value == 1) {
-			model.addAttribute("attendanceList", staffDao.attendanceList());
-			return "attendancAdmin";
+			model.addAttribute("studentList", staffDao.studentList());
+			return "attendanceAdmin";
 		} else
-			return "attendancAdmin";
+			return "attendanceAdmin";
 	}
 
 	// method to activate Or Deactivate Attendance
@@ -136,9 +142,9 @@ public class StaffController {
 		int value = staffDao.activateOrDeactivateAttendance(attendance);
 		if (value == 1) {
 			model.addAttribute("attendanceList", staffDao.attendanceList());
-			return "attendancAdmin";
+			return "attendanceAdmin";
 		} else
-			return "attendancAdmin";
+			return "attendanceAdmin";
 	}
 
 	// --------- Semester methods ------------

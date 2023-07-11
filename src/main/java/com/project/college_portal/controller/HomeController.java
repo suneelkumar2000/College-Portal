@@ -22,8 +22,10 @@ import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 
 @Controller
 public class HomeController {
-	JdbcTemplate jdbcTemplate = new JdbcTemplate();
-	UserDao userDao = new UserDao();
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	@Autowired
+	UserDao userDao;
 
 	// method to get index page
 	@GetMapping(path = "/index")
@@ -55,11 +57,7 @@ public class HomeController {
 		return "index";
 	}
 
-	// method to get Attendance Admin page
-	@GetMapping(path = "/attendanceAdmin")
-	public String adminAttendance() {
-		return "attendanceAdmin";
-	}
+	
 
 	// method to get result Admin page
 	@GetMapping(path = "/resultAdmin")

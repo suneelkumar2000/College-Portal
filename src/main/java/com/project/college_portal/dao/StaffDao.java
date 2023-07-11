@@ -176,8 +176,7 @@ public class StaffDao {
 
 	// --------- Attendance methods ------------
 
-	public int addOrUpdatePresentByOne(Attendance attendance) {
-		int userId = attendance.getUserId();
+	public int addOrUpdatePresentByOne(int userId) {
 		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
 		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
 		List<Attendance> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
@@ -187,29 +186,27 @@ public class StaffDao {
 				int daysAttended = attendanceModel1.getDaysAttended() + 1;
 				int daysLeave = attendanceModel1.getDaysLeave();
 				int totalDays = daysAttended + daysLeave;
-				int attendancePercentage = (daysAttended / totalDays) * 100;
+				double attendancePercentage = (daysAttended / totalDays) * 100;
 				String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
 				Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
 				int noOfRows = jdbcTemplate.update(update, params);
 				System.out.println(noOfRows + " updated");
 				return 1;
-			} else {
-				int daysAttended = 1;
-				int daysLeave = 0;
-				int totalDays = daysAttended + daysLeave;
-				int attendancePercentage = (daysAttended / totalDays) * 100;
-				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
-				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
-				int noOfRows = jdbcTemplate.update(add, params);
-				System.out.println(noOfRows + " updated");
-				return 2;
 			}
 		}
-		return 0;
+		int daysAttended = 1;
+		int daysLeave = 0;
+		int totalDays = daysAttended + daysLeave;
+		double attendancePercentage = (daysAttended / totalDays) * 100;
+		String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
+		Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
+		int noOfRows = jdbcTemplate.update(add, params);
+		System.out.println(noOfRows + " updated");
+		return 1;
+
 	}
 
-	public int addOrUpdateAbsentByOne(Attendance attendance) {
-		int userId = attendance.getUserId();
+	public int addOrUpdateAbsentByOne(int userId) {
 		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
 		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
 		List<Attendance> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
@@ -219,25 +216,23 @@ public class StaffDao {
 				int daysAttended = attendanceModel1.getDaysAttended();
 				int daysLeave = attendanceModel1.getDaysLeave() + 1;
 				int totalDays = daysAttended + daysLeave;
-				int attendancePercentage = (daysAttended / totalDays) * 100;
+				double attendancePercentage = (daysAttended / totalDays) * 100;
 				String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
 				Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
 				int noOfRows = jdbcTemplate.update(update, params);
 				System.out.println(noOfRows + " updated");
 				return 1;
-			} else {
-				int daysAttended = 0;
-				int daysLeave = 1;
-				int totalDays = daysAttended + daysLeave;
-				int attendancePercentage = (daysAttended / totalDays) * 100;
-				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
-				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
-				int noOfRows = jdbcTemplate.update(add, params);
-				System.out.println(noOfRows + " updated");
-				return 2;
 			}
 		}
-		return 0;
+		int daysAttended = 0;
+		int daysLeave = 1;
+		int totalDays = daysAttended + daysLeave;
+		double attendancePercentage = (daysAttended / totalDays) * 100;
+		String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
+		Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
+		int noOfRows = jdbcTemplate.update(add, params);
+		System.out.println(noOfRows + " updated");
+		return 1;
 	}
 
 	public int activateOrDeactivateAttendance(Attendance attendance) {
@@ -383,16 +378,16 @@ public class StaffDao {
 		return 0;
 	}
 
-	public Subject findByID(Subject subject) {
+	public Subject findByID(int id) {
 		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and id =?)";
-		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectMapper(), subject.getId());
+		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectMapper(), id);
 		System.out.println(subjectNameList);
 		return subjectNameList;
 	}
 
-	public Subject findSubjectNameByDepartment(Subject subject) {
+	public Subject findSubjectNameByDepartment(String department) {
 		String find = "select name from subjects where (is_active =true and department =?)";
-		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectNameMapper(), subject.getDepartment());
+		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectNameMapper(), department);
 		System.out.println(subjectNameList);
 		return subjectNameList;
 	}

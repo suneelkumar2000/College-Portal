@@ -176,15 +176,8 @@
     	<a th:href="@{/examlist}">Exam Details</a>
 	</div>
   <br>
-  <div>
-    <button><a th:href="@{/insertAttendance}">Insert</a></button>
-  </div>
-  <br>
   
-    <div style="height: 80%; box-sizing: border-box">
-      <div id="myGrid" style="height:100%" class="ag-theme-alpine">
-      </div>
-    </div>
+  <br>
 
   <script>
     function openNav() {
@@ -196,56 +189,31 @@
       document.getElementById("mySidenav").style.width = "0";
     }
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
-  </script>
-  <script>
-    const gridOptions = {
-      // define grid columns
-      columnDefs: [
-        // using number column type
-        { field: 'User ID', type: 'numberColumn' },
-
-        // using default ColDef
-        { field: 'First Name' },
-        { field: 'Last Name' },
-        { field: 'Department' },
-
-        // using number column type
-        { field: 'Semester', type: 'numberColumn', width: 150 },
-        { field: 'Total number of Days', type: 'numberColumn', width: 200, },
-        { field: 'Attended Days', type: 'numberColumn' },
-        { field: 'Attendce Percentage', type: 'numberColumn' },
-
-      ],
-
-      // default ColDef, gets applied to every column
-      defaultColDef: {
-        // set the default column width
-        width: 200,
-        // make every column editable
-        editable: true,
-        // make every column use 'text' filter by default
-        filter: 'agTextColumnFilter',
-        // enable floating filters by default
-        floatingFilter: true,
-        // make columns resizable
-        resizable: true,
-        // disable cell data types
-        cellDataType: false,
-      },
-
-    };
-
-    // setup the grid after the page has finished loading
-    document.addEventListener('DOMContentLoaded', () => {
-      const gridDiv = document.querySelector('#myGrid');
-      new agGrid.Grid(gridDiv, gridOptions);
-
-      fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
-        .then((response) => response.json())
-        .then((data) => gridOptions.api.setRowData(data));
-    });
-  </script>
+  
+  <div class="container">
+        <table border="1" class="table table-striped table-responsive-md">
+        <h1>Student List</h1>
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th> Actions </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="student : ${studentList}">
+                    <td th:text="${student.userId}"></td>
+                    <td th:text="${student.firstName}"></td>
+                    <td th:text="${student.lastName}"></td>
+                    <td> 
+                        <a th:href="@{/add-update-present-by-one/{userId}(userId=${student.userId})}" class="btn btn-danger">present</a>
+                        <a th:href="@{/add-update-absent-by-one/{userId}(userId=${student.userId})}" class="btn btn-danger">absent</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+	</div>
 </body>
 
 </html>
