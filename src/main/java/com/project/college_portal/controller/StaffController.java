@@ -2,10 +2,11 @@ package com.project.college_portal.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,8 +28,9 @@ import com.project.college_portal.model.User;
 
 @Controller
 public class StaffController {
-	
+
 	StaffDao staffDao = new StaffDao();
+	ExistDepartmentNameException ExistDepartmentNameException = new ExistDepartmentNameException(null);
 
 	// method to get student list
 	@GetMapping(path = "/listofusers")
@@ -65,15 +67,22 @@ public class StaffController {
 
 	// method to add department
 	@GetMapping(path = "/insertdepartment")
-	public String addDepartment(@RequestParam("department") String department, Model model) throws ExistDepartmentNameException {
+	public String addDepartment(@RequestParam("department") String department, Model model)
+			throws ExistDepartmentNameException {
 		Department depart = new Department();
 		depart.setDepartment(department);
 		int value = staffDao.addDepartment(depart);
 		if (value == 1) {
-			model.addAttribute("departmentList", staffDao.departmentList());
-			return "department";
+			return "redirect:/departmentlist";
 		} else
 			return "departmentForm";
+	}
+
+	// method to handle ExistDepartmentNameException
+	@ExceptionHandler(value = ExistDepartmentNameException.class)
+	public String exception(ExistDepartmentNameException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Department Already Exist");
+		return "errorpopup";
 	}
 
 	// method to activate/Deactivate Department
@@ -93,13 +102,13 @@ public class StaffController {
 	}
 
 	// --------- Attendance methods ------------
-	
+
 	// method to get Attendance Admin page
-		@GetMapping(path = "/attendanceAdmin")
-		public String adminAttendance(Model model) {
-			model.addAttribute("studentList", staffDao.studentList());
-			return "attendanceAdmin";
-		}
+	@GetMapping(path = "/attendanceAdmin")
+	public String adminAttendance(Model model) {
+		model.addAttribute("studentList", staffDao.studentList());
+		return "attendanceAdmin";
+	}
 
 	// method to get attendance List
 	@GetMapping(path = "/attendancelist")
@@ -117,7 +126,8 @@ public class StaffController {
 
 	// method to add present
 	@GetMapping(path = "/add-update-present-by-one/{userId}")
-	public String addOrUpdatePresentByOne(@PathVariable(value = "userId") int userId, Model model) throws UserIdException {
+	public String addOrUpdatePresentByOne(@PathVariable(value = "userId") int userId, Model model)
+			throws UserIdException {
 		int value = staffDao.addOrUpdatePresentByOne(userId);
 		if (value == 1) {
 			model.addAttribute("studentList", staffDao.studentList());
@@ -128,8 +138,9 @@ public class StaffController {
 
 	// method to add absent
 	@GetMapping(path = "/add-update-absent-by-one/{userId}")
-	public String addOrUpdateAbsentByOne(@PathVariable(value = "userId") int userId, Model model) throws UserIdException {
-		
+	public String addOrUpdateAbsentByOne(@PathVariable(value = "userId") int userId, Model model)
+			throws UserIdException {
+
 		int value = staffDao.addOrUpdateAbsentByOne(userId);
 		if (value == 1) {
 			model.addAttribute("studentList", staffDao.studentList());
@@ -212,7 +223,8 @@ public class StaffController {
 	// method to add subject
 	@GetMapping(path = "/addsubject")
 	public String addSubject(@RequestParam("subjectId") int subjectId, @RequestParam("name") String name,
-			@RequestParam("semesterId") int semesterId, @RequestParam("department") String department, Model model) throws SemesterIdException, ExistDepartmentNameException {
+			@RequestParam("semesterId") int semesterId, @RequestParam("department") String department, Model model)
+			throws SemesterIdException, ExistDepartmentNameException {
 		Subject subject = new Subject();
 		subject.setId(subjectId);
 		subject.setName(name);
@@ -263,7 +275,8 @@ public class StaffController {
 	// method to add exam
 	@GetMapping(path = "/addexam")
 	public String addExam(@RequestParam("examId") int examId, @RequestParam("name") String name,
-			@RequestParam("subjectId") int subjectId, @RequestParam("type") String type, Model model) throws SubjectIdException {
+			@RequestParam("subjectId") int subjectId, @RequestParam("type") String type, Model model)
+			throws SubjectIdException {
 		Exam exam = new Exam();
 		exam.setId(examId);
 		exam.setName(name);

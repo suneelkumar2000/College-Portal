@@ -176,13 +176,13 @@ public class StaffDao {
 	}
 
 	public List<Department> departmentList() {
-		String select = "select id,department,is_active from classroom where (is_active =true)";
+		String select = "select id,department,is_active from classroom where (is_active =true and department !='not selected')";
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		return departmentList;
 	}
 
 	public List<Department> inactiveDepartmentList() {
-		String select = "select id,department,is_active from classroom where (is_active =false)";
+		String select = "select id,department,is_active from classroom where (is_active =false and department !='not selected')";
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		return departmentList;
 	}

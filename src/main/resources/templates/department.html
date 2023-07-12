@@ -172,6 +172,28 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
+        td button {
+            display: block;
+            
+            height: 40px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+
+            width: 150px;
+            position: relative;
+            text-align: center;
+            background-color: #f20707;
+            border-radius: 20px;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 0;
+        }
+
+        td button a {
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -221,10 +243,13 @@
                 <tr class="row" th:each="department : ${departmentList}">
                     <td th:text="${department.id}"></td>
                     <td th:text="${department.department}"></td>
-                    <td th:text="${department.isActive}"></td>
+                    <td><span th:if="${department.isActive}">Active</span>
+                        <span th:unless="${department.isActive}">Inactive</span>
+                    </td>
                     <td>
-                        <a th:href="@{/activate-deactivate-department/{name}(name=${department.department})}"
-                            class="btn btn-danger">Activate/Deactivate</a>
+                        <button><a th:href="@{/activate-deactivate-department/{name}(name=${department.department})}"
+                                class="btn btn-danger"><span th:if="${department.isActive}">Deactivate</span>
+                                <span th:unless="${department.isActive}">Activate</span></a></button>
                     </td>
                 </tr>
             </tbody>
