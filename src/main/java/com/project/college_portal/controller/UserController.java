@@ -2,12 +2,16 @@ package com.project.college_portal.controller;
 
 import java.sql.Date;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.college_portal.dao.StaffDao;
 import com.project.college_portal.dao.UserDao;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
@@ -17,9 +21,10 @@ import com.project.college_portal.model.User;
 public class UserController {
 
 	UserDao userDao = new UserDao();
+	StaffDao staffDao = new StaffDao();
 
-	//--------- user method --------- 
-	
+	// --------- user method ---------
+
 	// method to save register details
 	@GetMapping(path = "/signup-submit")
 	public String saveUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
@@ -46,14 +51,21 @@ public class UserController {
 
 	// method to get Login success
 	@GetMapping(path = "/login-submit")
-	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password) throws InvalidMailIdException {
+	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password,
+			HttpSession session) throws InvalidMailIdException {
 		User user = new User();
 		user.setEmail(email);
 		user.setPassword(password);
 		int value = userDao.login(user);
 		if (value == 1) {
+			session.setAttribute("userId", userDao.findIdByEmail(email));
+			int UserId = (int) session.getAttribute("userId");
+			userDao.findById(UserId, session);
 			return "home";
 		} else if (value == 2) {
+			session.setAttribute("userId", userDao.findIdByEmail(email));
+			int UserId = (int) session.getAttribute("userId");
+			userDao.findById(UserId, session);
 			return "adminHome";
 		} else
 			return "index";
@@ -62,21 +74,33 @@ public class UserController {
 	// method to get forgot password
 	@GetMapping(path = "/forgotPassword")
 	public String forgotPassword(@RequestParam("email") String email, @RequestParam("password") String password,
-			@RequestParam("phone") Long phone) {
+			@RequestParam("phone") Long phone, HttpSession session) {
 		User user = new User();
 		user.setEmail(email);
 		user.setPhone(phone);
 		user.setPassword(password);
 		int value = userDao.forgotPassword(user);
 		if (value == 1) {
+			session.setAttribute("userId", userDao.findIdByEmail(email));
+			int UserId = (int) session.getAttribute("userId");
+			userDao.findById(UserId, session);
 			return "home";
 		} else if (value == 2) {
+			session.setAttribute("userId", userDao.findIdByEmail(email));
+			int UserId = (int) session.getAttribute("userId");
+			userDao.findById(UserId, session);
 			return "adminHome";
 		} else
 			return "index";
 	}
-	
-	//--------- student method --------- 
-	
-	
+
+	// --------- student method ---------
+
+	// method to edit student profile
+	@GetMapping(path = "/studentRegistration")
+	public String studentProfile(Model model) {
+		model.addAttribute("departmentList", staffDao.departmentList());
+		return "studentRegistration";
+	}
+
 }

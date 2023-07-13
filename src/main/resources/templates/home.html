@@ -161,14 +161,15 @@
 	</div>
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a th:href="@{#}">Home</a>
+		<a th:href="@{/studentHome}">Home</a>
 		<a th:href="@{#}">Attendance</a>
 		<a th:href="@{#}">Result</a>
-		<a th:href="@{/profile}">Edit Profile</a>
 	</div>
 	<center>
-		<h1>WELCOME TO STUDENT PAGE</h1>
+		<h1>WELCOME </h1><h1 th:text="${session.firstName}"></h1>
+		
 	</center>
+	<button><a th:href="@{/studentRegistration}">Complete Registration</a></button>
 
 	<script>
 		function openNav() {

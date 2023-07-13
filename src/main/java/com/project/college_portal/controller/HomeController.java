@@ -33,6 +33,12 @@ public class HomeController {
 	public String adminHome() {
 		return "adminHome";
 	}
+	
+	// method to get student home
+		@GetMapping(path = "/studentHome")
+		public String studentHome() {
+			return "Home";
+		}
 
 	// method to get logout
 	@GetMapping(path = "/logout")
@@ -56,13 +62,6 @@ public class HomeController {
 	@GetMapping(path = "/insertAttendance")
 	public String insertAttendance() {
 		return "insertAttendance";
-	}
-
-	// method to get student profile
-
-	@GetMapping(path = "/studentprofile")
-	public String studentProfile() {
-		return "studentProfile";
 	}
 
 	// method to get department form

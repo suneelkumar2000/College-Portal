@@ -41,14 +41,14 @@ public class StaffDao {
 
 	// --------- Students methods ------------
 
-	public User findDepartmentById(User user) {
+	public User findDepartmentById(int UserId) {
 		String select = "select department from user where (roll='student' and id=?)";
-		User userDepartment = jdbcTemplate.queryForObject(select, new UserDepartmentMapper(), user.getUserId());
+		User userDepartment = jdbcTemplate.queryForObject(select, new UserDepartmentMapper(), UserId);
 		return userDepartment;
 	}
 
 	public List<User> studentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and is_active =true)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		return userList;
 	}
@@ -72,14 +72,14 @@ public class StaffDao {
 	}
 
 	public List<User> approvedStudentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and status='approved' and is_active =true)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and status='approved' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		System.out.println(userList);
 		return userList;
 	}
 
 	public List<User> notApprovedStudentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and status='not approved' and is_active =true)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and status='not approved' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		return userList;
 	}
@@ -89,10 +89,10 @@ public class StaffDao {
 		String select = "Select id,roll,is_active from user";
 		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
-				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (true))
+				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isActive() == (true))
 				.collect(Collectors.toList());
 		List<User> user2 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
-				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (false))
+				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isActive() == (false))
 				.collect(Collectors.toList());
 		for (User userModel1 : user1) {
 			if (userModel1 != null) {
@@ -116,7 +116,7 @@ public class StaffDao {
 	}
 
 	public List<User> inactiveStudentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user where (roll='student' and is_active =false)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and is_active =false)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		return userList;
 	}
@@ -193,7 +193,7 @@ public class StaffDao {
 		String select1 = "Select id,roll,is_active from user";
 		List<User> user = jdbcTemplate.query(select1, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == userId)
-				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (true))
+				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isActive() == (true))
 				.collect(Collectors.toList());
 		for (User userModel1 : user1) {
 			if (userModel1 != null) {
@@ -234,7 +234,7 @@ public class StaffDao {
 		String select1 = "Select id,roll,is_active from user";
 		List<User> user = jdbcTemplate.query(select1, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == userId)
-				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isIsActive() == (true))
+				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isActive() == (true))
 				.collect(Collectors.toList());
 		for (User userModel1 : user1) {
 			if (userModel1 != null) {
@@ -536,7 +536,7 @@ public class StaffDao {
 				List<User> user = jdbcTemplate.query(select1, new ApprovingMapper());
 				List<User> user1 = user.stream().filter(id -> id.getUserId() == userId)
 						.filter(roll1 -> roll1.getRoll().equals("student"))
-						.filter(isActive -> isActive.isIsActive() == (true)).collect(Collectors.toList());
+						.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
 				for (User userModel1 : user1) {
 					if (userModel1 != null) {
 

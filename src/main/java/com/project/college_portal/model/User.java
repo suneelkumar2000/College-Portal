@@ -15,31 +15,31 @@ public class User {
 	private String status;
 	private String department;
 	private String parentName;
-	private int year_of_joining;
+	private int joiningYear;
 	private boolean isActive;
-
-	public User() {
-	}
-
-	public User(int userId, String firstName, String lastName, String email, String password, Long phone, Date DOB,
-			String gender, String roll, String status, String department, String parentName, int year_of_joining,
+	
+	public User() {}
+	
+	public User(int userId, String firstName, String lastName, String email, String password, Long phone, Date dOB,
+			String gender, String roll, String status, String department, String parentName, int joiningYear,
 			boolean isActive) {
+		super();
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.phone = phone;
-		this.DOB = DOB;
+		DOB = dOB;
 		this.gender = gender;
 		this.roll = roll;
 		this.status = status;
 		this.department = department;
 		this.parentName = parentName;
-		this.year_of_joining = year_of_joining;
+		this.joiningYear = joiningYear;
 		this.isActive = isActive;
 	}
-
+	
 	public int getUserId() {
 		return userId;
 	}
@@ -56,6 +56,14 @@ public class User {
 		this.firstName = firstName;
 	}
 
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -70,14 +78,6 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
 	}
 
 	public Long getPhone() {
@@ -136,19 +136,19 @@ public class User {
 		this.parentName = parentName;
 	}
 
-	public int getYear_of_joining() {
-		return year_of_joining;
+	public int getJoiningYear() {
+		return joiningYear;
 	}
 
-	public void setYear_of_joining(int year_of_joining) {
-		this.year_of_joining = year_of_joining;
+	public void setJoiningYear(int joiningYear) {
+		this.joiningYear = joiningYear;
 	}
 
-	public boolean isIsActive() {
+	public boolean isActive() {
 		return isActive;
 	}
 
-	public void setIs_active(boolean isActive) {
+	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
 
@@ -157,7 +157,10 @@ public class User {
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", password=" + password + ", phone=" + phone + ", DOB=" + DOB + ", gender=" + gender + ", roll="
 				+ roll + ", status=" + status + ", department=" + department + ", parentName=" + parentName
-				+ ", year_of_joining=" + year_of_joining + ", isActive=" + isActive + "]";
+				+ ", joiningYear=" + joiningYear + ", isActive=" + isActive + "]";
 	}
+
+	
+	
 
 }

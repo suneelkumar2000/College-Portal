@@ -15,6 +15,7 @@ import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
+import com.project.college_portal.mapper.UserDepartmentMapper;
 import com.project.college_portal.mapper.UserMapper;
 import com.project.college_portal.model.User;
 import com.project.college_portal.validation.Validation;
@@ -24,9 +25,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Repository
 public class UserDao {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
-	
-	//--------- user method --------- 
-	
+
+	// --------- user method ---------
+
+	// user registration method
 	public int save(User saveUser) throws ExistMailIdException {
 		String password = saveUser.getPassword();
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -71,7 +73,8 @@ public class UserDao {
 
 	}
 
-	public int login(User loginUser) throws InvalidMailIdException  {
+	// method for user login
+	public int login(User loginUser) throws InvalidMailIdException {
 		String email = loginUser.getEmail();
 
 		String password = loginUser.getPassword();
@@ -107,13 +110,15 @@ public class UserDao {
 		throw new InvalidMailIdException("Email dosen't exist");
 	}
 
+	// method to show user list
 	public List<User> listUsers() {
-		String sql = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,status,is_active from user";
+		String sql = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user";
 		List<User> userList = jdbcTemplate.query(sql, new UserMapper());
 		System.out.println(userList);
 		return userList;
 	}
-
+	
+	// forgotPassword method
 	public int forgotPassword(User user) {
 		// TODO Auto-generated method stub
 		String email = user.getEmail();
@@ -155,8 +160,54 @@ public class UserDao {
 		}
 		return 0;
 	}
+
+	// method to find user ID by email
+	public int findIdByEmail(String email) {
+		String select = "select * from user where email=?";
+		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
+		for (User user : userDetails) {
+			if (user != null) {
+				int userId = user.getUserId();
+				return userId;
+			}
+		}
+		return 0;
+	}
+
+	// method to find user details by ID
+	public int findById(int UserId, HttpSession session) {
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (id=?)";
+		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), UserId);
+		session.setAttribute("userList", userDetails);
+		for (User userModel : userDetails) {
+			if (userModel != null) {
+				session.setAttribute("firstName", userModel.getFirstName());
+				session.setAttribute("lastName", userModel.getLastName());
+				session.setAttribute("dob", userModel.getDOB());
+				session.setAttribute("gender", userModel.getGender());
+				session.setAttribute("phone", userModel.getPhone());
+				session.setAttribute("email", userModel.getEmail());
+				session.setAttribute("roll", userModel.getRoll());
+				session.setAttribute("department", userModel.getDepartment());
+				session.setAttribute("parentName", userModel.getParentName());
+				session.setAttribute("joiningYear", userModel.getJoiningYear());
+				session.setAttribute("status", userModel.getStatus());
+				session.setAttribute("isActive", userModel.isActive());
+				return 1;
+			}
+		}
+		return 0;
+	}
 	
-	//--------- student method --------- 
+	// --------- student method ---------
+
+	// method to find student details by Email
+	public List<User> findByEmail(String email) {
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and email=?)";
+		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
+		return userDetails;
+	}
 	
+	// method to update student details
 	
 }

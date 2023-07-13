@@ -361,7 +361,7 @@
                 success = false;
                 setError(phone, 'Phone Number is required')
             } else if (phoneValue <= 0) {
-                setErrorFor(phone, 'Invalid Phone Number');
+                setError(phone, 'Invalid Phone Number');
             } else {
                 setSuccess(phone)
             }
