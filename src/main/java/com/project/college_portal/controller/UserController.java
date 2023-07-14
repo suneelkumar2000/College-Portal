@@ -96,11 +96,35 @@ public class UserController {
 
 	// --------- student method ---------
 
-	// method to edit student profile
+	// method studentRegistration form
 	@GetMapping(path = "/studentRegistration")
 	public String studentProfile(Model model) {
 		model.addAttribute("departmentList", staffDao.departmentList());
-		return "studentRegistration";
+		return "studentRegistrationForm";
 	}
 
+	// method to update student Registration details
+	@GetMapping(path = "/studentsave")
+	public String studentsave(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
+			@RequestParam("phone") Long phone, @RequestParam("DOB") Date DOB,
+			@RequestParam("department") String department, @RequestParam("year") int year,
+			@RequestParam("parentName") String parentName, HttpSession session) {
+		int UserId = (int) session.getAttribute("userId");
+		User user = new User();
+		user.setUserId(UserId);
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setPhone(phone);
+		user.setDOB(DOB);
+		user.setDepartment(department);
+		user.setParentName(parentName);
+		user.setJoiningYear(year);
+
+		int value = userDao.studentsave(user);
+		
+		if (value == 1) {
+			return "home";
+		}
+		return "redirect:/studentRegistration";
+	}
 }

@@ -2,283 +2,323 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>JavaScript example</title>
-	<meta charSet="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<style media="only screen">
-		html,
-		body {
-			height: 100%;
-			width: 100%;
-			margin: 0;
-			box-sizing: border-box;
-			-webkit-overflow-scrolling: touch;
-		}
-		html {
-			position: absolute;
-			top: 0;
-			left: 0;
-			padding: 0;
-			overflow: auto;
-		}
+    <title>JavaScript example</title>
+    <meta charSet="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style media="only screen">
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
 
-		body {
-			padding: 1rem;
-			overflow: auto;
-		}
+        html {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0;
+            overflow: auto;
+        }
 
-		body {
-			background: #fffefe;
-		}
+        body {
+            padding: 1rem;
+            overflow: auto;
+        }
 
-		body h1 {
-			align-items: center;
-		}
+        body {
+            background: #fffefe;
+        }
 
-		ul {
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-			background-color: #000000;
-			width: 100%;
-		}
+        body h1 {
+            align-items: center;
+        }
 
-		li a {
-			float: right;
-		}
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000000;
+            width: 100%;
+        }
 
-		li span {
-			float: left;
-		}
+        li a {
+            float: right;
+        }
 
-		li span {
-			align-items: center;
-			text-decoration: none;
-			color: #ffffff;
-			text-transform: uppercase;
-			font-size: 20px;
-			font-weight: 600;
-			padding: 14px 16px;
-		}
+        li span {
+            float: left;
+        }
 
-		li a {
-			align-items: center;
-			text-decoration: none;
-			color: #ffffff;
-			text-transform: uppercase;
-			font-size: 20px;
-			font-weight: 600;
-			padding: 14px 16px;
-		}
+        li span {
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 14px 16px;
+        }
 
-		li a:hover {
-			color: #F81818;
-			transition: all .5s;
-			cursor: pointer;
-		}
+        li a {
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 14px 16px;
+        }
 
-		li span:hover {
-			color: #4df3ff;
-			transition: all .5s;
-			cursor: pointer;
-		}
+        li a:hover {
+            color: #F81818;
+            transition: all .5s;
+            cursor: pointer;
+        }
 
-		.sidenav {
-			height: 100%;
-			/* 100% Full-height */
-			width: 0;
-			/* 0 width - change this with JavaScript */
-			position: fixed;
-			/* Stay in place */
-			z-index: 1;
-			/* Stay on top */
-			top: 0;
-			/* Stay at the top */
-			left: 0;
-			background-color: #111;
-			/* Black*/
-			overflow-x: hidden;
-			/* Disable horizontal scroll */
-			padding-top: 60px;
-			/* Place content 60px from the top */
-			transition: 0.5s;
-			/* 0.5 second transition effect to slide in the sidenav */
-		}
+        li span:hover {
+            color: #4df3ff;
+            transition: all .5s;
+            cursor: pointer;
+        }
 
-		/* The navigation menu links */
-		.sidenav a {
-			padding: 8px 8px 8px 32px;
-			text-decoration: none;
-			font-size: 25px;
-			color: #818181;
-			display: block;
-			transition: 0.3s;
-		}
+        .sidenav {
+            height: 100%;
+            /* 100% Full-height */
+            width: 0;
+            /* 0 width - change this with JavaScript */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Stay on top */
+            top: 0;
+            /* Stay at the top */
+            left: 0;
+            background-color: #111;
+            /* Black*/
+            overflow-x: hidden;
+            /* Disable horizontal scroll */
+            padding-top: 60px;
+            /* Place content 60px from the top */
+            transition: 0.5s;
+            /* 0.5 second transition effect to slide in the sidenav */
+        }
 
-		/* When you mouse over the navigation links, change their color */
-		.sidenav a:hover {
-			color: #f1f1f1;
-		}
+        /* The navigation menu links */
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
 
-		/* Position and style the close button (top right corner) */
-		.sidenav .closebtn {
-			position: absolute;
-			top: 0;
-			right: 25px;
-			font-size: 36px;
-			margin-left: 50px;
-		}
+        /* When you mouse over the navigation links, change their color */
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
 
-		/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-		#main {
-			transition: margin-left .5s;
-			padding: 20px;
-		}
+        /* Position and style the close button (top right corner) */
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
 
-		/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-		@media screen and (max-height: 450px) {
-			.sidenav {
-				padding-top: 15px;
-			}
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s;
+            padding: 20px;
+        }
 
-			.sidenav a {
-				font-size: 18px;
-			}
-		}
-	</style>
+        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-	<div class="navbar">
-		<nav>
-			<ul>
-				<li><a th:href="@{/logout}">Logout</a></li>
-				<li class="menu"><span onclick="openNav()">Menu</span></li>
-			</ul>
-		</nav>
-	</div>
-	<div id="mySidenav" class="sidenav">
-		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a th:href="@{/adminHome}">Home</a>
-    	<a th:href="@{/listofusers}">Student List</a>
-    	<a th:href="@{/attendanceAdmin}">Attendance</a>
-    	<a th:href="@{/resultAdmin}">Result</a>
-    	<a th:href="@{/departmentlist}">Department</a>
-    	<a th:href="@{/semesterlist}">Semester List</a>
-    	<a th:href="@{/subjectDetails}">Subject Details</a>
-    	<a th:href="@{/examlist}">Exam Details</a>
-	</div>
+    <div class="navbar">
+        <nav>
+            <ul>
+                <li><a th:href="@{/logout}">Logout</a></li>
+                <li class="menu"><span onclick="openNav()">Menu</span></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a th:href="@{/adminHome}">Home</a>
+        <a th:href="@{/listofusers}">Student List</a>
+        <a th:href="@{/attendanceAdmin}">Attendance</a>
+        <a th:href="@{/resultAdmin}">Result</a>
+        <a th:href="@{/departmentlist}">Department</a>
+        <a th:href="@{/semesterlist}">Semester List</a>
+        <a th:href="@{/subjectDetails}">Subject Details</a>
+        <a th:href="@{/examlist}">Exam Details</a>
+    </div>
 
 
 
-	<div style="height: 100%; box-sizing: border-box">
-		<div id="myGrid" style="height: 100%" class="ag-theme-alpine">
-		</div>
-	</div>
+    <div style="height: 100%; box-sizing: border-box">
+        <div id="myGrid" style="height: 100%" class="ag-theme-alpine">
+        </div>
+    </div>
+    <input type="text" id="users" th:value="${USER_LIST}" style="display:none;">
 
-	<script>
-		function openNav() {
-			document.getElementById("mySidenav").style.width = "250px";
-		}
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
 
-		/* Set the width of the side navigation to 0 */
-		function closeNav() {
-			document.getElementById("mySidenav").style.width = "0";
-		}
-	</script>
-	<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
-	</script>
-	<script>
-		const gridOptions = {
-			// define grid columns
-			columnDefs: [
-				// using number column type
-				{ field: 'User ID', type: 'numberColumn' },
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
+    </script>
+    <script>
+        const gridOptions = {
+            // define grid columns
+            columnDefs: [
+                // using number column type
+                {
+                    id: "userId",
+                    name: "userId",
+                    field: 'User ID',
+                    type: 'numberColumn'
+                },
 
-				// using default ColDef
-				{ field: 'First Name' },
-				{ field: 'Last Name' },
+                // using default ColDef
+                {
+                    id: "firstName",
+                    name: "firstName",
+                    field: 'First Name'
+                },
+                {
+                    id: "lastName",
+                    name: "lastName",
+                    field: 'Last Name'
+                },
 
-				// using date and non-editable column types
-				{ field: 'DOB', type: 'dateColumn', width: 220 },
-
-				// using default ColDef
-				{ field: 'Gender' },
-				{ field: 'Email' },
-
-				// using number column type
-				{ field: 'Phone Number', type: 'numberColumn' },
+                // using date and non-editable column types
+                {
+                    id: "email",
+                    name: "email",
+                    field: "Email",
+                },
 
 
-			],
+                // using number column type
+                {
+                    id: "phone",
+                    name: "phone",
+                    field: 'Phone Number',
+                    type: 'numberColumn'
+                },
+                // using default ColDef
+                {
+                    id: "department",
+                    name: "department",
+                    field: "department",
+                },
 
-			// default ColDef, gets applied to every column
-			defaultColDef: {
-				// set the default column width
-				width: 150,
-				// make every column editable
-				editable: true,
-				// make every column use 'text' filter by default
-				filter: 'agTextColumnFilter',
-				// enable floating filters by default
-				floatingFilter: true,
-				// make columns resizable
-				resizable: true,
-				// disable cell data types
-				cellDataType: false,
-			},
 
-			// default ColGroupDef, get applied to every column group
-			defaultColGroupDef: {
-				marryChildren: true,
-			},
+                {
+                    id: "status",
+                    name: "Status",
+                    field: "Status",
+                    width: 100
+                },
 
-			// define specific column types
-			columnTypes: {
-				numberColumn: { width: 130, filter: 'agNumberColumnFilter' },
-				nonEditableColumn: { editable: false },
-				dateColumn: {
-					// specify we want to use the date filter
-					filter: 'agDateColumnFilter',
 
-					// add extra parameters for the date filter
-					filterParams: {
-						// provide comparator function
-						comparator: (filterLocalDateAtMidnight, cellValue) => {
-							// In the example application, dates are stored as dd/mm/yyyy
-							// We create a Date object for comparison against the filter date
-							const dateParts = cellValue.split('/');
-							const day = Number(dateParts[0]);
-							const month = Number(dateParts[1]) - 1;
-							const year = Number(dateParts[2]);
-							const cellDate = new Date(year, month, day);
+            ],
 
-							// Now that both parameters are Date objects, we can compare
-							if (cellDate < filterLocalDateAtMidnight) {
-								return -1;
-							} else if (cellDate > filterLocalDateAtMidnight) {
-								return 1;
-							} else {
-								return 0;
-							}
-						},
-					},
-				},
-			},
-			rowData: null,
-		};
+            // default ColDef, gets applied to every column
+            defaultColDef: {
+                // set the default column width
+                width: 150,
+                // make every column editable
+                editable: true,
+                // make every column use 'text' filter by default
+                filter: 'agTextColumnFilter',
+                // enable floating filters by default
+                floatingFilter: true,
+                // make columns resizable
+                resizable: true,
+                // disable cell data types
+                cellDataType: false,
+            },
 
-		// setup the grid after the page has finished loading
-		document.addEventListener('DOMContentLoaded', () => {
-			const gridDiv = document.querySelector('#myGrid');
-			new agGrid.Grid(gridDiv, gridOptions);
+            // default ColGroupDef, get applied to every column group
+            defaultColGroupDef: {
+                marryChildren: true,
+            },
 
-			fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
-				.then((response) => response.json())
-				.then((data) => gridOptions.api.setRowData(data));
-		});
-	</script>
+            // define specific column types
+            columnTypes: {
+                numberColumn: { width: 130, filter: 'agNumberColumnFilter' },
+                nonEditableColumn: { editable: false },
+                dateColumn: {
+                    // specify we want to use the date filter
+                    filter: 'agDateColumnFilter',
+
+                    // add extra parameters for the date filter
+                    filterParams: {
+                        // provide comparator function
+                        comparator: (filterLocalDateAtMidnight, cellValue) => {
+                            // In the example application, dates are stored as dd/mm/yyyy
+                            // We create a Date object for comparison against the filter date
+                            const dateParts = cellValue.split('/');
+                            const day = Number(dateParts[0]);
+                            const month = Number(dateParts[1]) - 1;
+                            const year = Number(dateParts[2]);
+                            const cellDate = new Date(year, month, day);
+
+                            // Now that both parameters are Date objects, we can compare
+                            if (cellDate < filterLocalDateAtMidnight) {
+                                return -1;
+                            } else if (cellDate > filterLocalDateAtMidnight) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        },
+                    },
+                },
+            },
+            rowData: null,
+        };
+
+        // setup the grid after the page has finished loading
+        document.addEventListener('DOMContentLoaded', () => {
+            let gridDiv = document.querySelector('#myGrid');
+            new agGrid.Grid(gridDiv, gridOptions);
+
+            let data = document.getElementById("users").value;
+            console.log(data);
+
+            let data1 = Object.values(data);
+            
+            console.log(data1);
+
+            gridOptions.api.setRowData(data1);
+        });
+    </script>
 </body>
 
 </html>

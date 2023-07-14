@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
+import com.project.college_portal.mapper.ApprovingMapper;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
 import com.project.college_portal.mapper.UserDepartmentMapper;
@@ -36,12 +37,10 @@ public class UserDao {
 
 		Validation val = new Validation();
 		List<User> listUsers = listUsers();
-		System.out.println(listUsers);
 
 		String userList = listUsers.toString();
 		String email = saveUser.getEmail();
 		boolean emailContains = userList.contains(email);
-		System.out.println(emailContains);
 
 		if (emailContains == true) {
 			throw new ExistMailIdException("Exist Email Exception");
@@ -60,13 +59,10 @@ public class UserDao {
 					String approve = "update user set status ='approved'  where email=?";
 					Object[] params1 = { email };
 					int noOfRows1 = jdbcTemplate.update(approve, params1);
-					System.out.println(noOfRows1 + " Hod Saved");
 					return 1;
 				}
-				System.out.println(noOfRows + "Saved");
 				return 1;
-			} else {
-				System.out.println("Incorrect value");
+			} else {			
 				return 0;
 			}
 		}
@@ -114,7 +110,6 @@ public class UserDao {
 	public List<User> listUsers() {
 		String sql = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user";
 		List<User> userList = jdbcTemplate.query(sql, new UserMapper());
-		System.out.println(userList);
 		return userList;
 	}
 	
@@ -144,7 +139,6 @@ public class UserDao {
 				String changePassword = "update user set Password =?  where Email=?";
 				Object[] params = { encodePassword, email };
 				int noOfRows = jdbcTemplate.update(changePassword, params);
-				System.out.println(noOfRows + "Saved");
 				return 1;
 			}
 		}
@@ -153,7 +147,6 @@ public class UserDao {
 				String changePassword = "update user set Password =?  where email=?";
 				Object[] params = { encodePassword, email };
 				int noOfRows = jdbcTemplate.update(changePassword, params);
-				System.out.println(noOfRows + "Saved");
 				return 2;
 			}
 
@@ -209,5 +202,21 @@ public class UserDao {
 	}
 	
 	// method to update student details
+	public int studentsave(User User) {
+		// TODO Auto-generated method stub
+		String select = "Select id,roll,is_active from user";
+		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
+				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
+		for (User userModel : user1) {
+			if (userModel != null) {
+				String update = "update user set first_name=?,last_name=?,dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
+				Object[] params = {User.getFirstName(),User.getLastName(),User.getDOB(),User.getPhone(),User.getDepartment(),User.getParentName(),User.getJoiningYear(), User.getUserId() };
+				int noOfRows = jdbcTemplate.update(update, params);
+				return 1;
+			}
+		}
+		return 0;
+	}
 	
 }
