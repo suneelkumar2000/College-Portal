@@ -227,7 +227,7 @@
 
         <button><a th:href="@{/insertDepartmentForm}" class="btn btn-primary btn-sm mb-3"> Add Department </a></button>
         <button><a th:href="@{/departmentlist}" class="btn btn-primary btn-sm mb-3">Active Departments</a></button>
-        <button><a th:href="@{/inactive-departmentlist}" class="btn btn-primary btn-sm mb-3"> Inactive
+        <button><a th:href="@{/inactiveDepartmentlist}" class="btn btn-primary btn-sm mb-3"> Inactive
                 Departments</a></button>
         <table border="1" class="table table-striped table-responsive-md">
             <h1>Department List</h1>
@@ -247,24 +247,21 @@
                         <span th:unless="${department.isActive}">Inactive</span>
                     </td>
                     <td>
-                        <button><a th:href="@{/activate-deactivate-department/{name}(name=${department.department})}"
+                        <button><a th:href="@{/activateDeactivateDepartment/{name}(name=${department.department})}"
                                 class="btn btn-danger"><span th:if="${department.isActive}">Deactivate</span>
                                 <span th:unless="${department.isActive}">Activate</span></a></button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        </div>
+	</div>
         
-        <div style="height: 100%; box-sizing: border-box">
-            <div id="myGrid" style="height: 100%" class="ag-theme-alpine">
-            </div>
+    <div style="height: 100%; box-sizing: border-box">
+    	<div id="myGrid" style="height: 100%" class="ag-theme-alpine">
         </div>
-        <input type="text" id="department" th:value="${listOfDepartment}" style="display:none;">
+    </div>
+    <input type="text" id="department" th:value="${listOfDepartment}" style="display:none;">
     
-
-
-
     <script>
         function openNav() {
             document.getElementById("mySidenav").style.width = "250px";

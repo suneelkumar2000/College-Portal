@@ -207,8 +207,8 @@
                     <td th:text="${student.firstName}"></td>
                     <td th:text="${student.lastName}"></td>
                     <td> 
-                        <a th:href="@{/add-update-present-by-one/{userId}(userId=${student.userId})}" class="btn btn-danger">present</a>
-                        <a th:href="@{/add-update-absent-by-one/{userId}(userId=${student.userId})}" class="btn btn-danger">absent</a>
+                        <a th:href="@{/addUpdatePresentbyone/{userId}(userId=${student.userId})}" class="btn btn-danger">present</a>
+                        <a th:href="@{/addUpdateAbsentbyone/{userId}(userId=${student.userId})}" class="btn btn-danger">absent</a>
                     </td>
                 </tr>
             </tbody>

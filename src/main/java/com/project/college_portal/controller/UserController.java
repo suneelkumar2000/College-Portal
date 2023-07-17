@@ -27,7 +27,7 @@ public class UserController {
 	// --------- user method ---------
 
 	// method to save register details
-	@GetMapping(path = "/signup-submit")
+	@GetMapping(path = "/signupSubmit")
 	public String saveUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
 			@RequestParam("email") String email, @RequestParam("password") String password,
 			@RequestParam("phone") Long phone, @RequestParam("gender") String gender, @RequestParam("roll") String roll,
@@ -51,22 +51,21 @@ public class UserController {
 	}
 
 	// method to get Login success
-	@GetMapping(path = "/login-submit")
+	@GetMapping(path = "/loginSubmit")
 	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password,
 			HttpSession session) throws InvalidMailIdException {
 		User user = new User();
 		user.setEmail(email);
 		user.setPassword(password);
 		int value = userDao.login(user);
+		
+		session.setAttribute("userId", userDao.findIdByEmail(email));
+		int UserId = (int) session.getAttribute("userId");
+		userDao.findById(UserId, session);
+		
 		if (value == 1) {
-			session.setAttribute("userId", userDao.findIdByEmail(email));
-			int UserId = (int) session.getAttribute("userId");
-			userDao.findById(UserId, session);
 			return "home";
 		} else if (value == 2) {
-			session.setAttribute("userId", userDao.findIdByEmail(email));
-			int UserId = (int) session.getAttribute("userId");
-			userDao.findById(UserId, session);
 			return "adminHome";
 		} else
 			return "index";
@@ -81,15 +80,14 @@ public class UserController {
 		user.setPhone(phone);
 		user.setPassword(password);
 		int value = userDao.forgotPassword(user);
+
+		session.setAttribute("userId", userDao.findIdByEmail(email));
+		int UserId = (int) session.getAttribute("userId");
+		userDao.findById(UserId, session);
+		
 		if (value == 1) {
-			session.setAttribute("userId", userDao.findIdByEmail(email));
-			int UserId = (int) session.getAttribute("userId");
-			userDao.findById(UserId, session);
 			return "home";
 		} else if (value == 2) {
-			session.setAttribute("userId", userDao.findIdByEmail(email));
-			int UserId = (int) session.getAttribute("userId");
-			userDao.findById(UserId, session);
 			return "adminHome";
 		} else
 			return "index";
@@ -122,7 +120,7 @@ public class UserController {
 		user.setJoiningYear(year);
 
 		int value = userDao.studentsave(user);
-		
+
 		if (value == 1) {
 			return "home";
 		}

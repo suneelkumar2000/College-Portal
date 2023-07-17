@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
+import com.project.college_portal.interfaces.UserInterface;
 import com.project.college_portal.mapper.ApprovingMapper;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
@@ -24,7 +25,7 @@ import com.project.college_portal.validation.Validation;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Repository
-public class UserDao {
+public class UserDao implements UserInterface{
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
 
 	// --------- user method ---------

@@ -178,9 +178,9 @@
 	<div class="container">
 	
 
-        <button><a th:href="@{#}" class="btn btn-primary btn-sm mb-3"> Add Semester</a></button>
+        <button><a th:href="@{/insertSemesterForm}" class="btn btn-primary btn-sm mb-3"> Add Semester</a></button>
         <button><a th:href="@{/semesterlist}"class="btn btn-primary btn-sm mb-3">Active Semester</a></button>
-        <button><a th:href="@{/inactive-semesterlist}" class="btn btn-primary btn-sm mb-3"> Inactive Semester</a></button>
+        <button><a th:href="@{/inactiveSemesterlist}" class="btn btn-primary btn-sm mb-3"> Inactive Semester</a></button>
         <table border="1" class="table table-striped table-responsive-md">
         <h1>Semester List</h1>
             <thead>
@@ -240,12 +240,6 @@
                 },
 
                 {
-                    id: "type",
-                    name: "type",
-                    field: "type",
-                    width: 100
-                },
-                {
                     id: "Activate/Deactivate",
                     name: "Activate/Deactivate",
                     field: "Activate/Deactivate",
@@ -254,8 +248,6 @@
                 },
                 
             ],
-
-
 
             // default ColDef, gets applied to every column
             defaultColDef: {
@@ -292,11 +284,11 @@
                         comparator: (filterLocalDateAtMidnight, cellValue) => {
                             // In the example application, dates are stored as dd/mm/yyyy
                             // We create a Date object for comparison against the filter date
-                            const dateParts = cellValue.split('/');
-                            const day = Number(dateParts[0]);
-                            const month = Number(dateParts[1]) - 1;
-                            const year = Number(dateParts[2]);
-                            const cellDate = new Date(year, month, day);
+                            let dateParts = cellValue.split('/');
+                            let day = Number(dateParts[0]);
+                            let month = Number(dateParts[1]) - 1;
+                            let year = Number(dateParts[2]);
+                            let cellDate = new Date(year, month, day);
 
                             // Now that both parameters are Date objects, we can compare
                             if (cellDate < filterLocalDateAtMidnight) {

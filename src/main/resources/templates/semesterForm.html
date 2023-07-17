@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
-    <title>Department Form</title>
+    <title>Semester Form</title>
     <style>
         body {
             background: #000000;
@@ -139,15 +139,15 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>Department Insertion Form</h2>
+            <h2>semester Insertion Form</h2>
         </div>
-        <form id="form" th:action="@{/insertdepartment}" th:object="${departmentForm}" method="GET"
+        <form id="form" th:action="@{/addsemester}" th:object="${semesterForm}" method="GET"
             class="form">
             <br>
 
             <div class="form-control">
-                <label for="department" class="text"><b>Department</b><span class="required">*</span><input type="text"
-                        placeholder="Enter Department" id="department" name="department">
+                <label for="semesterId" class="text"><b>Semester Id</b><span class="required">*</span><input type="number"
+                        placeholder="Enter Semester Id" id="semesterId" name="semesterId">
                     <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>
                     <div class="error"></div>
                 </label>
@@ -156,7 +156,7 @@
             <input type="submit" onclick="clearText()" value="ADD">
             <br>
             <div class="cancel_link">
-                <a th:href="@{/departmentlist}" class="cancel">Cancel</a>
+                <a th:href="@{/semesterlist}" class="cancel">Cancel</a>
             </div>
         </form>
     </div>
@@ -165,13 +165,13 @@
 
         function clearText(event) {
             // access input field
-            let clearDepartment = document.getElementById('#department');
+            let clearSemesterId = document.getElementById('#semesterId');
             // clear the input field.
-            clearDepartment.value = "";
+            clearSemesterId.value = "";
 
             output.innerHTML += "Form submitted successfully! <br>";
         }
-        let department = document.querySelector('#department');
+        let semesterId = document.querySelector('#semesterId');
 
         form.addEventListener('submit', (e) => {
 
@@ -181,15 +181,18 @@
         })
 
         function validateInputs() {
-            let departmentValue = department.value.trim();
+            let semesterIdValue = semesterId.value.trim();
             let success = true
 
-            if (departmentValue === '') {
+            if (semesterIdValue == '') {
                 success = false;
-                setError(department, 'This Field is required')
+                setError(semesterId, 'This Field is required')
+            }else if(semesterIdValue <=0) {
+                success = false;
+                setError(semesterId, 'Invalid Semester Id')
             }
             else {
-                setSuccess(department)
+                setSuccess(semesterId)
             }
             return success;
         }

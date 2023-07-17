@@ -64,16 +64,21 @@ public class HomeController {
 		return "subjectDetails";
 	}
 
-	// method to get Attendance form
-	@GetMapping(path = "/insertAttendance")
-	public String insertAttendance() {
-		return "insertAttendance";
-	}
-
 	// method to get department form
 	@GetMapping(path = "/insertDepartmentForm")
 	public String departmentForm() {
 		return "departmentForm";
 	}
 
+	// method to get semester form
+	@GetMapping(path = "/insertSemesterForm")
+	public String semesterForm() {
+		return "semesterForm";
+	}
+
+	// method to get subject form
+	@GetMapping(path = "/insertSubjectForm")
+	public String subjectForm() {
+		return "subjectForm";
+	}
 }
