@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.dao.StaffDao;
 import com.project.college_portal.dao.UserDao;
 import com.project.college_portal.exception.ExistMailIdException;
@@ -98,8 +99,8 @@ public class UserController {
 
 	// method studentRegistration form
 	@GetMapping(path = "/studentRegistration")
-	public String studentProfile(Model model) {
-		model.addAttribute("departmentList", staffDao.departmentList());
+	public String studentProfile(Model model) throws JsonProcessingException {
+		model.addAttribute("departmentList", staffDao.departmentList(model));
 		return "studentRegistrationForm";
 	}
 

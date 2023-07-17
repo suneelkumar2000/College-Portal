@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.dao.StaffDao;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
@@ -34,9 +35,9 @@ public class StaffController {
 
 	// method to get student list
 	@GetMapping(path = "/listofusers")
-	public String getAllUser(Model model) {
+	public String getAllUser(Model model) throws JsonProcessingException {
 		System.out.println("getting datas");
-		List<User> users = staffDao.studentList();
+		List<User> users = staffDao.studentList(model);
 		model.addAttribute("USER_LIST", users);
 		return "listusers";
 	}
@@ -53,15 +54,15 @@ public class StaffController {
 
 	// method to get department list
 	@GetMapping(path = "/departmentlist")
-	public String departmentList(Model model) {
-		model.addAttribute("departmentList", staffDao.departmentList());
+	public String departmentList(Model model) throws JsonProcessingException {
+		model.addAttribute("departmentList", staffDao.departmentList(model));
 		return "department";
 	}
 
 	// method to get inactiveDepartment list
 	@GetMapping(path = "/inactive-departmentlist")
-	public String inactiveDepartmentList(Model model) {
-		model.addAttribute("departmentList", staffDao.inactiveDepartmentList());
+	public String inactiveDepartmentList(Model model) throws JsonProcessingException {
+		model.addAttribute("departmentList", staffDao.inactiveDepartmentList(model));
 		return "department";
 	}
 
@@ -92,11 +93,9 @@ public class StaffController {
 		department.setDepartment(name);
 		int value = staffDao.activateOrDeactivateDepartment(department);
 		if (value == 1) {
-			model.addAttribute("departmentList", staffDao.departmentList());
-			return "department";
+			return "redirect:/departmentlist";
 		} else if (value == 2) {
-			model.addAttribute("departmentList", staffDao.inactiveDepartmentList());
-			return "department";
+			return "redirect:/inactive-departmentlist";
 		} else
 			return "department";
 	}
@@ -105,8 +104,8 @@ public class StaffController {
 
 	// method to get Attendance Admin page
 	@GetMapping(path = "/attendanceAdmin")
-	public String adminAttendance(Model model) {
-		model.addAttribute("studentList", staffDao.studentList());
+	public String adminAttendance(Model model) throws JsonProcessingException {
+		model.addAttribute("studentList", staffDao.approvedStudentList(model));
 		return "attendanceAdmin";
 	}
 
@@ -127,11 +126,10 @@ public class StaffController {
 	// method to add present
 	@GetMapping(path = "/add-update-present-by-one/{userId}")
 	public String addOrUpdatePresentByOne(@PathVariable(value = "userId") int userId, Model model)
-			throws UserIdException {
+			throws UserIdException, JsonProcessingException {
 		int value = staffDao.addOrUpdatePresentByOne(userId);
 		if (value == 1) {
-			model.addAttribute("studentList", staffDao.studentList());
-			return "attendanceAdmin";
+			return "redirect:/attendanceAdmin";
 		} else
 			return "attendanceAdmin";
 	}
@@ -139,12 +137,11 @@ public class StaffController {
 	// method to add absent
 	@GetMapping(path = "/add-update-absent-by-one/{userId}")
 	public String addOrUpdateAbsentByOne(@PathVariable(value = "userId") int userId, Model model)
-			throws UserIdException {
+			throws UserIdException, JsonProcessingException {
 
 		int value = staffDao.addOrUpdateAbsentByOne(userId);
 		if (value == 1) {
-			model.addAttribute("studentList", staffDao.studentList());
-			return "attendanceAdmin";
+			return "redirect:/attendanceAdmin";
 		} else
 			return "attendanceAdmin";
 	}
@@ -166,15 +163,15 @@ public class StaffController {
 
 	// method to get Semester List
 	@GetMapping(path = "/semesterlist")
-	public String semesterList(Model model) {
-		model.addAttribute("semesterList", staffDao.semesterList());
+	public String semesterList(Model model) throws JsonProcessingException {
+		model.addAttribute("semesterList", staffDao.semesterList(model));
 		return "semester";
 	}
 
 	// method to get inactive Semester List
 	@GetMapping(path = "/inactive-semesterlist")
-	public String inactiveSemesterList(Model model) {
-		model.addAttribute("semesterList", staffDao.inactiveSemesterList());
+	public String inactiveSemesterList(Model model) throws JsonProcessingException {
+		model.addAttribute("semesterList", staffDao.inactiveSemesterList(model));
 		return "semester";
 	}
 
@@ -185,8 +182,7 @@ public class StaffController {
 		semester.setId(semesterId);
 		int value = staffDao.addSemester(semester);
 		if (value == 1) {
-			model.addAttribute("semesterList", staffDao.semesterList());
-			return "semester";
+			return "redirect:/semesterlist";
 		} else
 			return "semester";
 	}
@@ -198,8 +194,9 @@ public class StaffController {
 		semester.setId(semesterId);
 		int value = staffDao.activateOrDeactivateSemester(semester);
 		if (value == 1) {
-			model.addAttribute("semesterList", staffDao.semesterList());
-			return "semester";
+			return "redirect:/semesterlist";
+		} else if (value == 2) {
+			return "redirect:/inactive-semesterlistt";
 		} else
 			return "semester";
 	}
@@ -260,15 +257,15 @@ public class StaffController {
 
 	// method to get exam list
 	@GetMapping(path = "/examlist")
-	public String examList(Model model) {
-		model.addAttribute("examList", staffDao.examList());
+	public String examList(Model model) throws JsonProcessingException {
+		model.addAttribute("examList", staffDao.examList(model));
 		return "examDetails";
 	}
 
 	// method to get inactive exam list
 	@GetMapping(path = "/inactive-examlist")
-	public String inactiveExamList(Model model) {
-		model.addAttribute("inactiveExamList", staffDao.inactiveExamList());
+	public String inactiveExamList(Model model) throws JsonProcessingException {
+		model.addAttribute("inactiveExamList", staffDao.inactiveExamList(model));
 		return "examDetails";
 	}
 
@@ -284,8 +281,7 @@ public class StaffController {
 		exam.setType(type);
 		int value = staffDao.addExam(exam);
 		if (value == 1) {
-			model.addAttribute("examList", staffDao.examList());
-			return "examDetails";
+			return "redirect:/examlist";
 		} else
 			return "examDetails";
 	}
@@ -297,11 +293,9 @@ public class StaffController {
 		exam.setId(examId);
 		int value = staffDao.activateOrDeactivateExam(exam);
 		if (value == 1) {
-			model.addAttribute("examList", staffDao.examList());
-			return "examDetails";
+			return "redirect:/examlist";
 		} else if (value == 2) {
-			model.addAttribute("examList", staffDao.inactiveExamList());
-			return "examDetails";
+			return "redirect:/inactive-examlist";
 		} else
 			return "examDetails";
 	}
@@ -310,15 +304,15 @@ public class StaffController {
 
 	// method to get result List
 	@GetMapping(path = "/resultlist")
-	public String resultList(Model model) {
-		model.addAttribute("resultList", staffDao.resultList());
+	public String resultList(Model model) throws JsonProcessingException {
+		model.addAttribute("resultList", staffDao.resultList(model));
 		return "resultAdmin";
 	}
 
 	// method to get inactive Result List
 	@GetMapping(path = "/inactive-resultlist")
-	public String inactiveResultList(Model model) {
-		model.addAttribute("inactiveResultList", staffDao.inactiveResultList());
+	public String inactiveResultList(Model model) throws JsonProcessingException {
+		model.addAttribute("inactiveResultList", staffDao.inactiveResultList(model));
 		return "resultAdmin";
 	}
 
@@ -332,8 +326,7 @@ public class StaffController {
 		result.setMarks(marks);
 		int value = staffDao.addOrUpdateResult(result);
 		if (value == 1) {
-			model.addAttribute("resultList", staffDao.resultList());
-			return "resultAdmin";
+			return "redirect:/resultlist";
 		} else
 			return "resultAdmin";
 	}
@@ -347,11 +340,9 @@ public class StaffController {
 		result.setUserId(userId);
 		int value = staffDao.activateOrDeactivateOneResult(result);
 		if (value == 1) {
-			model.addAttribute("resultList", staffDao.resultList());
-			return "resultAdmin";
+			return "redirect:/resultlist";
 		} else if (value == 2) {
-			model.addAttribute("resultList", staffDao.inactiveResultList());
-			return "resultAdmin";
+			return "redirect:/inactive-resultlist";
 		} else
 			return "resultAdmin";
 	}
@@ -363,11 +354,9 @@ public class StaffController {
 		result.setExamId(examId);
 		int value = staffDao.activateOrDeactivateWholeExamResult(result);
 		if (value == 1) {
-			model.addAttribute("resultList", staffDao.resultList());
-			return "resultAdmin";
+			return "redirect:/resultlist";
 		} else if (value == 2) {
-			model.addAttribute("resultList", staffDao.inactiveResultList());
-			return "resultAdmin";
+			return "redirect:/inactive-resultlist";
 		} else
 			return "resultAdmin";
 	}
@@ -379,11 +368,9 @@ public class StaffController {
 		result.setUserId(userId);
 		int value = staffDao.activateOrDeactivateWholeUserResult(result);
 		if (value == 1) {
-			model.addAttribute("resultList", staffDao.resultList());
-			return "resultAdmin";
+			return "redirect:/resultlist";
 		} else if (value == 2) {
-			model.addAttribute("resultList", staffDao.inactiveResultList());
-			return "resultAdmin";
+			return "redirect:/inactive-resultlist";
 		} else
 			return "resultAdmin";
 	}

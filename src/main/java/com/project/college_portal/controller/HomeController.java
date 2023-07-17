@@ -33,12 +33,18 @@ public class HomeController {
 	public String adminHome() {
 		return "adminHome";
 	}
-	
+
 	// method to get student home
-		@GetMapping(path = "/studentHome")
-		public String studentHome() {
-			return "Home";
-		}
+	@GetMapping(path = "/studentHome")
+	public String studentHome() {
+		return "Home";
+	}
+
+	// method to get student attendance
+	@GetMapping(path = "/attendance")
+	public String attendance() {
+		return "attendance";
+	}
 
 	// method to get logout
 	@GetMapping(path = "/logout")

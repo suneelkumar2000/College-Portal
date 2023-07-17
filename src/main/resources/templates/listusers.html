@@ -147,6 +147,23 @@
                 font-size: 18px;
             }
         }
+
+        .but {
+            background: green;
+            color: white;
+            border: none;
+            width: 140px;
+            height: 40px;
+            border-radius: 3px 3px 3px 3px;
+            margin-left: 30px;
+            margin-top: 100px;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
+
+        }
+
+        .but:hover {
+            background: rgba(16, 150, 47);
+        }
     </style>
 </head>
 
@@ -177,7 +194,7 @@
         <div id="myGrid" style="height: 100%" class="ag-theme-alpine">
         </div>
     </div>
-    <input type="text" id="users" th:value="${USER_LIST}" style="display:none;">
+    <input type="text" id="users" th:value="${listOfStudents}" style="display:none;">
 
     <script>
         function openNav() {
@@ -199,27 +216,41 @@
                 {
                     id: "userId",
                     name: "userId",
-                    field: 'User ID',
-                    type: 'numberColumn'
+                    field: "userId",
+                    type: 'numberColumn',
+                    width: 100
                 },
 
                 // using default ColDef
                 {
                     id: "firstName",
                     name: "firstName",
-                    field: 'First Name'
+                    field: "firstName"
                 },
                 {
                     id: "lastName",
                     name: "lastName",
-                    field: 'Last Name'
+                    field: "lastName"
+                },
+
+                {
+                    id: "gender",
+                    name: "gender",
+                    field: "gender",
+                    width: 100
+                },
+
+                {
+                    id: "parentName",
+                    name: "parentName",
+                    field: "parentName"
                 },
 
                 // using date and non-editable column types
                 {
                     id: "email",
                     name: "email",
-                    field: "Email",
+                    field: "email",
                 },
 
 
@@ -227,7 +258,7 @@
                 {
                     id: "phone",
                     name: "phone",
-                    field: 'Phone Number',
+                    field: "phone",
                     type: 'numberColumn'
                 },
                 // using default ColDef
@@ -240,13 +271,21 @@
 
                 {
                     id: "status",
-                    name: "Status",
-                    field: "Status",
+                    name: "status",
+                    field: "status",
                     width: 100
                 },
 
-
+                {
+                    id: "approve",
+                    name: "approve",
+                    field: "approve",
+                    formatter: buttonFormatter,
+                    width: 200
+                },
             ],
+
+
 
             // default ColDef, gets applied to every column
             defaultColDef: {
@@ -312,12 +351,19 @@
             let data = document.getElementById("users").value;
             console.log(data);
 
-            let data1 = Object.values(data);
-            
+            var data1 = JSON.parse(data);
+
             console.log(data1);
 
             gridOptions.api.setRowData(data1);
         });
+
+        function buttonFormatter(row, cell, value, columnDef, dataContext) {
+            let a = dataContext.userId;
+            console.log(a);
+            return '<form action="/aprove" metod="get"><button type="submit"  class="but" name="user_id" value="' + a + '">Aprove</button></form>';
+
+        }
     </script>
 </body>
 

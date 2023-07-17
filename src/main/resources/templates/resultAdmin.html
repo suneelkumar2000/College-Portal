@@ -177,24 +177,7 @@
 		</div>
 	</div>
 	
-	<?php
-$data = '';
-$i = 0;
-
-$con = new mysqli('mysql', 'root', 'root', 'Bright_College_Portal');
-$sql = "select * from user where roll='student'";
-$sql_query = mysqli_query($con, $sql);
-
-while ($row = mysqli_fetch_array($sql_query)) {
-  $data .= '
-    data['.$i.'] = {
-    title: "'.$row['title'].'",
-    newcolumn: "'.$row['newcolumn'].'"
-    };
-  ';
-$i++;
-}
-?>
+	<input type="text" id="result" th:value="${listOfResult}" style="display:none;">
 
 	<script>
 		function openNav() {
@@ -213,13 +196,31 @@ $i++;
 			// define grid columns
 			columnDefs: [
 				// using number column type
-				{ field: 'Roll Number', type: 'numberColumn' },
+				{
+                    id: "userId",
+                    name: "userId",
+                    field: "userId",
+                    type: 'numberColumn',
+                    width: 100
+                },
 
 				// using default ColDef
-				{ field: 'First Name' },
-				{ field: 'Last Name' },
+				{
+                    id: "firstName",
+                    name: "firstName",
+                    field: "firstName"
+                },
+				{
+                    id: "lastName",
+                    name: "lastName",
+                    field: "lastName"
+                },
 
-				{ field: 'Department' },
+				{
+                    id: "department",
+                    name: "department",
+                    field: "department",
+                },
 
 				{ field: 'Semester', type: 'numberColumn' },
 				{ field: 'Mark', type: 'numberColumn' },
@@ -287,9 +288,14 @@ $i++;
 			const gridDiv = document.querySelector('#myGrid');
 			new agGrid.Grid(gridDiv, gridOptions);
 
-			fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
-				.then((response) => response.json())
-				.then((data) => gridOptions.api.setRowData(data));
+			let data = document.getElementById("result").value;
+            console.log(data);
+
+            var data1 = JSON.parse(data);
+
+            console.log(data1);
+
+            gridOptions.api.setRowData(data1);
 		});
 	</script>
 </body>

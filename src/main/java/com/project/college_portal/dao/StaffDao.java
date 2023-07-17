@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
 
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExamIdException;
@@ -33,6 +34,8 @@ import com.project.college_portal.model.Result;
 import com.project.college_portal.model.Semester;
 import com.project.college_portal.model.Subject;
 import com.project.college_portal.model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 public class StaffDao {
@@ -47,9 +50,12 @@ public class StaffDao {
 		return userDepartment;
 	}
 
-	public List<User> studentList() {
+	public List<User> studentList(Model model) throws JsonProcessingException {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String user=object.writeValueAsString(userList);
+		model.addAttribute("listOfStudents", user);
 		return userList;
 	}
 
@@ -71,10 +77,12 @@ public class StaffDao {
 		return 0;
 	}
 
-	public List<User> approvedStudentList() {
+	public List<User> approvedStudentList(Model model) throws JsonProcessingException {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and status='approved' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		System.out.println(userList);
+		ObjectMapper object=new ObjectMapper();
+	       String user=object.writeValueAsString(userList);
+		model.addAttribute("listOfApprovedStudents", user);
 		return userList;
 	}
 
@@ -175,15 +183,21 @@ public class StaffDao {
 		return 0;
 	}
 
-	public List<Department> departmentList() {
+	public List<Department> departmentList(Model model) throws JsonProcessingException {
 		String select = "select id,department,is_active from classroom where (is_active =true and department !='not selected')";
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String department=object.writeValueAsString(departmentList);
+		model.addAttribute("listOfDepartment", department);
 		return departmentList;
 	}
 
-	public List<Department> inactiveDepartmentList() {
+	public List<Department> inactiveDepartmentList(Model model) throws JsonProcessingException {
 		String select = "select id,department,is_active from classroom where (is_active =false and department !='not selected')";
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String department=object.writeValueAsString(departmentList);
+		model.addAttribute("listOfDepartment", department);
 		return departmentList;
 	}
 
@@ -350,21 +364,27 @@ public class StaffDao {
 				Object[] params = { Semester.getId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				logger.info(noOfRows + " Semester are activated");
-				return 1;
+				return 2;
 			}
 		}
 		return 0;
 	}
 
-	public List<Semester> semesterList() {
+	public List<Semester> semesterList(Model model) throws JsonProcessingException {
 		String select = "Select id,is_active from semester where (is_active =true)";
 		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String semester=object.writeValueAsString(semesterList);
+		model.addAttribute("listOfSemester", semester);
 		return semesterList;
 	}
 
-	public List<Semester> inactiveSemesterList() {
+	public List<Semester> inactiveSemesterList(Model model) throws JsonProcessingException {
 		String select = "Select id,is_active from semester where (is_active =false)";
 		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String semester=object.writeValueAsString(semesterList);
+		model.addAttribute("listOfSemester", semester);
 		return semesterList;
 	}
 
@@ -508,15 +528,21 @@ public class StaffDao {
 		return 0;
 	}
 
-	public List<Exam> examList() {
+	public List<Exam> examList(Model model) throws JsonProcessingException {
 		String select = "select id,subject_id,name,type,is_active from exam where (is_active =true)";
 		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String exam=object.writeValueAsString(examList);
+		model.addAttribute("listOfExam", exam);
 		return examList;
 	}
 
-	public List<Exam> inactiveExamList() {
+	public List<Exam> inactiveExamList(Model model) throws JsonProcessingException {
 		String select = "select id,subject_id,name,type,is_active from exam where (is_active =false)";
 		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String exam=object.writeValueAsString(examList);
+		model.addAttribute("listOfExam", exam);
 		return examList;
 	}
 
@@ -663,15 +689,21 @@ public class StaffDao {
 		return 0;
 	}
 
-	public List<Result> resultList() {
+	public List<Result> resultList(Model model) throws JsonProcessingException {
 		String select = "select exam_id,user_id,marks,is_active from result where (is_active =true)";
 		List<Result> resultList = jdbcTemplate.query(select, new ResultMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String result=object.writeValueAsString(resultList);
+		model.addAttribute("listOfResult", result);
 		return resultList;
 	}
 
-	public List<Result> inactiveResultList() {
+	public List<Result> inactiveResultList(Model model) throws JsonProcessingException {
 		String select = "select exam_id,user_id,marks,is_active from result where (is_active =false)";
 		List<Result> resultList = jdbcTemplate.query(select, new ResultMapper());
+		ObjectMapper object=new ObjectMapper();
+	       String result=object.writeValueAsString(resultList);
+		model.addAttribute("listOfResult", result);
 		return resultList;
 	}
 
