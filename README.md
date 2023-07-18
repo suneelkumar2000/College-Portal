@@ -30,11 +30,13 @@
 <h3>Staff Panel</h3>
 
 - [x] Staff login
-- [ ] View Students list
+- [x] View Students list
 - [ ] Approve Students
 - [ ] Manage Student Attendence
 - [ ] Manage Student Result
-- [ ] Manage subjects
+- [x] Manage department
+- [x] Manage subjects
+- [x] Manage exams
       
 <h3>Student Panel</h3>
 
