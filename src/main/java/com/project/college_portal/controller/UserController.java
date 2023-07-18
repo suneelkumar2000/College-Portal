@@ -64,7 +64,7 @@ public class UserController {
 		userDao.findById(UserId, session);
 		
 		if (value == 1) {
-			return "home";
+			return "redirect:/studentHome";
 		} else if (value == 2) {
 			return "adminHome";
 		} else
@@ -86,7 +86,7 @@ public class UserController {
 		userDao.findById(UserId, session);
 		
 		if (value == 1) {
-			return "home";
+			return "redirect:/studentHome";
 		} else if (value == 2) {
 			return "adminHome";
 		} else
@@ -94,13 +94,6 @@ public class UserController {
 	}
 
 	// --------- student method ---------
-
-	// method studentRegistration form
-	@GetMapping(path = "/studentRegistration")
-	public String studentProfile(Model model) throws JsonProcessingException {
-		model.addAttribute("departmentList", staffDao.departmentList(model));
-		return "studentRegistrationForm";
-	}
 
 	// method to update student Registration details
 	@GetMapping(path = "/studentsave")
@@ -122,7 +115,7 @@ public class UserController {
 		int value = userDao.studentsave(user);
 
 		if (value == 1) {
-			return "home";
+			return "redirect:/studentHome";
 		}
 		return "redirect:/studentRegistration";
 	}

@@ -1,5 +1,6 @@
 package com.project.college_portal.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -378,6 +379,55 @@ public class StaffDao implements StaffInterface{
 			}
 		}
 		return 0;
+	}
+	
+	public int activeOrInactiveSemester() {
+		// TODO Auto-generated method stub
+		String select = "Select id,is_active from semester";
+		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
+		
+		for (Semester semesterModel1 : semester) {
+			if (semesterModel1 != null) {
+				int SemesterId = semesterModel1.getId();
+				LocalDate currentDate = LocalDate.now();
+				int month = currentDate.getMonthValue();
+				System.out.println(month);
+				if(month>5 && month <12) {
+					if(SemesterId%2==0) {
+						String deactivate = "update semester set is_active =false where id=?";
+						Object[] params = { SemesterId };
+						int noOfRows = jdbcTemplate.update(deactivate, params);
+						logger.info(noOfRows + " Semester are deactivated");
+						return 1;
+					}
+					else {
+						String deactivate = "update semester set is_active =true where id=?";
+						Object[] params = { SemesterId };
+						int noOfRows = jdbcTemplate.update(deactivate, params);
+						logger.info(noOfRows + " Semester are deactivated");
+						return 1;
+					}
+				}else {
+					if(SemesterId%2==0) {
+						String deactivate = "update semester set is_active =true where id=?";
+						Object[] params = { SemesterId };
+						int noOfRows = jdbcTemplate.update(deactivate, params);
+						logger.info(noOfRows + " Semester are deactivated");
+						return 1;
+					}
+					else {
+						String deactivate = "update semester set is_active =false where id=?";
+						Object[] params = { SemesterId };
+						int noOfRows = jdbcTemplate.update(deactivate, params);
+						logger.info(noOfRows + " Semester are deactivated");
+						return 1;
+					}
+				}
+				
+			}
+		}
+		return 0;
+		
 	}
 
 	public List<Semester> semesterList(Model model) throws JsonProcessingException {

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
-    <title>Register Page</title>
+    <title>Subject Insertion Form</title>
     <style>
         body {
             background: #000000;
@@ -26,10 +26,10 @@
 
         .container {
             background-color: #fff;
-            border-radius: 8px;
+            border-radius: 5px;
             box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
             overflow: hidden;
-            width: 500px;
+            width: 600px;
             max-width: 100%;
         }
 
@@ -127,7 +127,6 @@
         }
 
         .cancel_link {
-            cursor: pointer;
             margin: 30px 0;
             text-align: center;
             font-size: 16px;
@@ -137,31 +136,55 @@
 </head>
 
 <body>
+
     <div class="container">
         <div class="header">
-            <h2>Department Insertion Form</h2>
+            <h2>Subject Insertion Form</h2>
         </div>
-        <form id="form" th:action="@{/addsubject}" th:object="${departmentForm}" method="GET"
+        <form id="form" action="addsubject" th:action="@{/addsubject}"  method="GET"
             class="form">
             <br>
 
             <div class="form-control">
-                <label for="department" class="text"><b>Department</b><span class="required">*</span><input type="text"
-                        placeholder="Enter Department" id="department" name="department">
+                <label for="name" class="text"><b>Subject Name</b></label><input
+                    type="text" placeholder="Enter Subject Name" id="name" name="name"> <i
+                    class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>
+                <div class="error"></div>
+            </div>
+
+            <div class="form-control">
+                <label for="department" class="text">
+                    <b>Select Subject Department</b><span class="required">*</span>
+
+                    <select id="department" name="department"  required>
+                        <option th:each="department : ${departmentList}" th:value="${department.department}"
+                            th:utext="${department.department}"></option>
+                    </select>
                     <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>
                     <div class="error"></div>
                 </label>
             </div>
-            <div class="form-control">
-            <div class="error" th:each="department : ${departmentExist}"
-            th:text="${department}" id=error>
-            </div>
-            </div>
 
-            <input type="submit" onclick="clearText()" value="ADD">
+            <div class="form-control">
+                <label for="semesterId" class="text">
+                    <b>Select Subject Department</b><span class="required">*</span>
+
+                    <select id="semesterId" name="semesterId"  required>
+                        <option th:each="semester : ${semesterList}" th:value="${department.department}"
+                            th:utext="${semester.id}"></option>
+                    </select>
+                    <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>
+                    <div class="error"></div>
+                </label>
+            </div>
+            
+            <input type="submit" onclick="clearText()" value="Submit">
             <br>
             <div class="cancel_link">
-                <a th:href="@{/departmentlist}" class="cancel">Cancel</a>
+                <a th:href="@{/editstudentprofile}">Clear Form</a>
+            </div>
+            <div class="cancel_link">
+                <a th:href="@{/studentHome}" class="cancel">Cancel</a>
             </div>
         </form>
     </div>
@@ -170,14 +193,14 @@
 
         function clearText(event) {
             // access input field
-            let clearDepartment = document.getElementById('#department');
+            let clearName = document.getElementById('#name');
             // clear the input field.
-            clearDepartment.value = "";
-
+            clearName.value = "";
             output.innerHTML += "Form submitted successfully! <br>";
         }
-        let department = document.querySelector('#department');
 
+        let form = document.querySelector('#form')
+        let name = document.querySelector('#name');
         form.addEventListener('submit', (e) => {
 
             if (!validateInputs()) {
@@ -186,16 +209,21 @@
         })
 
         function validateInputs() {
-            let departmentValue = department.value.trim();
+            let nameValue = name.value.trim();
             let success = true
 
-            if (departmentValue === '') {
+            if (nameValue === '') {
                 success = false;
-                setError(department, 'This Field is required')
+                setError(name, 'Subject Name is required')
+            }
+            else if (!validateName(nameValue)) {
+                success = false;
+                setError(name, 'Please Enter Valid Subject Name')
             }
             else {
-                setSuccess(department)
+                setSuccess(name)
             }
+
             return success;
         }
         function setError(element, message) {
@@ -215,6 +243,21 @@
             inputGroup.classList.add('success')
             inputGroup.classList.remove('error')
         }
+
+        let validateEmail = (email) => {
+            return String(email)
+                .toLowerCase()
+                .match(
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                )
+        };
+
+        let validateName = (name) => {
+            return String(name)
+                .match(
+                    /^[A-Za-z]+$/
+                );
+        };
     </script>
 
 </body>

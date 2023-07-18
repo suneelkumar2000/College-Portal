@@ -42,6 +42,7 @@ public interface StaffInterface {
 	
 	public int addSemester(Semester semester) throws ExistSemesterIdException;
 	public int activateOrDeactivateSemester(Semester Semester);
+	public int activeOrInactiveSemester();
 	public List<Semester> semesterList(Model model) throws JsonProcessingException;
 	public List<Semester> inactiveSemesterList(Model model) throws JsonProcessingException;
 	

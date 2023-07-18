@@ -211,8 +211,20 @@
                     type: 'numberColumn',
                     width: 100
                 },
-
+                
                 // using default ColDef
+                {
+                    id: "name",
+                    name: "name",
+                    field: "name"
+                },
+                {
+                    id: "semesterId",
+                    name: "semesterId",
+                    field: "semesterId",
+                    type: 'numberColumn',
+                    width: 100
+                },
                 {
                     id: "department",
                     name: "department",
@@ -289,7 +301,7 @@
             let gridDiv = document.querySelector('#myGrid');
             new agGrid.Grid(gridDiv, gridOptions);
 
-            let data = document.getElementById("Subject").value;
+            let data = document.getElementById("subject").value;
             console.log(data);
 
             var data1 = JSON.parse(data);

@@ -1,5 +1,6 @@
 package com.project.college_portal.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
@@ -17,16 +19,20 @@ import com.project.college_portal.interfaces.UserInterface;
 import com.project.college_portal.mapper.ApprovingMapper;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
+import com.project.college_portal.mapper.SubjectMapper;
 import com.project.college_portal.mapper.UserDepartmentMapper;
 import com.project.college_portal.mapper.UserMapper;
+import com.project.college_portal.model.Semester;
+import com.project.college_portal.model.Subject;
 import com.project.college_portal.model.User;
 import com.project.college_portal.validation.Validation;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Repository
-public class UserDao implements UserInterface{
+public class UserDao implements UserInterface {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
+	StaffDao staffDao = new StaffDao();
 
 	// --------- user method ---------
 
@@ -63,7 +69,7 @@ public class UserDao implements UserInterface{
 					return 1;
 				}
 				return 1;
-			} else {			
+			} else {
 				return 0;
 			}
 		}
@@ -113,7 +119,7 @@ public class UserDao implements UserInterface{
 		List<User> userList = jdbcTemplate.query(sql, new UserMapper());
 		return userList;
 	}
-	
+
 	// forgotPassword method
 	public int forgotPassword(User user) {
 		// TODO Auto-generated method stub
@@ -192,7 +198,7 @@ public class UserDao implements UserInterface{
 		}
 		return 0;
 	}
-	
+
 	// --------- student method ---------
 
 	// method to find student details by Email
@@ -201,7 +207,7 @@ public class UserDao implements UserInterface{
 		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
 		return userDetails;
 	}
-	
+
 	// method to update student details
 	public int studentsave(User User) {
 		// TODO Auto-generated method stub
@@ -212,12 +218,54 @@ public class UserDao implements UserInterface{
 		for (User userModel : user1) {
 			if (userModel != null) {
 				String update = "update user set first_name=?,last_name=?,dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
-				Object[] params = {User.getFirstName(),User.getLastName(),User.getDOB(),User.getPhone(),User.getDepartment(),User.getParentName(),User.getJoiningYear(), User.getUserId() };
+				Object[] params = { User.getFirstName(), User.getLastName(), User.getDOB(), User.getPhone(),
+						User.getDepartment(), User.getParentName(), User.getJoiningYear(), User.getUserId() };
 				int noOfRows = jdbcTemplate.update(update, params);
 				return 1;
 			}
 		}
 		return 0;
 	}
-	
+
+	// method to find Student semester
+	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException {
+		String select = "Select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where id=?";
+		List<User> userList = jdbcTemplate.query(select, new UserMapper(), userid);
+		for (User userModel : userList) {
+			if (userModel != null) {
+				int joiningYear = userModel.getJoiningYear();
+				LocalDate currentDate = LocalDate.now();
+				int year = currentDate.getYear();
+				staffDao.activeOrInactiveSemester();
+				List<Semester> semesterList = staffDao.semesterList(model);
+				for (Semester semesterModel : semesterList) {
+					int semesterId = semesterModel.getId();
+					if ((year - joiningYear) > 4) {
+						if ((year - joiningYear) < 1) {
+							if (semesterId <= 2) {
+								return semesterId;
+							}
+						} else if ((year - joiningYear) < 2 && (year - joiningYear) > 1) {
+							if ((semesterId <= 4) && (semesterId > 2)) {
+								return semesterId;
+							}
+						} else if ((year - joiningYear) < 3 && (year - joiningYear) > 2) {
+							if ((semesterId <= 6) && (semesterId > 4)) {
+								return semesterId;
+							}
+						} else if ((year - joiningYear) < 4 && (year - joiningYear) > 3) {
+							if ((semesterId <= 8) && (semesterId > 6)) {
+								return semesterId;
+							}
+						}
+
+					} else {
+						System.out.println("Course Completed");
+						return -1;
+					}
+				}
+			}
+		}
+		return 0;
+	}
 }

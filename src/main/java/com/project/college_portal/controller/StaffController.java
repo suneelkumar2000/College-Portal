@@ -164,6 +164,7 @@ public class StaffController {
 	// method to get Semester List
 	@GetMapping(path = "/semesterlist")
 	public String semesterList(Model model) throws JsonProcessingException {
+		staffDao.activeOrInactiveSemester();
 		model.addAttribute("semesterList", staffDao.semesterList(model));
 		return "semester";
 	}
@@ -171,6 +172,7 @@ public class StaffController {
 	// method to get inactive Semester List
 	@GetMapping(path = "/inactiveSemesterlist")
 	public String inactiveSemesterList(Model model) throws JsonProcessingException {
+		staffDao.activeOrInactiveSemester();
 		model.addAttribute("semesterList", staffDao.inactiveSemesterList(model));
 		return "semester";
 	}
@@ -181,6 +183,7 @@ public class StaffController {
 		Semester semester = new Semester();
 		semester.setId(semesterId);
 		int value = staffDao.addSemester(semester);
+		
 		if (value == 1) {
 			return "redirect:/semesterlist";
 		} else
