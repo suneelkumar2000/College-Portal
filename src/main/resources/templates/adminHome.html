@@ -24,12 +24,9 @@
 		}
 
 		body {
+			background: #fffefe;
 			padding: 1rem;
 			overflow: auto;
-		}
-
-		body {
-			background: #fffefe;
 		}
 
 		body h1 {
@@ -51,9 +48,6 @@
 
 		li span {
 			float: left;
-		}
-
-		li span {
 			align-items: center;
 			text-decoration: none;
 			color: #ffffff;
@@ -171,7 +165,7 @@
     	<a th:href="@{/examlist}">Exam Details</a>
 	</div>
 	<center>
-		<h1>WELCOME</h1><h1 th:text="${session.firstName}"></h1>
+		<h1>WELCOME <span th:text="${session.firstName}"></span></h1>
 	</center>
 
 	<script>

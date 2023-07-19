@@ -13,7 +13,6 @@ public class ConnectionUtil {
 		ds.setUrl("jdbc:mysql://localhost:3306/Bright_College_Portal");
 		ds.setUsername("root");
 		ds.setPassword("root");
-		System.out.println(ds);
 		return ds;
 
 	}

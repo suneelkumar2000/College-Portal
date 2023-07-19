@@ -5,6 +5,7 @@
 	<title>JavaScript example</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
 	<style media="only screen">
 		html,
 		body {
@@ -189,12 +190,66 @@
 	</div>
 
 
-
 	<div style="height: 100%; box-sizing: border-box">
 		<div id="myGrid" style="height: 100%" class="ag-theme-alpine">
 		</div>
 	</div>
 	<input type="text" id="users" th:value="${listOfStudents}" style="display:none;">
+
+
+
+	<form th:action="@{/Approve}" method="post" th:onclick="return checkForm()">
+
+		<input type="text"  placeholder="...." id="userCode" readonly required
+			style="display: none">
+		<div class="button">
+			<button type="button" class="approve-button" id="approve-btn">Approve</button>
+			<button type="button" class="reject-button" id="reject-btn">Reject</button>
+		</div>
+		<!-- confirmation popup start -->
+		<div class="modal">
+			<div class="modalContent">
+				<span class="close">×</span>
+				<p>Are you sure you want to Approve</p>
+				<button class="confirm" type="submit">Approve</button>
+				<button class="cancel" type="button" th:onclick="hideModal()">Cancel</button>
+			</div>
+		</div>
+		<!-- confirmation popup end -->
+		<!-- reject popup start -->
+		<div class="modalReject">
+			<div class="modalContent">
+				<span class="close" id="reject-close">×</span>
+				<p>Are you sure you want to Reject</p>
+				<button class="confirm" type="submit" id="reject-button" th:formaction="@{/Reject}">Reject</button>
+				<button class="cancel" id="reject-cancel" type="button" th:onclick="hideModal()">Cancel</button>
+			</div>
+		</div>
+		<!-- reject popup end -->
+	</form>
+
+	<script>
+		function checkForm() {
+			let inputField = document.getElementById('donationCode').value;
+			if (inputField == "") {
+				alert('Please select the donation')
+				return false;
+			}
+
+			if (approveBtn == 'clicked') {
+
+				modal.style.display = "block";
+
+			}
+			if (rejectBtn == 'clicked') {
+
+				modalReject.style.display = "block";
+
+			}
+			return true;
+		}
+
+	</script>
 
 	<script>
 		function openNav() {
@@ -206,6 +261,7 @@
 			document.getElementById("mySidenav").style.width = "0";
 		}
 	</script>
+	
 	<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
 	</script>
 	<script>
@@ -358,7 +414,7 @@
 		}
 		/* check box funtion start */
 		function checkboxFormatter(row, cell, value, columnDef, dataContext) {
-			let a = dataContext.donationCode;
+			let a = dataContext.userCode;
 			return '<input type="checkbox" value="' + a + '" name="checkName" id="checkBox"' + (value ? 'checked="checked"' : '') + '/>';
 		}
 

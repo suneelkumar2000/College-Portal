@@ -58,11 +58,11 @@ public class UserController {
 		user.setEmail(email);
 		user.setPassword(password);
 		int value = userDao.login(user);
-		
+
 		session.setAttribute("userId", userDao.findIdByEmail(email));
 		int UserId = (int) session.getAttribute("userId");
 		userDao.findById(UserId, session);
-		
+
 		if (value == 1) {
 			return "redirect:/studentHome";
 		} else if (value == 2) {
@@ -84,7 +84,7 @@ public class UserController {
 		session.setAttribute("userId", userDao.findIdByEmail(email));
 		int UserId = (int) session.getAttribute("userId");
 		userDao.findById(UserId, session);
-		
+
 		if (value == 1) {
 			return "redirect:/studentHome";
 		} else if (value == 2) {
@@ -97,15 +97,12 @@ public class UserController {
 
 	// method to update student Registration details
 	@GetMapping(path = "/studentsave")
-	public String studentsave(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-			@RequestParam("phone") Long phone, @RequestParam("DOB") Date DOB,
+	public String studentsave(@RequestParam("phone") Long phone, @RequestParam("DOB") Date DOB,
 			@RequestParam("department") String department, @RequestParam("year") int year,
 			@RequestParam("parentName") String parentName, HttpSession session) {
 		int UserId = (int) session.getAttribute("userId");
 		User user = new User();
 		user.setUserId(UserId);
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
 		user.setPhone(phone);
 		user.setDOB(DOB);
 		user.setDepartment(department);

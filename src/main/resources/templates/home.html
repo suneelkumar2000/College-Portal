@@ -147,11 +147,13 @@
 				font-size: 18px;
 			}
 		}
-		.note{
-      		color: #f70f0f;
+
+		.note {
+			color: #f70f0f;
 		}
-		.note2{
-      		color: #2c83d4;
+
+		.note2 {
+			color: #2c83d4;
 		}
 	</style>
 </head>
@@ -172,16 +174,30 @@
 		<a th:href="@{#}">Result</a>
 	</div>
 	<center>
-		<h1>WELCOME </h1><h1 th:text="${session.firstName}"></h1>
-		
+		<h1>WELCOME </h1>
+		<h1 th:text="${session.firstName}"></h1>
+
 	</center>
-	<h2 th:text="${semester}"></h2>
+	<h2 th:if="${semester >0}">
+		Your current semester is :
+		<span th:text="${semester}"></span>
+	</h2>
+
+
 	<h2 th:switch="${semester}">
-    <span th:case="'0'"><div class="note">please complete your registration first</div></span>
-    <span th:case="'-1'"><div class="note2">You have Completed Your degree Already</div></span>
-</h2>
+		<span th:case="'0'">
+			<div class="note">please complete your registration first</div>
+			<button><a th:href="@{/studentRegistration}">Complete Registration</a></button>
+		</span>
+		<span th:case="'-1'">
+			<div class="note2">You have Completed Your degree Already</div>
+		</span>
+	</h2>
+
+
+
+
 	
-	<button><a th:href="@{/studentRegistration}">Complete Registration</a></button>
 
 	<script>
 		function openNav() {

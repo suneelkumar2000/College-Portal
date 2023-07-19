@@ -220,9 +220,9 @@ public class UserDao implements UserInterface {
 			int year = currentDate.getYear();
 			if (User.getJoiningYear() <= year) {
 				if (userModel != null) {
-					String update = "update user set first_name=?,last_name=?,dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
-					Object[] params = { User.getFirstName(), User.getLastName(), User.getDOB(), User.getPhone(),
-							User.getDepartment(), User.getParentName(), User.getJoiningYear(), User.getUserId() };
+					String update = "update user set dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
+					Object[] params = { User.getDOB(), User.getPhone(), User.getDepartment(), User.getParentName(),
+							User.getJoiningYear(), User.getUserId() };
 					jdbcTemplate.update(update, params);
 					return 1;
 				}
@@ -292,10 +292,9 @@ public class UserDao implements UserInterface {
 							}
 						}
 
-					}else if(joiningYear==0) {
+					} else if (joiningYear == 0) {
 						return 0;
-					}
-					else {
+					} else {
 						return -1;
 					}
 				}

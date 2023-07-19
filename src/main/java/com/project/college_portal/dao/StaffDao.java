@@ -462,9 +462,10 @@ public class StaffDao implements StaffInterface{
 				for (Department departmentModel1 : department1) {
 					if (departmentModel1 != null) {
 
-						String add = "insert into subjects(id,name,semester_id,department) values(?,?,?,?)";
-						Object[] params = { subject.getId(), subject.getName(), semesterId, department };
+						String add = "insert into subjects(name,semester_id,department) values(?,?,?)";
+						Object[] params = {subject.getName(), semesterId, department };
 						int noOfRows = jdbcTemplate.update(add, params);
+						String create = "SELECT concat(SUBSTR(department, 1, 2),SUBSTR(name, 1, 2),semester_id) as subject_id FROM subjects where id=?;" ;
 						if (noOfRows > 0) {
 							logger.info(noOfRows + "Saved");
 							return 1;

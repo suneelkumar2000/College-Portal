@@ -17,30 +17,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 //@EnableSwagger2
 public class SwaggerConfig {
 	 
-	    /*public Docket api() {
-	        return new Docket(DocumentationType.SWAGGER_2)
-	                .select()
-	                .apis(RequestHandlerSelectors.basePackage("com.project.college_portal.controller"))
-	                .paths(PathSelectors.any())
-	                .build()
-	                .apiInfo(apiInfo())
-	                .securitySchemes(Arrays.asList(apiKey()));
-	    }
 	    
-	    private ApiInfo apiInfo() {
-	    	
-	    	
-	    			
-	        return new ApiInfoBuilder()
-	                .title("My API Documentation")
-	                .description("Welcome to College Portal")
-	                .version("1.0.0")
-	                .build();
-	    }
-	    
-	    private ApiKey apiKey() {
-	        return new ApiKey("apiKey", "apiKey", "header");
-	    }*/
 	@Bean
     public Docket swaggerConfiguration() {
          return new Docket(DocumentationType.SWAGGER_2)

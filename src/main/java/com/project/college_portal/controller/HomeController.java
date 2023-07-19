@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,7 +47,6 @@ public class HomeController {
 		int UserId = (int) session.getAttribute("userId");
 		userDao.findById(UserId, session);
 		int value = userDao.findStudentSemesterById(UserId, model);
-		System.out.println(value);
 		if (value > 0) {
 			session.setAttribute("semester", value);
 			model.addAttribute("semester", value);
@@ -104,9 +104,9 @@ public class HomeController {
 
 	// method to get subject form
 	@GetMapping(path = "/insertSubjectForm")
-	public String subjectForm(Model model) throws JsonProcessingException {
-		model.addAttribute("departmentList", staffDao.departmentList(model));
-		// model.addAttribute("semesterList", staffDao.semesterList(model));
+	public String subjectForm(ModelMap map,Model model) throws JsonProcessingException {
+		map.addAttribute("departmentList", staffDao.departmentList(model));
+		map.addAttribute("semesterList", staffDao.semesterList(model));
 		return "subjectForm";
 	}
 }

@@ -167,10 +167,10 @@
 
             <div class="form-control">
                 <label for="semesterId" class="text">
-                    <b>Select Subject Department</b><span class="required">*</span>
+                    <b>Select Subject Semester</b><span class="required">*</span>
 
                     <select id="semesterId" name="semesterId"  required>
-                        <option th:each="semester : ${semesterList}" th:value="${department.department}"
+                        <option th:each="semester : ${semesterList}" th:value="${semester.id}"
                             th:utext="${semester.id}"></option>
                     </select>
                     <i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>
@@ -181,10 +181,10 @@
             <input type="submit" onclick="clearText()" value="Submit">
             <br>
             <div class="cancel_link">
-                <a th:href="@{/editstudentprofile}">Clear Form</a>
+                <a th:href="@{/insertSubjectForm}">Clear Form</a>
             </div>
             <div class="cancel_link">
-                <a th:href="@{/studentHome}" class="cancel">Cancel</a>
+                <a th:href="@{/subjectDetails}" class="cancel">Cancel</a>
             </div>
         </form>
     </div>
