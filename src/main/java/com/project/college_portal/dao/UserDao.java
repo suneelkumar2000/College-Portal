@@ -61,11 +61,11 @@ public class UserDao implements UserInterface {
 			boolean firstNameVal = val.nameValidation(saveUser.getFirstName());
 			boolean adminval = val.adminEmailValidation(email);
 			if (emailval == true && phoneval == true && firstNameVal == true) {
-				int noOfRows = jdbcTemplate.update(sql, params);
+				jdbcTemplate.update(sql, params);
 				if (adminval == true) {
 					String approve = "update user set status ='approved'  where email=?";
 					Object[] params1 = { email };
-					int noOfRows1 = jdbcTemplate.update(approve, params1);
+					jdbcTemplate.update(approve, params1);
 					return 1;
 				}
 				return 1;
@@ -145,7 +145,7 @@ public class UserDao implements UserInterface {
 			if (userModel1 != null) {
 				String changePassword = "update user set Password =?  where Email=?";
 				Object[] params = { encodePassword, email };
-				int noOfRows = jdbcTemplate.update(changePassword, params);
+				jdbcTemplate.update(changePassword, params);
 				return 1;
 			}
 		}
@@ -153,7 +153,7 @@ public class UserDao implements UserInterface {
 			if (userModel2 != null) {
 				String changePassword = "update user set Password =?  where email=?";
 				Object[] params = { encodePassword, email };
-				int noOfRows = jdbcTemplate.update(changePassword, params);
+				jdbcTemplate.update(changePassword, params);
 				return 2;
 			}
 
@@ -216,12 +216,16 @@ public class UserDao implements UserInterface {
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
 				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
 		for (User userModel : user1) {
-			if (userModel != null) {
-				String update = "update user set first_name=?,last_name=?,dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
-				Object[] params = { User.getFirstName(), User.getLastName(), User.getDOB(), User.getPhone(),
-						User.getDepartment(), User.getParentName(), User.getJoiningYear(), User.getUserId() };
-				int noOfRows = jdbcTemplate.update(update, params);
-				return 1;
+			LocalDate currentDate = LocalDate.now();
+			int year = currentDate.getYear();
+			if (User.getJoiningYear() <= year) {
+				if (userModel != null) {
+					String update = "update user set first_name=?,last_name=?,dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
+					Object[] params = { User.getFirstName(), User.getLastName(), User.getDOB(), User.getPhone(),
+							User.getDepartment(), User.getParentName(), User.getJoiningYear(), User.getUserId() };
+					jdbcTemplate.update(update, params);
+					return 1;
+				}
 			}
 		}
 		return 0;
@@ -235,32 +239,63 @@ public class UserDao implements UserInterface {
 			if (userModel != null) {
 				int joiningYear = userModel.getJoiningYear();
 				LocalDate currentDate = LocalDate.now();
+				int month = currentDate.getMonthValue();
 				int year = currentDate.getYear();
 				staffDao.activeOrInactiveSemester();
 				List<Semester> semesterList = staffDao.semesterList(model);
 				for (Semester semesterModel : semesterList) {
 					int semesterId = semesterModel.getId();
-					if ((year - joiningYear) > 4) {
-						if ((year - joiningYear) < 1) {
-							if (semesterId <= 2) {
-								return semesterId;
+					int yearDifference = year - joiningYear;
+					if ((yearDifference) < 5) {
+						if (month > 5 && month < 12) {
+							if (yearDifference == 0) {
+								if (semesterId <= 2) {
+									return semesterId;
+								}
+								System.out.println(1);
+							} else if ((yearDifference < 2 && yearDifference >= 1)) {
+								if ((semesterId <= 4) && (semesterId > 2)) {
+									return semesterId;
+								}
+								System.out.println(2);
+							} else if (yearDifference < 3 && yearDifference >= 2) {
+								if ((semesterId <= 6) && (semesterId > 4)) {
+									return semesterId;
+								}
+								System.out.println(3);
+							} else if (yearDifference < 4 && yearDifference >= 3) {
+								if ((semesterId <= 8) && (semesterId > 6)) {
+									return semesterId;
+								}
+							} else {
+								return -1;
 							}
-						} else if ((year - joiningYear) < 2 && (year - joiningYear) > 1) {
-							if ((semesterId <= 4) && (semesterId > 2)) {
-								return semesterId;
-							}
-						} else if ((year - joiningYear) < 3 && (year - joiningYear) > 2) {
-							if ((semesterId <= 6) && (semesterId > 4)) {
-								return semesterId;
-							}
-						} else if ((year - joiningYear) < 4 && (year - joiningYear) > 3) {
-							if ((semesterId <= 8) && (semesterId > 6)) {
-								return semesterId;
+						} else {
+							if ((yearDifference == 1 && month != 12) && (yearDifference == 0 && month == 12)) {
+								if (semesterId <= 2) {
+									return semesterId;
+								}
+							} else if ((yearDifference == 2 && month != 12) && (yearDifference == 1 && month == 12)) {
+								if ((semesterId <= 4) && (semesterId > 2)) {
+									return semesterId;
+								}
+							} else if ((yearDifference == 3 && month != 12) && (yearDifference == 2 && month == 12)) {
+								if ((semesterId <= 6) && (semesterId > 4)) {
+									return semesterId;
+								}
+							} else if ((yearDifference == 4 && month != 12) && (yearDifference == 3 && month == 12)) {
+								if ((semesterId <= 8) && (semesterId > 6)) {
+									return semesterId;
+								}
+							} else {
+								return -1;
 							}
 						}
 
-					} else {
-						System.out.println("Course Completed");
+					}else if(joiningYear==0) {
+						return 0;
+					}
+					else {
 						return -1;
 					}
 				}

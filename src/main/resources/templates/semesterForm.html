@@ -190,6 +190,9 @@
             }else if(semesterIdValue <=0) {
                 success = false;
                 setError(semesterId, 'Invalid Semester Id')
+            }else if(semesterIdValue >8) {
+        	    success = false;
+    	        setError(semesterId, 'Invalid Semester Id')
             }
             else {
                 setSuccess(semesterId)

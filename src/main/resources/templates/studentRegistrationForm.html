@@ -141,7 +141,7 @@
         <div class="header">
             <h2>Complete Your Registration</h2>
         </div>
-        <form id="form" action="studentsave" th:action="@{/studentsave}"  method="GET"
+        <form id="form" th:action="@{/studentsave}"  method="GET"
             class="form">
             <br>
 
@@ -203,7 +203,7 @@
             <input type="submit" onclick="clearText()" value="Submit">
             <br>
             <div class="cancel_link">
-                <a th:href="@{/editstudentprofile}">Clear Form</a>
+                <a th:href="@{/studentRegistration}">Clear Form</a>
             </div>
             <div class="cancel_link">
                 <a th:href="@{/studentHome}" class="cancel">Cancel</a>
@@ -241,8 +241,8 @@
             let parentNameValue = parentName.value.trim();
             let phoneValue = phone.value.trim();
             let yearValue = year.value.trim();
-            let d = new Date();
-            let Nyear = d.getFullYear();
+            let date = new Date();
+            let presentYear = date.getFullYear();
             let success = true
 
             if (parentNameValue === '') {
@@ -270,12 +270,15 @@
                 success = false;
                 setError(year, 'Joining year is required')
             } else if (yearValue <= 1950) {
+            	success = false;
                 setError(year, 'Invalid Joining year');
-            } else if (yearValue > Nyear) {
+            } else if (yearValue > presentYear) {
+            	success = false;
                 setError(year, 'Invalid Joining year');
             } else {
                 setSuccess(year)
             }
+            
             return success;
         }
         function setError(element, message) {

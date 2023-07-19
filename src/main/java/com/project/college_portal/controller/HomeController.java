@@ -48,11 +48,12 @@ public class HomeController {
 		int value = userDao.findStudentSemesterById(UserId, model);
 		System.out.println(value);
 		if (value > 0) {
+			session.setAttribute("semester", value);
 			model.addAttribute("semester", value);
 		} else if (value == 0) {
-			model.addAttribute("semester", "please complete your restration first");
+			model.addAttribute("semester", value);
 		} else {
-			model.addAttribute("semester", "You have Completed Your Course");
+			model.addAttribute("semester", value);
 		}
 		return "Home";
 	}
