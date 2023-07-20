@@ -2,14 +2,14 @@ package com.project.college_portal.model;
 
 public class Exam {
 	private int id;
-	private int subjectId;
+	private String subjectId;
 	private String name;
 	private String type;
 	private boolean isActive ;
 	
 	public Exam() {}
 
-	public Exam(int id, int subjectId, String name, String type, boolean isActive) {
+	public Exam(int id, String subjectId, String name, String type, boolean isActive) {
 		super();
 		this.id = id;
 		this.subjectId = subjectId;
@@ -26,11 +26,11 @@ public class Exam {
 		this.id = id;
 	}
 
-	public int getSubjectId() {
+	public String getSubjectId() {
 		return subjectId;
 	}
 
-	public void setSubjectId(int subjectId) {
+	public void setSubjectId(String subjectId) {
 		this.subjectId = subjectId;
 	}
 

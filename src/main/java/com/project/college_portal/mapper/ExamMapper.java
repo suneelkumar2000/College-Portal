@@ -12,7 +12,7 @@ public class ExamMapper implements RowMapper<Exam>{
 		Exam exam = new Exam();
 		int id = rs.getInt("id");
 		String name = rs.getString("name");
-		int subjectId = rs.getInt("subject_id");
+		String subjectId = rs.getString("subject_id");
 		String type = rs.getString("type");
 		boolean isActive = rs.getBoolean("is_active");
 		exam.setId(id);

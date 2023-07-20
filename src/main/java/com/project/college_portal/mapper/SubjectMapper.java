@@ -10,7 +10,7 @@ import com.project.college_portal.model.Subject;
 public class SubjectMapper implements RowMapper<Subject>{
 	public Subject mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Subject subject = new Subject();
-		int id = rs.getInt("id");
+		String id = rs.getString("id");
 		String name = rs.getString("name");
 		int semesterId = rs.getInt("semester_id");
 		String department = rs.getString("department");

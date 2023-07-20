@@ -1,7 +1,7 @@
 package com.project.college_portal.model;
 
 public class Subject {
-	private int id;
+	private String id;
 	private String name;
 	private int semesterId;
 	private String department;
@@ -10,7 +10,7 @@ public class Subject {
 	public Subject() {
 	}
 
-	public Subject(int id, String name, int semesterId, String department, boolean isActive) {
+	public Subject(String id, String name, int semesterId, String department, boolean isActive) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -19,11 +19,11 @@ public class Subject {
 		this.isActive = isActive;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

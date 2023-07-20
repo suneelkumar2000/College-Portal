@@ -464,8 +464,10 @@ public class StaffDao implements StaffInterface{
 
 						String add = "insert into subjects(name,semester_id,department) values(?,?,?)";
 						Object[] params = {subject.getName(), semesterId, department };
-						int noOfRows = jdbcTemplate.update(add, params);
-						String create = "SELECT concat(SUBSTR(department, 1, 2),SUBSTR(name, 1, 2),semester_id) as subject_id FROM subjects where id=?;" ;
+						int noOfRow = jdbcTemplate.update(add, params);
+						String update = "update subjects set id=(concat(SUBSTR(department, 1, 2),SUBSTR(name, 1, 2),semester_id)) where (name=? and semester_id=? and department=?)";
+						Object[] param = {subject.getName(), semesterId, department};
+						int noOfRows = jdbcTemplate.update(update, param);
 						if (noOfRows > 0) {
 							logger.info(noOfRows + "Saved");
 							return 1;
@@ -519,6 +521,15 @@ public class StaffDao implements StaffInterface{
 		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectNameMapper(), department);
 		return subjectNameList;
 	}
+	
+	public List<Subject> findSubjectBySemester(int semesterId,Model model) throws JsonProcessingException {
+		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and semester_id =?)";
+		List<Subject> subjectList = jdbcTemplate.query(find, new SubjectNameMapper(), semesterId);
+		ObjectMapper object = new ObjectMapper();
+		String subject = object.writeValueAsString(subjectList);
+		model.addAttribute("listOfSubjectbySemesterId", subject);
+		return subjectList;
+	}
 
 	public List<Subject> subjectList(Model model) throws JsonProcessingException {
 		String select = "select id,name,semester_id,department,is_active from subjects where (is_active =true)";
@@ -541,7 +552,7 @@ public class StaffDao implements StaffInterface{
 	// --------- Exam methods ------------
 
 	public int addExam(Exam exam) throws SubjectIdException {
-		int subjectId = exam.getSubjectId();
+		String subjectId = exam.getSubjectId();
 		String select = "Select id,name,semester_id,department,is_active from subjects";
 		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
 		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (subjectId))

@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.ui.Model;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.model.User;
@@ -17,4 +20,5 @@ public interface UserInterface {
 	public int findById(int UserId, HttpSession session);
 	public List<User> findByEmail(String email);
 	public int studentsave(User User);
+	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException;
 }

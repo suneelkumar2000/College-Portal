@@ -50,6 +50,7 @@ public interface StaffInterface {
 	public int activateOrDeactivateSubject(Subject Subject);
 	public Subject findByID(int id);
 	public Subject findSubjectNameByDepartment(String department);
+	public List<Subject> findSubjectBySemester(int semesterId,Model model) throws JsonProcessingException;
 	public List<Subject> subjectList(Model model) throws JsonProcessingException;
 	public List<Subject> inactivesubjectList(Model model) throws JsonProcessingException;
 	

@@ -229,11 +229,10 @@ public class StaffController {
 
 	// method to add subject
 	@GetMapping(path = "/addsubject")
-	public String addSubject(@RequestParam("subjectId") int subjectId, @RequestParam("name") String name,
+	public String addSubject( @RequestParam("name") String name,
 			@RequestParam("semesterId") int semesterId, @RequestParam("department") String department, Model model)
 			throws SemesterIdException, ExistDepartmentNameException {
 		Subject subject = new Subject();
-		subject.setId(subjectId);
 		subject.setName(name);
 		subject.setSemesterId(semesterId);
 		subject.setDepartment(department);
@@ -248,7 +247,7 @@ public class StaffController {
 
 	// method to activate/Deactivate Subject
 	@GetMapping(path = "/activateDeactivateSubject/{subjectId}")
-	public String activateOrDeactivateSubject(@PathVariable(value = "subjectId") int subjectId, Model model) {
+	public String activateOrDeactivateSubject(@PathVariable(value = "subjectId") String subjectId, Model model) {
 		Subject subject = new Subject();
 		subject.setId(subjectId);
 		int value = staffDao.activateOrDeactivateSubject(subject);
@@ -279,7 +278,7 @@ public class StaffController {
 	// method to add exam
 	@GetMapping(path = "/addexam")
 	public String addExam(@RequestParam("examId") int examId, @RequestParam("name") String name,
-			@RequestParam("subjectId") int subjectId, @RequestParam("type") String type, Model model)
+			@RequestParam("subjectId") String subjectId, @RequestParam("type") String type, Model model)
 			throws SubjectIdException {
 		Exam exam = new Exam();
 		exam.setId(examId);

@@ -116,4 +116,12 @@ public class UserController {
 		}
 		return "redirect:/studentRegistration";
 	}
+	
+	// method to find Subject By semester
+	@GetMapping(path = "/findsubjectListbySemester")
+	public String findSubjectListBySemester(Model model, HttpSession session) throws JsonProcessingException {
+		int semesterId = (int) session.getAttribute("semester");
+		model.addAttribute("subjectList", staffDao.findSubjectBySemester(semesterId,model));
+		return "subjectDetails";
+	}
 }
