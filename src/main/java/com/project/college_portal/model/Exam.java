@@ -1,20 +1,24 @@
 package com.project.college_portal.model;
 
+import java.sql.Date;
+
 public class Exam {
 	private int id;
 	private String subjectId;
 	private String name;
 	private String type;
+	private Date date;
 	private boolean isActive ;
 	
 	public Exam() {}
 
-	public Exam(int id, String subjectId, String name, String type, boolean isActive) {
+	public Exam(int id, String subjectId, String name, String type,Date date, boolean isActive) {
 		super();
 		this.id = id;
 		this.subjectId = subjectId;
 		this.name = name;
 		this.type = type;
+		this.setDate(date);
 		this.isActive = isActive;
 	}
 
@@ -58,10 +62,18 @@ public class Exam {
 		this.isActive = isActive;
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	@Override
 	public String toString() {
-		return "Exam [id=" + id + ", subjectId=" + subjectId + ", name=" + name + ", type=" + type + ", isActive="
-				+ isActive + "]";
+		return "Exam [id=" + id + ", subjectId=" + subjectId + ", name=" + name + ", type=" + type + ", date=" + date
+				+ ", isActive=" + isActive + "]";
 	}
 	
 }

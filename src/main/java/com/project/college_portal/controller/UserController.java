@@ -121,7 +121,7 @@ public class UserController {
 	@GetMapping(path = "/findsubjectListbySemester")
 	public String findSubjectListBySemester(Model model, HttpSession session) throws JsonProcessingException {
 		int semesterId = (int) session.getAttribute("semester");
-		model.addAttribute("subjectList", staffDao.findSubjectBySemester(semesterId,model));
+		model.addAttribute("subjectList", staffDao.findSubjectListBySemester(semesterId,model));
 		return "subjectDetails";
 	}
 }

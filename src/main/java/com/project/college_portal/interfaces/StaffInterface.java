@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
+import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistSemesterIdException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SemesterIdException;
@@ -50,11 +51,12 @@ public interface StaffInterface {
 	public int activateOrDeactivateSubject(Subject Subject);
 	public Subject findByID(int id);
 	public Subject findSubjectNameByDepartment(String department);
-	public List<Subject> findSubjectBySemester(int semesterId,Model model) throws JsonProcessingException;
+	public List<Subject> findSubjectListBySemester(int semesterId,Model model) throws JsonProcessingException;
+	public List<Subject> findSubjectList(int semesterId,String department,Model model) throws JsonProcessingException;
 	public List<Subject> subjectList(Model model) throws JsonProcessingException;
 	public List<Subject> inactivesubjectList(Model model) throws JsonProcessingException;
 	
-	public int addExam(Exam exam) throws SubjectIdException;
+	public int addExam(Exam exam) throws SubjectIdException, ExistExamException;
 	public int activateOrDeactivateExam(Exam Exam);
 	public List<Exam> examList(Model model) throws JsonProcessingException;
 	public List<Exam> inactiveExamList(Model model) throws JsonProcessingException;

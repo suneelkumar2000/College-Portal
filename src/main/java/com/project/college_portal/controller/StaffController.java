@@ -1,5 +1,6 @@
 package com.project.college_portal.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.dao.StaffDao;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
+import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistSemesterIdException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SemesterIdException;
@@ -277,13 +279,13 @@ public class StaffController {
 
 	// method to add exam
 	@GetMapping(path = "/addexam")
-	public String addExam(@RequestParam("examId") int examId, @RequestParam("name") String name,
+	public String addExam( @RequestParam("name") String name,@RequestParam("date") Date date,
 			@RequestParam("subjectId") String subjectId, @RequestParam("type") String type, Model model)
-			throws SubjectIdException {
+			throws SubjectIdException, ExistExamException {
 		Exam exam = new Exam();
-		exam.setId(examId);
 		exam.setName(name);
 		exam.setSubjectId(subjectId);
+		exam.setDate(date);
 		exam.setType(type);
 		int value = staffDao.addExam(exam);
 		if (value == 1) {

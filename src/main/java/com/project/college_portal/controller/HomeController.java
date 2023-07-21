@@ -43,13 +43,16 @@ public class HomeController {
 
 	// method to get student home
 	@GetMapping(path = "/studentHome")
-	public String studentHome(Model model, HttpSession session) throws JsonProcessingException {
+	public String studentHome(ModelMap map,Model model, HttpSession session) throws JsonProcessingException {
 		int UserId = (int) session.getAttribute("userId");
 		userDao.findById(UserId, session);
 		int value = userDao.findStudentSemesterById(UserId, model);
 		if (value > 0) {
+			String department = (String) session.getAttribute("department");
 			session.setAttribute("semester", value);
-			model.addAttribute("semester", value);
+			map.addAttribute("semester", value);
+			map.addAttribute("subjectList", staffDao.findSubjectList(value,department,model));
+			System.out.println();
 		} else if (value == 0) {
 			model.addAttribute("semester", value);
 		} else {
@@ -109,4 +112,10 @@ public class HomeController {
 		map.addAttribute("semesterList", staffDao.semesterList(model));
 		return "subjectForm";
 	}
+	
+	// method to get exam form
+		@GetMapping(path = "/insertExamForm")
+		public String examForm() {
+			return "examForm";
+		}
 }

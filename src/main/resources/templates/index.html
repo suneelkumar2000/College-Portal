@@ -14,7 +14,7 @@
     }
 
     body {
-      background-image: url(https://images.theconversation.com/files/96073/original/image-20150924-17103-54sgxy.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop);
+
       font-family: 'Roboto', sans-serif;
       background-repeat: no-repeat;
       background-position: center;
@@ -23,6 +23,30 @@
     }
 
     .container {
+      background-image: url(https://images.theconversation.com/files/96073/original/image-20150924-17103-54sgxy.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop);
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container1 {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slideshow-container{
+      background-color: #1e2436;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container2 {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -303,12 +327,12 @@
       border-radius: 20px;
       background: #ffffff;
       position: fixed;
-      box-shadow: 0 5px 30px rgba(0, 0, 0, .30);
+      box-shadow: 0 5px 30px rgba(146, 141, 141, 0.3);
       z-index: 1;
     }
 
     .content h1 {
-      background-color: #000000;
+      background-color: #ffffff;
       color: #2691d9;
       text-align: center;
       padding: 0 0 20px 0;
@@ -327,7 +351,7 @@
     }
 
     .txt_field input {
-      color: white;
+      color: rgb(0, 0, 0);
       width: 100%;
       padding: 0 5px;
       height: 40px;
@@ -372,7 +396,7 @@
 
     .pass {
       margin: -5px 0 20px 5px;
-      color: #b4b4b4;
+      color: #888484;
       cursor: pointer;
     }
 
@@ -423,7 +447,7 @@
     .popup.active .content {
       transition: all 300ms ease-in-out;
       transform: translate(-50%, -50%) scale(1);
-      background-color: #000000;
+      background-color: #ffffff;
     }
 
     .popup .close-btn {
@@ -431,7 +455,7 @@
       color: white;
       font-size: 20px;
       border-radius: 50%;
-      background: #302f2f;
+      background: #837f7f;
       position: absolute;
       right: 20px;
       top: 20px;
@@ -439,7 +463,7 @@
       padding: 2px 5px 7px 5px;
       height: 30px;
       cursor: pointer;
-      box-shadow: 0 5px 30px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 5px 30px rgba(255, 255, 255, 0.26);
     }
 
     .popup .close-btn:hover {
@@ -510,7 +534,7 @@
     }
 
     .text {
-      color: #aba5ad;
+      color: #817d83;
     }
 
     /* footer */
@@ -585,6 +609,51 @@
       padding-top: 20px;
       width: 100%;
       height: 40px;
+    }
+
+    /* Number text (1/3 etc) */
+    .numbertext {
+      color: #f2f2f2;
+      font-size: 12px;
+      padding: 8px 12px;
+      position: absolute;
+      
+    }
+
+    .dot {
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 1.2s ease;
+    }
+    .active {
+      background-color: #717171;
+    }
+
+    /* Fading animation */
+    .fade {
+      animation-name: fade;
+      animation-duration: 1.5s;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: .4
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    /* On smaller screens, decrease text size */
+    @media only screen and (max-width: 300px) {
+      .text {
+        font-size: 11px
+      }
     }
   </style>
 </head>
@@ -683,107 +752,143 @@
     <h1>WELCOME TO BRIGHT COLLEGE PORTAL</h1>
   </header>
 
+  <div class="slideshow-container">
+    <h2></h2>
+    <div class="mySlides fade">
+      <div class="numbertext">1 / 3</div>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3oqNKEF6JVUf3iUa5NV3yIPwZiliX5cEaGw&usqp=CAU"
+        style="width:20cm; height: 10cm;">
+      <div class="text">Caption Text</div>
+    </div>
+
+    <div class="mySlides fade">
+      <div class="numbertext">2 / 3</div>
+      <img src="https://srec.ac.in/uploads/resource/src/WqqO5vqK1g12082022070524srecblog080822v5.png"
+        style="width:20cm; height: 10cm;">
+      <div class="text">Caption Two</div>
+    </div>
+
+    <div class="mySlides fade">
+      <div class="numbertext">3 / 3</div>
+      <img src="https://wherewomenwork.s3-eu-west-1.amazonaws.com/insight/engineering-2-23.jpg" style="width:20cm; height: 10cm;">
+      <div class="text">Caption Three</div>
+    </div>
+    <br>
+    <div style="text-align:center">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+  
+
+ 
+
   <div class="container" id="blur">
-    <div class="product-container">
-      <div class="product">
+    <div class="container1">
+      <div class="product-container">
+        <div class="product">
 
-        <h2>Academics</h2>
-        <p>"Teaching quality is good and teachers are too supportive and we also help students in extra
-          curricular
-          activities . we have a great support with students . There so many societies which also help
-          students to
-          learn in different field." </p>
-        <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
-      </div>
+          <h2>Academics</h2>
+          <p>"Teaching quality is good and teachers are too supportive and we also help students in extra
+            curricular
+            activities . we have a great support with students . There so many societies which also help
+            students to
+            learn in different field." </p>
+          <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+        </div>
 
-      <div class="product">
+        <div class="product">
 
-        <h2>College Infrastructure</h2>
-        <p>"In terms of infrastructure of our college it is top class. Since our college construction has
-          finished recently so our infrastructure from inside is very professional and high class. Lecture
-          halls are very large and all halls and classrooms are air conditioned. Even our corridors are very
-          cold during Summers. Also high-speed Wi-Fi is available for students use. Canteen, medical
-          facilities and sports room are average and do have adequate equipments required. Hostels even have
-          Wi-Fi and AC as well" </p>
-        <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
-      </div>
+          <h2>College Infrastructure</h2>
+          <p>"In terms of infrastructure of our college it is top class. Since our college construction has
+            finished recently so our infrastructure from inside is very professional and high class. Lecture
+            halls are very large and all halls and classrooms are air conditioned. Even our corridors are very
+            cold during Summers. Also high-speed Wi-Fi is available for students use. Canteen, medical
+            facilities and sports room are average and do have adequate equipments required. Hostels even have
+            Wi-Fi and AC as well" </p>
+          <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+        </div>
 
-      <div class="product">
+        <div class="product">
 
-        <h2>Placements</h2>
-        <p>"Our college has a highly active placement unit. The placement cell maintains the placement reports
-          each year. Our college has a user-friendly website. Students can get all details regarding
-          placements on the website. Around 48 undergraduate students got placed in our college." </p>
-        <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+          <h2>Placements</h2>
+          <p>"Our college has a highly active placement unit. The placement cell maintains the placement reports
+            each year. Our college has a user-friendly website. Students can get all details regarding
+            placements on the website. Around 48 undergraduate students got placed in our college." </p>
+          <img src="https://cdn-icons-png.flaticon.com/512/2175/2175193.png" class="icon" alt="Facebook icon">
+        </div>
       </div>
     </div>
-
-    <div class="review-input">
-      <h3>Share Your Review</h3>
-      <p class="rating-text"><b>Rating: </b></p>
-      <div class="star-rating">
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-      </div>
-      <br>
-      <textarea id="review-title" rows="1" cols="80" maxlength="50"
-        placeholder="what's the gist of your review?"></textarea>
-      <br>
-      <textarea id="review-field" rows="5" cols="80" placeholder="tell me what you think about this website"></textarea>
-      <div class="review-submit">
-        <button class="submit-button" id="submit-button">Submit</button>
-      </div>
-    </div>
-
-    <h2 class="reviewHead">Reviews</h2>
-    <div class="reviews">
-
-      <div class="review">
-        <div class="review-hero">
-          <img
-            src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
-            class="avatar" alt="traveller">
-          <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;&starf;&starf;</span>
-          </p>
+    
+    <div class="container2">
+      <div class="review-input">
+        <h3>Share Your Review</h3>
+        <p class="rating-text"><b>Rating: </b></p>
+        <div class="star-rating">
+          <div class="star"></div>
+          <div class="star"></div>
+          <div class="star"></div>
+          <div class="star"></div>
+          <div class="star"></div>
         </div>
-        <div class="review-content">
-          <h3>Perfect!</h3>
-          <p>"Really professional service with friendly and knowledgeable staff."</p>
+        <br>
+        <textarea id="review-title" rows="1" cols="80" maxlength="50"
+          placeholder="what's the gist of your review?"></textarea>
+        <br>
+        <textarea id="review-field" rows="5" cols="80"
+          placeholder="tell me what you think about this website"></textarea>
+        <div class="review-submit">
+          <button class="submit-button" id="submit-button">Submit</button>
         </div>
       </div>
 
-      <div class="review">
-        <div class="review-hero">
-          <img
-            src="https://images.unsplash.com/photo-1654110455429-cf322b40a906?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80"
-            class="avatar" alt="traveller">
-          <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
+      <h2 class="reviewHead">Reviews</h2>
+      <div class="reviews">
+
+        <div class="review">
+          <div class="review-hero">
+            <img
+              src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+              class="avatar" alt="traveller">
+            <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;&starf;&starf;</span>
+            </p>
+          </div>
+          <div class="review-content">
+            <h3>Perfect!</h3>
+            <p>"Really professional service with friendly and knowledgeable staff."</p>
+          </div>
         </div>
-        <div class="review-content">
-          <h3>Fantastic</h3>
-          <p>"Really professional service with friendly and knowledgeable staff."</p>
+
+        <div class="review">
+          <div class="review-hero">
+            <img
+              src="https://images.unsplash.com/photo-1654110455429-cf322b40a906?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80"
+              class="avatar" alt="traveller">
+            <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
+          </div>
+          <div class="review-content">
+            <h3>Fantastic</h3>
+            <p>"Really professional service with friendly and knowledgeable staff."</p>
+          </div>
         </div>
-      </div>
 
 
-      <div class="review">
-        <div class="review-hero">
-          <img
-            src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
-            class="avatar" alt="traveller">
-          <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
-        </div>
-        <div class="review-content">
-          <h3>OK</h3>
-          <p>"Really professional service with friendly and knowledgeable staff."</p>
+        <div class="review">
+          <div class="review-hero">
+            <img
+              src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+              class="avatar" alt="traveller">
+            <p class="rating-label">Rating: <span class="star-rating">&starf;&starf;&starf;</span></p>
+          </div>
+          <div class="review-content">
+            <h3>OK</h3>
+            <p>"Really professional service with friendly and knowledgeable staff."</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
   <footer>
     <div id="footer-about">
       <p id="f-about-h2">About Us</p>
@@ -891,7 +996,6 @@
     function togglePopup2() {
       document.getElementById("popup-2")
         .classList.toggle("active");
-      blur.classList.toggle('active');
     }
   </script>
   <script>
@@ -1006,6 +1110,27 @@
           /^[A-Za-z]+$/
         );
     };
+  </script>
+  <script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+      let i;
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("dot");
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1 }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex - 1].style.display = "block";
+      dots[slideIndex - 1].className += " active";
+      setTimeout(showSlides, 4000); // Change image every 4 seconds
+    }
   </script>
 
 </body>

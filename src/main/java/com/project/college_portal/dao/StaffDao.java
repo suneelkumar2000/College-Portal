@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
+import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ExistSemesterIdException;
 import com.project.college_portal.exception.MarkException;
@@ -41,7 +42,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
-public class StaffDao implements StaffInterface{
+public class StaffDao implements StaffInterface {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
 	Logger logger = LoggerFactory.getLogger(StaffDao.class);
 
@@ -380,49 +381,47 @@ public class StaffDao implements StaffInterface{
 		}
 		return 0;
 	}
-	
+
 	public int activeOrInactiveSemester() {
 		// TODO Auto-generated method stub
 		String select = "Select id,is_active from semester";
 		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
-		
+
 		for (Semester semesterModel1 : semester) {
 			if (semesterModel1 != null) {
 				int SemesterId = semesterModel1.getId();
 				LocalDate currentDate = LocalDate.now();
 				int month = currentDate.getMonthValue();
-				if(month>5 && month <12) {
-					if(SemesterId%2==0) {
+				if (month > 5 && month < 12) {
+					if (SemesterId % 2 == 0) {
 						String deactivate = "update semester set is_active =false where id=?";
 						Object[] params = { SemesterId };
 						int noOfRows = jdbcTemplate.update(deactivate, params);
 						logger.info(noOfRows + " even Semester are deactivated");
-					}
-					else {
+					} else {
 						String deactivate = "update semester set is_active =true where id=?";
 						Object[] params = { SemesterId };
 						int noOfRows = jdbcTemplate.update(deactivate, params);
 						logger.info(noOfRows + " odd Semester are activated");
 					}
-				}else {
-					if(SemesterId%2==0) {
+				} else {
+					if (SemesterId % 2 == 0) {
 						String deactivate = "update semester set is_active =true where id=?";
 						Object[] params = { SemesterId };
 						int noOfRows = jdbcTemplate.update(deactivate, params);
 						logger.info(noOfRows + " even Semester are activated");
-					}
-					else {
+					} else {
 						String deactivate = "update semester set is_active =false where id=?";
 						Object[] params = { SemesterId };
 						int noOfRows = jdbcTemplate.update(deactivate, params);
 						logger.info(noOfRows + " odd Semester are deactivated");
 					}
 				}
-				
+
 			}
 		}
 		return 0;
-		
+
 	}
 
 	public List<Semester> semesterList(Model model) throws JsonProcessingException {
@@ -463,10 +462,10 @@ public class StaffDao implements StaffInterface{
 					if (departmentModel1 != null) {
 
 						String add = "insert into subjects(name,semester_id,department) values(?,?,?)";
-						Object[] params = {subject.getName(), semesterId, department };
+						Object[] params = { subject.getName(), semesterId, department };
 						int noOfRow = jdbcTemplate.update(add, params);
 						String update = "update subjects set id=(concat(SUBSTR(department, 1, 2),SUBSTR(name, 1, 2),semester_id)) where (name=? and semester_id=? and department=?)";
-						Object[] param = {subject.getName(), semesterId, department};
+						Object[] param = { subject.getName(), semesterId, department };
 						int noOfRows = jdbcTemplate.update(update, param);
 						if (noOfRows > 0) {
 							logger.info(noOfRows + "Saved");
@@ -521,10 +520,20 @@ public class StaffDao implements StaffInterface{
 		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectNameMapper(), department);
 		return subjectNameList;
 	}
-	
-	public List<Subject> findSubjectBySemester(int semesterId,Model model) throws JsonProcessingException {
+
+	public List<Subject> findSubjectListBySemester(int semesterId, Model model) throws JsonProcessingException {
 		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and semester_id =?)";
-		List<Subject> subjectList = jdbcTemplate.query(find, new SubjectNameMapper(), semesterId);
+		List<Subject> subjectList = jdbcTemplate.query(find, new SubjectMapper(), semesterId);
+		ObjectMapper object = new ObjectMapper();
+		String subject = object.writeValueAsString(subjectList);
+		model.addAttribute("listOfSubjectbySemesterId", subject);
+		return subjectList;
+	}
+
+	public List<Subject> findSubjectList(int semesterId, String department, Model model)
+			throws JsonProcessingException {
+		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and semester_id =? and department=?)";
+		List<Subject> subjectList = jdbcTemplate.query(find, new SubjectMapper(), semesterId, department);
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
 		model.addAttribute("listOfSubjectbySemesterId", subject);
@@ -551,7 +560,7 @@ public class StaffDao implements StaffInterface{
 
 	// --------- Exam methods ------------
 
-	public int addExam(Exam exam) throws SubjectIdException {
+	public int addExam(Exam exam) throws SubjectIdException, ExistExamException {
 		String subjectId = exam.getSubjectId();
 		String select = "Select id,name,semester_id,department,is_active from subjects";
 		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
@@ -559,14 +568,25 @@ public class StaffDao implements StaffInterface{
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
 		for (Subject subjectModel1 : subject1) {
 			if (subjectModel1 != null) {
-				String add = "insert into exam(id,subject_id,name,type) values(?,?,?,?)";
-				Object[] params = { exam.getId(), subjectId, exam.getName(), exam.getType() };
+				String select1 = "Select id,subject_id,name,type,is_active from exam";
+				List<Exam> exam1 = jdbcTemplate.query(select1, new ExamMapper());
+				List<Exam> exam2 = exam1.stream().filter(subjectid -> (subjectid.getSubjectId()).equals(subjectId))
+						.filter(name -> name.getName().equals(exam.getName()))
+						.filter(type -> type.getType().equals(exam.getType())).collect(Collectors.toList());
+				for (Exam examModel1 : exam2) {
+					if (examModel1 != null) {
+						throw new ExistExamException("Exist Exam Exception");
+					}
+				}
+				String add = "insert into exam(subject_id,name,date,type) values(?,?,?,?)";
+				Object[] params = { subjectId, exam.getName(), exam.getDate(), exam.getType() };
 				int noOfRows = jdbcTemplate.update(add, params);
 				if (noOfRows > 0) {
 					System.out.println(noOfRows + "Saved");
 					return 1;
-				} else
+				} else {
 					return 0;
+				}
 			}
 		}
 		throw new SubjectIdException("Subject Id dosen't exist");

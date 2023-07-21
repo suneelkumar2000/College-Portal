@@ -274,39 +274,45 @@
 					name: "Select",
 					field: "select",
 					width: 100,
-					formatter: checkboxFormatter,
+					formatter: checkboxFormatter
+					
 				},
 				{
 					id: "userId",
 					name: "userId",
 					field: "userId",
 					type: 'numberColumn',
-					width: 100
+					width: 100,
+					sortable:true
 				},
 
 				// using default ColDef
 				{
 					id: "firstName",
 					name: "firstName",
-					field: "firstName"
+					field: "firstName",
+					sortable:true
 				},
 				{
 					id: "lastName",
 					name: "lastName",
-					field: "lastName"
+					field: "lastName",
+					sortable:true
 				},
 
 				{
 					id: "gender",
 					name: "gender",
 					field: "gender",
-					width: 100
+					width: 100,
+					sortable:true
 				},
 
 				{
 					id: "parentName",
 					name: "parentName",
-					field: "parentName"
+					field: "parentName",
+					sortable:true
 				},
 
 				// using date and non-editable column types
@@ -314,6 +320,7 @@
 					id: "email",
 					name: "email",
 					field: "email",
+					sortable:true
 				},
 
 
@@ -322,13 +329,15 @@
 					id: "phone",
 					name: "phone",
 					field: "phone",
-					type: 'numberColumn'
+					type: 'numberColumn',
+					sortable:true
 				},
 				// using default ColDef
 				{
 					id: "department",
 					name: "department",
 					field: "department",
+					sortable:true
 				},
 
 
@@ -336,7 +345,8 @@
 					id: "status",
 					name: "status",
 					field: "status",
-					width: 100
+					width: 100,
+					sortable:true
 				},
 
 				{
