@@ -2,7 +2,6 @@ package com.project.college_portal.dao;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
@@ -19,11 +18,8 @@ import com.project.college_portal.interfaces.UserInterface;
 import com.project.college_portal.mapper.ApprovingMapper;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
-import com.project.college_portal.mapper.SubjectMapper;
-import com.project.college_portal.mapper.UserDepartmentMapper;
 import com.project.college_portal.mapper.UserMapper;
 import com.project.college_portal.model.Semester;
-import com.project.college_portal.model.Subject;
 import com.project.college_portal.model.User;
 import com.project.college_portal.validation.Validation;
 
@@ -115,8 +111,8 @@ public class UserDao implements UserInterface {
 
 	// method to show user list
 	public List<User> listUsers() {
-		String sql = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user";
-		List<User> userList = jdbcTemplate.query(sql, new UserMapper());
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user";
+		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		return userList;
 	}
 
@@ -163,7 +159,7 @@ public class UserDao implements UserInterface {
 
 	// method to find user ID by email
 	public int findIdByEmail(String email) {
-		String select = "select * from user where email=?";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where email=?";
 		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
 		for (User user : userDetails) {
 			if (user != null) {
@@ -174,9 +170,9 @@ public class UserDao implements UserInterface {
 		return 0;
 	}
 
-	// method to find user details by ID
-	public int findById(int UserId, HttpSession session) {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (id=?)";
+	// method to set User Session By Id
+	public int setUserSessionById(int UserId, HttpSession session) {
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (id=?)";
 		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), UserId);
 		session.setAttribute("userList", userDetails);
 		for (User userModel : userDetails) {
@@ -203,7 +199,7 @@ public class UserDao implements UserInterface {
 
 	// method to find student details by Email
 	public List<User> findByEmail(String email) {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and email=?)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and email=?)";
 		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
 		return userDetails;
 	}
@@ -211,7 +207,7 @@ public class UserDao implements UserInterface {
 	// method to update student details
 	public int studentsave(User User) {
 		// TODO Auto-generated method stub
-		String select = "Select id,roll,is_active from user";
+		String select = "Select id,roll,status,is_active from user";
 		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
 				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
@@ -231,10 +227,10 @@ public class UserDao implements UserInterface {
 		return 0;
 	}
 
-	// method to find Student semester
-	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException {
-		String select = "Select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where id=?";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper(), userid);
+	// method to update Student semester
+	public void updateStudentSemester(Model model) throws JsonProcessingException {
+		String select = "Select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where roll='student'";
+		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		for (User userModel : userList) {
 			if (userModel != null) {
 				int joiningYear = userModel.getJoiningYear();
@@ -250,56 +246,99 @@ public class UserDao implements UserInterface {
 						if (month > 5 && month < 12) {
 							if (yearDifference == 0) {
 								if (semesterId <= 2) {
-									return semesterId;
+									String update = "update user set semester =? where id=?";
+									Object[] params = { semesterId, userModel.getUserId() };
+									jdbcTemplate.update(update, params);
 								}
 								System.out.println(1);
 							} else if ((yearDifference < 2 && yearDifference >= 1)) {
 								if ((semesterId <= 4) && (semesterId > 2)) {
-									return semesterId;
+									String update = "update user set semester =? where id=?";
+									Object[] params = { semesterId, userModel.getUserId() };
+									jdbcTemplate.update(update, params);
 								}
 								System.out.println(2);
 							} else if (yearDifference < 3 && yearDifference >= 2) {
 								if ((semesterId <= 6) && (semesterId > 4)) {
-									return semesterId;
+									String update = "update user set semester =? where id=?";
+									Object[] params = { semesterId, userModel.getUserId() };
+									jdbcTemplate.update(update, params);
 								}
 								System.out.println(3);
 							} else if (yearDifference < 4 && yearDifference >= 3) {
 								if ((semesterId <= 8) && (semesterId > 6)) {
-									return semesterId;
+									String update = "update user set semester =? where id=?";
+									Object[] params = { semesterId, userModel.getUserId() };
+									jdbcTemplate.update(update, params);
 								}
 							} else {
-								return -1;
+								String update = "update user set semester =? where id=?";
+								Object[] params = { -1, userModel.getUserId() };
+								jdbcTemplate.update(update, params);
 							}
 						} else {
 							if ((yearDifference == 1 && month != 12) && (yearDifference == 0 && month == 12)) {
 								if (semesterId <= 2) {
-									return semesterId;
+									String update = "update user set semester =? where id=?";
+									Object[] params = { semesterId, userModel.getUserId() };
+									jdbcTemplate.update(update, params);
 								}
 							} else if ((yearDifference == 2 && month != 12) && (yearDifference == 1 && month == 12)) {
 								if ((semesterId <= 4) && (semesterId > 2)) {
-									return semesterId;
+									String update = "update user set semester =? where id=?";
+									Object[] params = { semesterId, userModel.getUserId() };
+									jdbcTemplate.update(update, params);
 								}
 							} else if ((yearDifference == 3 && month != 12) && (yearDifference == 2 && month == 12)) {
 								if ((semesterId <= 6) && (semesterId > 4)) {
-									return semesterId;
+									String update = "update user set semester =? where id=?";
+									Object[] params = { semesterId, userModel.getUserId() };
+									jdbcTemplate.update(update, params);
 								}
 							} else if ((yearDifference == 4 && month != 12) && (yearDifference == 3 && month == 12)) {
 								if ((semesterId <= 8) && (semesterId > 6)) {
-									return semesterId;
+									String update = "update user set semester =? where id=?";
+									Object[] params = { semesterId, userModel.getUserId() };
+									jdbcTemplate.update(update, params);
 								}
 							} else {
-								return -1;
+								String update = "update user set semester =? where id=?";
+								Object[] params = { -1, userModel.getUserId() };
+								jdbcTemplate.update(update, params);
 							}
 						}
-
 					} else if (joiningYear == 0) {
-						return 0;
+						String update = "update user set semester =? where id=?";
+						Object[] params = { null, userModel.getUserId() };
+						jdbcTemplate.update(update, params);
 					} else {
-						return -1;
+						String update = "update user set semester =? where id=?";
+						Object[] params = { -1, userModel.getUserId() };
+						jdbcTemplate.update(update, params);
 					}
 				}
 			}
 		}
-		return 0;
 	}
+
+	// method to find Student semester
+	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException {
+		String select = "Select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where id=?";
+		List<User> userList = jdbcTemplate.query(select, new UserMapper(), userid);
+		for (User userModel : userList) {
+			if (userModel != null) {
+				int semester = userModel.getSemester();
+				if (semester > 0) {
+					return semester;
+				} else if (semester == 0) {
+					return 0;
+				} else {
+					return -1;
+				}
+			}
+		}
+		return -1;
+	}
+	
+	
 }

@@ -17,8 +17,9 @@ public interface UserInterface {
 	public List<User> listUsers();
 	public int forgotPassword(User user);
 	public int findIdByEmail(String email);
-	public int findById(int UserId, HttpSession session);
+	public int setUserSessionById(int UserId, HttpSession session);
 	public List<User> findByEmail(String email);
 	public int studentsave(User User);
+	public void updateStudentSemester(Model model) throws JsonProcessingException ;
 	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException;
 }

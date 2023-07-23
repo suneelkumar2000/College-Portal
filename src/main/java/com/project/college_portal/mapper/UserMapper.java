@@ -26,8 +26,10 @@ public class UserMapper implements RowMapper<User> {
 		String department = rs.getString("department");
 		String parentName = rs.getString("parent_name");
 		int joiningYear = rs.getInt("year_of_joining");
-		
+		int semester = rs.getInt("semester");
+		String image = rs.getString("image");
 		boolean isActive = rs.getBoolean("is_active");
+		
 		user.setUserId(userId);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -40,8 +42,11 @@ public class UserMapper implements RowMapper<User> {
 		user.setStatus(status);
 		user.setDepartment(department);
 		user.setParentName(parentName);
-		user.setActive(isActive);
 		user.setJoiningYear(joiningYear);
+		user.setSemester(semester);
+		user.setImage(image);
+		user.setActive(isActive);
+		
 		return user;
 	}
 }

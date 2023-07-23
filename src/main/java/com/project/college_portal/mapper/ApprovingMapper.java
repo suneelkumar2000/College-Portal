@@ -12,9 +12,11 @@ public class ApprovingMapper implements RowMapper<User>{
 		User user = new User();
 		int userId = rs.getInt("id");
 		String roll = rs.getString("roll");
+		String status = rs.getString("status");
 		boolean isActive = rs.getBoolean("is_active");
 		user.setUserId(userId);
 		user.setRoll(roll);
+		user.setStatus(status);
 		user.setActive(isActive);
 		return user;
 		

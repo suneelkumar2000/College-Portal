@@ -14,8 +14,8 @@ import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
 import com.project.college_portal.exception.ExistExamException;
-import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SemesterIdException;
 import com.project.college_portal.exception.SubjectIdException;
@@ -55,7 +55,7 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public List<User> studentList(Model model) throws JsonProcessingException {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and is_active =true)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		ObjectMapper object = new ObjectMapper();
 		String user = object.writeValueAsString(userList);
@@ -63,26 +63,36 @@ public class StaffDao implements StaffInterface {
 		return userList;
 	}
 
-	public int approve(User approveUser) {
+	public int approve(int staffId, User approveUser) throws UserIdException, HigherAuthorityException {
 		// TODO Auto-generated method stub
-		String select = "Select id,roll,is_active from user";
-		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
-		List<User> user1 = user.stream().filter(id -> id.getUserId() == (approveUser.getUserId()))
-				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
+		String selectStaff = "Select id,roll,status,is_active from user";
+		List<User> user = jdbcTemplate.query(selectStaff, new ApprovingMapper());
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == (staffId))
+				.filter(roll -> roll.getRoll().equals("staff"))
+				.filter(status -> status.getStatus().equals("approved")).collect(Collectors.toList());
 		for (User userModel : user1) {
 			if (userModel != null) {
-				String approve = "update user set status='approved'  where (roll='student' and id=?)";
-				Object[] params = { approveUser.getUserId() };
-				int noOfRows = jdbcTemplate.update(approve, params);
-				logger.info(noOfRows + " student are approved");
-				return 1;
+
+				String select = "Select id,roll,status ,is_active from user";
+				List<User> user2 = jdbcTemplate.query(select, new ApprovingMapper());
+				List<User> user3 = user2.stream().filter(id -> id.getUserId() == (approveUser.getUserId()))
+						.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
+				for (User userMode2 : user3) {
+					if (userModel != null) {
+						String approve = "update user set status='approved'  where (roll='student' and id=?)";
+						Object[] params = { approveUser.getUserId() };
+						int noOfRows = jdbcTemplate.update(approve, params);
+						logger.info(noOfRows + " student are approved");
+						return 1;
+					}
+				}throw new UserIdException("User Id dosen't exist");
 			}
-		}
-		return 0;
+		}throw new HigherAuthorityException("HigherAuthority Exception");
+		
 	}
 
 	public List<User> approvedStudentList(Model model) throws JsonProcessingException {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and status='approved' and is_active =true)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and status='approved' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		ObjectMapper object = new ObjectMapper();
 		String user = object.writeValueAsString(userList);
@@ -91,14 +101,14 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public List<User> notApprovedStudentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and status='not approved' and is_active =true)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and status='not approved' and is_active =true)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		return userList;
 	}
 
 	public int activateOrDeactivateStudent(User User) {
 		// TODO Auto-generated method stub
-		String select = "Select id,roll,is_active from user";
+		String select = "Select id,roll,status,is_active from user";
 		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
 				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isActive() == (true))
@@ -128,7 +138,7 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public List<User> inactiveStudentList() {
-		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,status,is_active from user where (roll='student' and is_active =false)";
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and is_active =false)";
 		List<User> userList = jdbcTemplate.query(select, new UserMapper());
 		return userList;
 	}
@@ -208,7 +218,7 @@ public class StaffDao implements StaffInterface {
 	// --------- Attendance methods ------------
 
 	public int addOrUpdatePresentByOne(int userId) throws UserIdException {
-		String select1 = "Select id,roll,is_active from user";
+		String select1 = "Select id,roll,status,is_active from user";
 		List<User> user = (jdbcTemplate.query(select1, new ApprovingMapper())).stream()
 				.filter(id -> id.getUserId() == userId).filter(roll1 -> roll1.getRoll().equals("student"))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
@@ -248,7 +258,7 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int addOrUpdateAbsentByOne(int userId) throws UserIdException {
-		String select1 = "Select id,roll,is_active from user";
+		String select1 = "Select id,roll,status,is_active from user";
 		List<User> user = (jdbcTemplate.query(select1, new ApprovingMapper())).stream()
 				.filter(id -> id.getUserId() == userId).filter(roll1 -> roll1.getRoll().equals("student"))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
@@ -651,7 +661,7 @@ public class StaffDao implements StaffInterface {
 			if (examModel1 != null) {
 
 				int userId = Result.getUserId();
-				String select1 = "Select id,roll,is_active from user";
+				String select1 = "Select id,roll,status,is_active from user";
 				List<User> user = jdbcTemplate.query(select1, new ApprovingMapper());
 				List<User> user1 = user.stream().filter(id -> id.getUserId() == userId)
 						.filter(roll1 -> roll1.getRoll().equals("student"))

@@ -4,25 +4,32 @@ import java.sql.Date;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.project.college_portal.dao.StaffDao;
-import com.project.college_portal.dao.UserDao;
+import com.project.college_portal.exception.ExamIdException;
+import com.project.college_portal.exception.ExistDepartmentNameException;
+import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistMailIdException;
+import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.InvalidMailIdException;
+import com.project.college_portal.exception.MarkException;
+import com.project.college_portal.exception.SubjectIdException;
+import com.project.college_portal.exception.UserIdException;
 import com.project.college_portal.model.User;
+import com.project.college_portal.service.StaffService;
+import com.project.college_portal.service.UserService;
 
 @Controller
 public class UserController {
 
-	UserDao userDao = new UserDao();
-	StaffDao staffDao = new StaffDao();
+	UserService userService = new UserService();
+	StaffService staffService = new StaffService();
 
 	// --------- user method ---------
 
@@ -41,7 +48,7 @@ public class UserController {
 		user.setDOB(DOB);
 		user.setGender(gender);
 		user.setRoll(roll);
-		int value = userDao.save(user);
+		int value = userService.saveUser(user);
 
 		if (value == 1) {
 			return "index";
@@ -52,21 +59,17 @@ public class UserController {
 
 	// method to get Login success
 	@GetMapping(path = "/loginSubmit")
-	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password,
-			HttpSession session) throws InvalidMailIdException {
+	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password,Model model,
+			HttpSession session) throws InvalidMailIdException, JsonProcessingException {
 		User user = new User();
 		user.setEmail(email);
 		user.setPassword(password);
-		int value = userDao.login(user);
-
-		session.setAttribute("userId", userDao.findIdByEmail(email));
-		int UserId = (int) session.getAttribute("userId");
-		userDao.findById(UserId, session);
-
+		int value = userService.loginUser(user, session);
+		
 		if (value == 1) {
 			return "redirect:/studentHome";
 		} else if (value == 2) {
-			return "adminHome";
+			return "redirect:/adminHome";
 		} else
 			return "index";
 	}
@@ -79,11 +82,7 @@ public class UserController {
 		user.setEmail(email);
 		user.setPhone(phone);
 		user.setPassword(password);
-		int value = userDao.forgotPassword(user);
-
-		session.setAttribute("userId", userDao.findIdByEmail(email));
-		int UserId = (int) session.getAttribute("userId");
-		userDao.findById(UserId, session);
+		int value = userService.forgotPassword(user, session);
 
 		if (value == 1) {
 			return "redirect:/studentHome";
@@ -109,19 +108,91 @@ public class UserController {
 		user.setParentName(parentName);
 		user.setJoiningYear(year);
 
-		int value = userDao.studentsave(user);
+		int value = userService.studentsave(user);
 
 		if (value == 1) {
 			return "redirect:/studentHome";
 		}
 		return "redirect:/studentRegistration";
 	}
-	
+
 	// method to find Subject By semester
 	@GetMapping(path = "/findsubjectListbySemester")
 	public String findSubjectListBySemester(Model model, HttpSession session) throws JsonProcessingException {
 		int semesterId = (int) session.getAttribute("semester");
-		model.addAttribute("subjectList", staffDao.findSubjectListBySemester(semesterId,model));
+		model.addAttribute("subjectList", staffService.findSubjectListBySemester(semesterId, model));
 		return "subjectDetails";
+	}
+
+	// ----------Exception methods---------
+
+	// method to handle ExistDepartmentNameException
+	@ExceptionHandler(value = ExistDepartmentNameException.class)
+	public String ExistDepartmentNameException(ExistDepartmentNameException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Department Already Exist");
+		return "errorpopup";
+	}
+
+	// method to handle ExistExamException
+	@ExceptionHandler(value = ExistExamException.class)
+	public String ExistExamException(ExistExamException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Exam Already Exist");
+		return "errorpopup";
+	}
+
+	// method to handle ExistMailIdException
+	@ExceptionHandler(value = ExistMailIdException.class)
+	public String ExistMailIdException(ExistMailIdException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Sorry! This Email Id Already Exist");
+		return "errorpopup";
+	}
+
+	// method to handle InvalidMailIdException
+	@ExceptionHandler(value = InvalidMailIdException.class)
+	public String InvalidMailIdException(InvalidMailIdException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Sorry! Invalid Email Id And Password");
+		return "errorpopup";
+	}
+
+	// method to handle ExamIdException
+	@ExceptionHandler(value = ExamIdException.class)
+	public String ExamIdException(ExamIdException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Exam Id dosen't Exist");
+		return "errorpopup";
+	}
+
+	// method to handle MarkException
+	@ExceptionHandler(value = MarkException.class)
+	public String MarkException(MarkException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Invalid Marks ,Marks should be between 0 to 100");
+		return "errorpopup";
+	}
+
+	// method to handle ExistSemesterIdException
+	@ExceptionHandler(value = ExistSemesterIdException.class)
+	public String ExistSemesterIdException(ExistSemesterIdException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Semester Already Exist");
+		return "errorpopup";
+	}
+
+	// method to handle SubjectIdException
+	@ExceptionHandler(value = SubjectIdException.class)
+	public String SubjectIdException(SubjectIdException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Subject Id dosen't Exist");
+		return "errorpopup";
+	}
+
+	// method to handle UserIdException
+	@ExceptionHandler(value = UserIdException.class)
+	public String UserIdException(UserIdException exception, Model model) {
+		model.addAttribute("ErrorMessage", "User dosen't Exist");
+		return "errorpopup";
+	}
+
+	// method to handle UserIdException
+	@ExceptionHandler(value = HigherAuthorityException.class)
+	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
+		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");
+		return "errorpopup";
 	}
 }

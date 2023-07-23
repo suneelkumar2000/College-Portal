@@ -9,6 +9,7 @@ import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
 import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SemesterIdException;
 import com.project.college_portal.exception.SubjectIdException;
@@ -24,7 +25,7 @@ import com.project.college_portal.model.User;
 public interface StaffInterface {
 	public User findDepartmentById(int UserId);
 	public List<User> studentList(Model model) throws JsonProcessingException;
-	public int approve(User approveUser);
+	public int approve(int staffId,User approveUser) throws UserIdException, HigherAuthorityException;
 	public List<User> approvedStudentList(Model model) throws JsonProcessingException;
 	public List<User> notApprovedStudentList();
 	public int activateOrDeactivateStudent(User User);

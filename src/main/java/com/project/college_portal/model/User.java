@@ -16,13 +16,15 @@ public class User {
 	private String department;
 	private String parentName;
 	private int joiningYear;
+	private int semester;
+	private String image;
 	private boolean isActive;
 	
 	public User() {}
-	
+
 	public User(int userId, String firstName, String lastName, String email, String password, Long phone, Date dOB,
 			String gender, String roll, String status, String department, String parentName, int joiningYear,
-			boolean isActive) {
+			int semester, String image, boolean isActive) {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
@@ -37,9 +39,11 @@ public class User {
 		this.department = department;
 		this.parentName = parentName;
 		this.joiningYear = joiningYear;
+		this.semester = semester;
+		this.image = image;
 		this.isActive = isActive;
 	}
-	
+
 	public int getUserId() {
 		return userId;
 	}
@@ -144,6 +148,22 @@ public class User {
 		this.joiningYear = joiningYear;
 	}
 
+	public int getSemester() {
+		return semester;
+	}
+
+	public void setSemester(int semester) {
+		this.semester = semester;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	public boolean isActive() {
 		return isActive;
 	}
@@ -157,10 +177,8 @@ public class User {
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", password=" + password + ", phone=" + phone + ", DOB=" + DOB + ", gender=" + gender + ", roll="
 				+ roll + ", status=" + status + ", department=" + department + ", parentName=" + parentName
-				+ ", joiningYear=" + joiningYear + ", isActive=" + isActive + "]";
+				+ ", joiningYear=" + joiningYear + ", semester=" + semester + ", image=" + image + ", isActive="
+				+ isActive + "]";
 	}
-
 	
-	
-
 }

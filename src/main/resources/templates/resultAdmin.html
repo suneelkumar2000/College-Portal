@@ -169,6 +169,41 @@
     	<a th:href="@{/subjectDetails}">Subject Details</a>
     	<a th:href="@{/examlist}">Exam Details</a>
 	</div>
+	
+	<div class="container">
+
+
+        <button><a th:href="@{/resultAdmin}" class="btn btn-primary btn-sm mb-3"> Add Department </a></button>
+        <button><a th:href="@{/}" class="btn btn-primary btn-sm mb-3">Active result</a></button>
+        <button><a th:href="@{/}" class="btn btn-primary btn-sm mb-3"> Inactive result</a></button>
+        <table border="1" class="table table-striped table-responsive-md">
+            <h1>student List</h1>
+            <thead>
+                <tr>
+                    <th>Sutdent ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Department</th>
+                    <th>Semester</th>
+                    <th> Actions </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row" th:each="department : ${departmentList}">
+                    <td th:text="${department.id}"></td>
+                    <td th:text="${department.department}"></td>
+                    <td><span th:if="${department.isActive}">Active</span>
+                        <span th:unless="${department.isActive}">Inactive</span>
+                    </td>
+                    <td>
+                        <button><a th:href="@{/activateDeactivateDepartment/{name}(name=${department.department})}"
+                                class="btn btn-danger"><span th:if="${department.isActive}">Deactivate</span>
+                                <span th:unless="${department.isActive}">Activate</span></a></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+	</div>
 
 
 
@@ -177,7 +212,7 @@
 		</div>
 	</div>
 	
-	<input type="text" id="result" th:value="${listOfResult}" style="display:none;">
+	<input type="text" id="users" th:value="${listOfApprovedStudents}" style="display:none;">
 
 	<script>
 		function openNav() {
@@ -222,8 +257,13 @@
                     field: "department",
                 },
 
-				{ field: 'Semester', type: 'numberColumn' },
-				{ field: 'Mark', type: 'numberColumn' },
+				{  
+					id: "semester",
+                    name: "semester",
+					field: 'semester', 
+					type: 'numberColumn' 
+				},
+				
 
 			],
 
