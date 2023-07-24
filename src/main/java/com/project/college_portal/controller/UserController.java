@@ -189,7 +189,7 @@ public class UserController {
 		return "errorpopup";
 	}
 
-	// method to handle UserIdException
+	// method to handle HigherAuthorityException
 	@ExceptionHandler(value = HigherAuthorityException.class)
 	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
 		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");

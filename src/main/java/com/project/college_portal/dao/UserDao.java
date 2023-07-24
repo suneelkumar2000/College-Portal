@@ -238,7 +238,7 @@ public class UserDao implements UserInterface {
 				int month = currentDate.getMonthValue();
 				int year = currentDate.getYear();
 				staffDao.activeOrInactiveSemester();
-				List<Semester> semesterList = staffDao.semesterList(model);
+				List<Semester> semesterList = staffDao.activeSemesterList(model);
 				for (Semester semesterModel : semesterList) {
 					int semesterId = semesterModel.getId();
 					int yearDifference = year - joiningYear;

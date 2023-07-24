@@ -48,6 +48,20 @@ public class StaffDao implements StaffInterface {
 
 	// --------- Students methods ------------
 
+	public int checkHigherAuthority(int staffId) throws HigherAuthorityException {
+		String selectStaff = "Select id,roll,status,is_active from user";
+		List<User> user = jdbcTemplate.query(selectStaff, new ApprovingMapper());
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == (staffId))
+				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals("approved"))
+				.collect(Collectors.toList());
+		for (User userModel : user1) {
+			if (userModel != null) {
+				return 0;
+			}
+		}
+		throw new HigherAuthorityException("HigherAuthority Exception");
+	}
+
 	public User findDepartmentById(int UserId) {
 		String select = "select department from user where (roll='student' and id=?)";
 		User userDepartment = jdbcTemplate.queryForObject(select, new UserDepartmentMapper(), UserId);
@@ -68,8 +82,8 @@ public class StaffDao implements StaffInterface {
 		String selectStaff = "Select id,roll,status,is_active from user";
 		List<User> user = jdbcTemplate.query(selectStaff, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (staffId))
-				.filter(roll -> roll.getRoll().equals("staff"))
-				.filter(status -> status.getStatus().equals("approved")).collect(Collectors.toList());
+				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals("approved"))
+				.collect(Collectors.toList());
 		for (User userModel : user1) {
 			if (userModel != null) {
 
@@ -85,10 +99,12 @@ public class StaffDao implements StaffInterface {
 						logger.info(noOfRows + " student are approved");
 						return 1;
 					}
-				}throw new UserIdException("User Id dosen't exist");
+				}
+				throw new UserIdException("User Id dosen't exist");
 			}
-		}throw new HigherAuthorityException("HigherAuthority Exception");
-		
+		}
+		throw new HigherAuthorityException("HigherAuthority Exception");
+
 	}
 
 	public List<User> approvedStudentList(Model model) throws JsonProcessingException {
@@ -145,25 +161,36 @@ public class StaffDao implements StaffInterface {
 
 	// --------- Department methods ------------
 
-	public int addDepartment(Department department) throws ExistDepartmentNameException {
-		String name = department.getDepartment();
-		String select = "Select id,department,is_active from classroom";
-		List<Department> department1 = (jdbcTemplate.query(select, new DepartmentMapper())).stream()
-				.filter(dep -> ((dep.getDepartment()).toLowerCase()).equals((name).toLowerCase()))
+	public int addDepartment(int staffId, Department department)
+			throws ExistDepartmentNameException, HigherAuthorityException {
+		String selectStaff = "Select id,roll,status,is_active from user";
+		List<User> user = jdbcTemplate.query(selectStaff, new ApprovingMapper());
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == (staffId))
+				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals("approved"))
 				.collect(Collectors.toList());
-		for (Department departmentModel1 : department1) {
-			if (departmentModel1 != null) {
-				throw new ExistDepartmentNameException("Exist Department Exception");
+		for (User userModel : user1) {
+			if (userModel != null) {
+				String name = department.getDepartment();
+				String select = "Select id,department,is_active from classroom";
+				List<Department> department1 = (jdbcTemplate.query(select, new DepartmentMapper())).stream()
+						.filter(dep -> ((dep.getDepartment()).toLowerCase()).equals((name).toLowerCase()))
+						.collect(Collectors.toList());
+				for (Department departmentModel1 : department1) {
+					if (departmentModel1 != null) {
+						throw new ExistDepartmentNameException("Exist Department Exception");
+					}
+				}
+				String add = "insert into classroom(department) values(?)";
+				Object[] params = { name };
+				int noOfRows = jdbcTemplate.update(add, params);
+				if (noOfRows > 0) {
+					logger.info(noOfRows + "Saved");
+					return 1;
+				} else
+					return 0;
 			}
 		}
-		String add = "insert into classroom(department) values(?)";
-		Object[] params = { name };
-		int noOfRows = jdbcTemplate.update(add, params);
-		if (noOfRows > 0) {
-			logger.info(noOfRows + "Saved");
-			return 1;
-		} else
-			return 0;
+		throw new HigherAuthorityException("HigherAuthority Exception");
 	}
 
 	public int activateOrDeactivateDepartment(Department Department) {
@@ -435,6 +462,15 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public List<Semester> semesterList(Model model) throws JsonProcessingException {
+		String select = "Select id,is_active from semester";
+		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
+		ObjectMapper object = new ObjectMapper();
+		String semester = object.writeValueAsString(semesterList);
+		model.addAttribute("listOfSemester", semester);
+		return semesterList;
+	}
+
+	public List<Semester> activeSemesterList(Model model) throws JsonProcessingException {
 		String select = "Select id,is_active from semester where (is_active =true)";
 		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		ObjectMapper object = new ObjectMapper();

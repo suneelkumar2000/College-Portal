@@ -75,11 +75,12 @@ public class StaffController {
 
 	// method to add department
 	@GetMapping(path = "/insertdepartment")
-	public String addDepartment(@RequestParam("department") String department, Model model)
-			throws ExistDepartmentNameException {
+	public String addDepartment(@RequestParam("department") String department, Model model, HttpSession session)
+			throws ExistDepartmentNameException, HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
 		Department depart = new Department();
 		depart.setDepartment(department);
-		int value = staffService.addDepartment(depart);
+		int value = staffService.addDepartment(staffId, depart);
 		if (value == 1) {
 			return "redirect:/departmentlist";
 		} else
@@ -199,7 +200,7 @@ public class StaffController {
 		if (value == 1) {
 			return "redirect:/semesterlist";
 		} else if (value == 2) {
-			return "redirect:/inactiveSemesterlistt";
+			return "redirect:/inactiveSemesterlist";
 		} else
 			return "semester";
 	}
@@ -439,7 +440,7 @@ public class StaffController {
 		return "errorpopup";
 	}
 
-	// method to handle UserIdException
+	// method to handle HigherAuthorityException
 	@ExceptionHandler(value = HigherAuthorityException.class)
 	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
 		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");

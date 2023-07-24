@@ -59,8 +59,8 @@ public class StaffService {
 	}
 
 	// method to add department
-	public int addDepartment(Department depart) throws ExistDepartmentNameException {
-		int department = staffDao.addDepartment(depart);
+	public int addDepartment(int staffId,Department depart) throws ExistDepartmentNameException, HigherAuthorityException {
+		int department = staffDao.addDepartment(staffId, depart);
 		return department;
 	}
 
@@ -224,5 +224,11 @@ public class StaffService {
 	public List<Subject> findSubjectList(int value, String department, Model model) throws JsonProcessingException {
 		List<Subject> subject = staffDao.findSubjectList(value, department, model);
 		return subject;
+	}
+	
+	// method to check Higher Authority
+	public int checkHigherAuthority(int staffId) throws HigherAuthorityException{
+		int value = staffDao.checkHigherAuthority(staffId);
+		return value;
 	}
 }

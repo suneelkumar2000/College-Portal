@@ -237,20 +237,20 @@
         setSuccess(name)
       }
 
-      if (DOBValue === '') {
-        success = false;
-        setError(date, 'Exam Date is required')
-      } else {
-        let userinput = document.getElementById("date").value;
-        let today = new Date();
-        let date = new Date(userinput);
-        if (date > today) {
-          success = false;
-          setError(date, 'Invalid date')
-        } else {
-          setSuccess(date)
-        }
-      }
+       if (dateValue === '') {
+                success = false;
+                setError(date, 'Exam Date is required')
+            } else {
+                let userinput = document.getElementById("date").value;
+                let exam = new Date(userinput);
+                let today = Date.now();
+                if (today<exam.getTime()) {
+                    success = false;
+                    setError(date, 'Invalid Date of exam')
+                } else {
+                    setSuccess(date)
+                }
+            }
 
       return success;
     }

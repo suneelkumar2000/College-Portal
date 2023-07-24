@@ -34,7 +34,7 @@ public class HomeController {
 	// method to get index page
 	@GetMapping(path = "/index")
 	public String index() {
-		System.out.println("Email : "+email);
+		System.out.println("Email : " + email);
 		return "index";
 	}
 
@@ -93,7 +93,14 @@ public class HomeController {
 	// method to get result Admin page
 	@GetMapping(path = "/resultAdmin")
 	public String adminResult(Model model) throws JsonProcessingException {
-		model.addAttribute("studentList", staffService.approvedStudentList(model));
+		model.addAttribute("approvedStudentList", staffService.approvedStudentList(model));
+		return "resultAdmin";
+	}
+
+	// method to get result popup page
+	@GetMapping(path = "/resultAdmin")
+	public String adminResult(Model model) throws JsonProcessingException {
+		model.addAttribute("approvedStudentList", staffService.approvedStudentList(model));
 		return "resultAdmin";
 	}
 
@@ -105,19 +112,26 @@ public class HomeController {
 
 	// method to get department form
 	@GetMapping(path = "/insertDepartmentForm")
-	public String departmentForm() {
+	public String departmentForm(HttpSession session) throws HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		return "departmentForm";
 	}
 
 	// method to get semester form
 	@GetMapping(path = "/insertSemesterForm")
-	public String semesterForm() {
+	public String semesterForm(HttpSession session) throws HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		return "semesterForm";
 	}
 
 	// method to get subject form
 	@GetMapping(path = "/insertSubjectForm")
-	public String subjectForm(ModelMap map, Model model) throws JsonProcessingException {
+	public String subjectForm(ModelMap map, Model model, HttpSession session)
+			throws JsonProcessingException, HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		map.addAttribute("departmentList", staffService.departmentList(model));
 		map.addAttribute("semesterList", staffService.semesterList(model));
 		return "subjectForm";
@@ -125,7 +139,8 @@ public class HomeController {
 
 	// method to get exam form
 	@GetMapping(path = "/insertExamForm")
-	public String examForm() {
+	public String examForm(Model model) throws JsonProcessingException {
+		model.addAttribute("subjectList", staffService.subjectList(model));
 		return "examForm";
 	}
 
@@ -194,7 +209,7 @@ public class HomeController {
 		return "errorpopup";
 	}
 
-	// method to handle UserIdException
+	// method to handle HigherAuthorityException
 	@ExceptionHandler(value = HigherAuthorityException.class)
 	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
 		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");

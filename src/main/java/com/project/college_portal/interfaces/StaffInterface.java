@@ -23,6 +23,7 @@ import com.project.college_portal.model.Subject;
 import com.project.college_portal.model.User;
 
 public interface StaffInterface {
+	public int checkHigherAuthority(int staffId) throws HigherAuthorityException;
 	public User findDepartmentById(int UserId);
 	public List<User> studentList(Model model) throws JsonProcessingException;
 	public int approve(int staffId,User approveUser) throws UserIdException, HigherAuthorityException;
@@ -31,7 +32,7 @@ public interface StaffInterface {
 	public int activateOrDeactivateStudent(User User);
 	public List<User> inactiveStudentList();
 	
-	public int addDepartment(Department department) throws ExistDepartmentNameException;
+	public int addDepartment(int staffId,Department department) throws ExistDepartmentNameException, HigherAuthorityException;
 	public int activateOrDeactivateDepartment(Department Department);
 	public List<Department> departmentList(Model model) throws JsonProcessingException;
 	public List<Department> inactiveDepartmentList(Model model) throws JsonProcessingException;
@@ -46,6 +47,7 @@ public interface StaffInterface {
 	public int activateOrDeactivateSemester(Semester Semester);
 	public int activeOrInactiveSemester();
 	public List<Semester> semesterList(Model model) throws JsonProcessingException;
+	public List<Semester> activeSemesterList(Model model) throws JsonProcessingException;
 	public List<Semester> inactiveSemesterList(Model model) throws JsonProcessingException;
 	
 	public int addSubject(Subject subject) throws SemesterIdException, ExistDepartmentNameException;
