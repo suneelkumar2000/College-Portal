@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Error Message</title>
+<link
+    th:href="@{https://fonts.googleapis.com/css2?family=Poppins&display=swap}"
+    rel="stylesheet">
+<style media="screen">
+*, *:before, *:after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color:rgb(133, 133, 134);
+}
+
+.popup {
+    background-color: #ffffff;
+    width: 420px;
+    padding: 30px 40px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    border-radius: 8px;
+    font-family: "Poppins", sans-serif;
+    display: none;
+    text-align: center;
+    	box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
+    
+}
+ button {
+    display: block;
+    margin: 0 0 20px auto;
+    font-size: 30px;
+    color: #ffffff;
+    background-color:red;
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+ button:hover{
+background-color: rgb(255, 0, 0,.3);
+}
+
+.popup h2 {
+    margin-top: -20px;
+}
+
+.popup p {
+    font-size: 16px;
+    text-align: center;
+    margin: 20px 0;
+    padding-left:25px;
+	padding-right:25px;
+    line-height: 25px;
+}
+
+.Error {
+    display: block;
+    width: 150px;
+    position: relative;
+    margin: 10px auto;
+    text-align: center;
+    background-color: #f20707;
+    border-radius: 20px;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 0;
+}
+</style>
+</head>
+<body>
+    <div class="popup">
+      <div class="close-btn" th:onclick="location.href='javascript:history.back()'">x
+      </div>
+        
+      </form>
+      <div class="header">
+			<h1>Insert Marks</h1>
+		</div>
+		<h4><span class="text">Student ID : </span><span th:text="${userId}"></span></h4>
+		<h4><span class="text">Name : </span><span th:text="${userName}"></span></h4>
+		
+		<form id="form" th:action="@{/addUpdateResult}" method="GET" class="form">
+		
+		<input type="text" id="userId" name="userId" th:value="${userId}" style="display:none;">
+
+			<div class="form-control">
+				<label for="subject" class="text">
+					<b>Select subject</b><span class="required">*</span>
+
+					<select id="subject" name="subject" required>
+						<option th:each="subject : ${subjectName}" th:value="${subject.name}"
+							th:utext="${subject.name}"></option>
+					</select>
+					<div class="error"></div>
+				</label>
+			</div>
+
+			<div class="form-control">
+				<label for="exam" class="text">
+					<b>Select Exam</b><span class="required">*</span>
+
+					<select id="exam" name="exam" required>
+						<option th:each="exam : ${Exam}" th:value="${exam.name}"
+							th:utext="${exam.name}"></option>
+					</select>
+					<div class="error"></div>
+				</label>
+			</div>
+			
+			<div class="form-control">
+				<label for="examType" class="text">
+					<b>Select Exam Type</b><span class="required">*</span>
+
+					<select id="examType" name="examType" required>
+						<option th:each="examType : ${ExamType}" th:value="${examType.type}"
+							th:utext="${examType.type}"></option>
+					</select>
+					<div class="error"></div>
+				</label>
+			</div>
+
+			<div class="form-control">
+				<label for="marks" class="text"><b>Mark</b><span class="required">*</span></label> <input
+					type="number"  placeholder="Enter Student Marks"
+					id="marks" name="marks" />
+				<i class="fas fa-check-circle"></i> <i class="fas fa-exclamation-circle"></i>
+				<div class="error"></div>
+			</div>
+
+			<input type="submit" onclick="clearText()" value="Submit">
+		</form>
+    </div>
+    
+   
+    <script type="text/javascript">
+        window.addEventListener("load", function() {
+            setTimeout(function open(event) {
+                document.querySelector(".popup").style.display = "block";
+            }, 600)
+        });
+
+        document.querySelector("#close").addEventListener("click", function() {
+            document.querySelector(".popup").style.display = "none";
+        });
+    </script>
+</body>
+</html>

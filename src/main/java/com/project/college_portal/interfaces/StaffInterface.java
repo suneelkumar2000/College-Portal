@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.ui.Model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
 import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SemesterIdException;
@@ -24,7 +26,8 @@ import com.project.college_portal.model.User;
 
 public interface StaffInterface {
 	public int checkHigherAuthority(int staffId) throws HigherAuthorityException;
-	public User findDepartmentById(int UserId);
+	public User findStudentDepartmentById(int UserId);
+	public List<User> findStudentById(int UserId,Model model) ;
 	public List<User> studentList(Model model) throws JsonProcessingException;
 	public int approve(int staffId,User approveUser) throws UserIdException, HigherAuthorityException;
 	public List<User> approvedStudentList(Model model) throws JsonProcessingException;
@@ -50,10 +53,12 @@ public interface StaffInterface {
 	public List<Semester> activeSemesterList(Model model) throws JsonProcessingException;
 	public List<Semester> inactiveSemesterList(Model model) throws JsonProcessingException;
 	
-	public int addSubject(Subject subject) throws SemesterIdException, ExistDepartmentNameException;
+	public int addSubject(Subject subject) throws SemesterIdException,DepartmentException, ExistSubjectNameException;
 	public int activateOrDeactivateSubject(Subject Subject);
 	public Subject findByID(int id);
-	public Subject findSubjectNameByDepartment(String department);
+	public List<Subject> findSubjectID(String department, int semester,String name);
+	public List<Subject> findSubjectIdByName(String name);
+	public List<Subject> findSubjectNameByDepartmentSemester(String department,int semester);
 	public List<Subject> findSubjectListBySemester(int semesterId,Model model) throws JsonProcessingException;
 	public List<Subject> findSubjectList(int semesterId,String department,Model model) throws JsonProcessingException;
 	public List<Subject> subjectList(Model model) throws JsonProcessingException;
@@ -63,6 +68,8 @@ public interface StaffInterface {
 	public int activateOrDeactivateExam(Exam Exam);
 	public List<Exam> examList(Model model) throws JsonProcessingException;
 	public List<Exam> inactiveExamList(Model model) throws JsonProcessingException;
+	public List<Exam> findExamNameBySubjectID(String subjectID);
+	public List<Exam> findExamTypeBySubjectID(String subjectID);
 	
 	public int addOrUpdateResult(Result Result) throws MarkException, UserIdException, ExamIdException;
 	public int activateOrDeactivateOneResult(Result Result);

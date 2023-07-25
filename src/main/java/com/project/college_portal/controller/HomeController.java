@@ -1,5 +1,7 @@
 package com.project.college_portal.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -8,17 +10,24 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
 import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
+import com.project.college_portal.dao.StaffDao;
+import com.project.college_portal.dao.UserDao;
+import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SubjectIdException;
 import com.project.college_portal.exception.UserIdException;
+import com.project.college_portal.model.Subject;
+import com.project.college_portal.model.User;
 import com.project.college_portal.service.StaffService;
 import com.project.college_portal.service.UserService;
 import com.project.college_portal.exception.HigherAuthorityException;
@@ -26,6 +35,8 @@ import com.project.college_portal.exception.HigherAuthorityException;
 @Controller
 public class HomeController {
 
+	StaffDao staffDao = new StaffDao();
+	UserDao userDao = new UserDao();
 	UserService userService = new UserService();
 	StaffService staffService = new StaffService();
 	@Value("${email}")
@@ -98,10 +109,34 @@ public class HomeController {
 	}
 
 	// method to get result popup page
-	@GetMapping(path = "/resultAdmin")
-	public String adminResult(Model model) throws JsonProcessingException {
-		model.addAttribute("approvedStudentList", staffService.approvedStudentList(model));
-		return "resultAdmin";
+	@GetMapping(path = "/resultPopup/{userId}")
+	public String resultPopup(@PathVariable(value = "userId") int userId, ModelMap map, Model model)
+			throws JsonProcessingException {
+		List<User> user = staffDao.findStudentById(userId, model);
+		for (User userModel : user) {
+			if (userModel != null) {
+				map.addAttribute("userId", userId);
+				map.addAttribute("userName", userModel.getFirstName());
+				String department = userModel.getDepartment();
+				int semester = userModel.getSemester();
+				List<Subject> subject = staffDao.findSubjectNameByDepartmentSemester(department, semester);
+				for (Subject subjectModel : subject) {
+					if (subjectModel != null) {
+						String name = subjectModel.getName();
+						map.addAttribute("subjectName", subject);
+						List<Subject> id = staffDao.findSubjectIdByName(name);
+						for (Subject subjectModel2 :id) {
+							if (subjectModel2 != null) {
+								String SubjectID = subjectModel2.getId();
+								map.addAttribute("Exam", staffDao.findExamNameBySubjectID(SubjectID));
+								map.addAttribute("ExamType", staffDao.findExamTypeBySubjectID(SubjectID));
+							}
+						}
+					}
+				}
+			}
+		}
+		return "resultPopup";
 	}
 
 	// method to get Subject Details
@@ -213,6 +248,20 @@ public class HomeController {
 	@ExceptionHandler(value = HigherAuthorityException.class)
 	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
 		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");
+		return "errorpopup";
+	}
+
+	// method to handle DepartmentException
+	@ExceptionHandler(value = DepartmentException.class)
+	public String DepartmentException(DepartmentException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Department dosen't Exist");
+		return "errorpopup";
+	}
+
+	// method to handle ExistSubjectNameException
+	@ExceptionHandler(value = ExistSubjectNameException.class)
+	public String ExistSubjectNameException(ExistSubjectNameException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Subject Already Exist");
 		return "errorpopup";
 	}
 }

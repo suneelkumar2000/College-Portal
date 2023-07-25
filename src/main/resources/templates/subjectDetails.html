@@ -2,319 +2,241 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Subject Details</title>
-	<meta charSet="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<style media="only screen">
-		html,
-		body {
-			height: 100%;
-			width: 100%;
-			margin: 0;
-			box-sizing: border-box;
-			-webkit-overflow-scrolling: touch;
-		}
+    <title>Subject Details</title>
+    <meta charSet="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		html {
-			position: absolute;
-			top: 0;
-			left: 0;
-			padding: 0;
-			overflow: auto;
-		}
+    <link rel="stylesheet" th:href="@{/SlickGrid2/css/smoothness/jquery-ui-1.8.16.custom.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/SlickGrid2/slick.grid.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/SlickGrid2/controls/slick.gridmenu.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{/SlickGrid2/controls/slick.columnpicker.css}" type="text/css" />
 
-		body {
-			padding: 1rem;
-			overflow: auto;
-		}
+    <style media="only screen">
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
 
-		body {
-			background: #fffefe;
-		}
+        html {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0;
+            overflow: auto;
+        }
 
-		body h1 {
-			align-items: center;
-		}
+        body {
+            padding: 1rem;
+            overflow: auto;
+        }
 
-		ul {
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-			background-color: #000000;
-			width: 100%;
-		}
+        body {
+            background: #fffefe;
+        }
 
-		li a {
-			float: right;
-		}
+        body h1 {
+            align-items: center;
+        }
 
-		li span {
-			float: left;
-		}
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000000;
+            width: 100%;
+        }
 
-		li span {
-			align-items: center;
-			text-decoration: none;
-			color: #ffffff;
-			text-transform: uppercase;
-			font-size: 20px;
-			font-weight: 600;
-			padding: 14px 16px;
-		}
+        li a {
+            float: right;
+        }
 
-		li a {
-			align-items: center;
-			text-decoration: none;
-			color: #ffffff;
-			text-transform: uppercase;
-			font-size: 20px;
-			font-weight: 600;
-			padding: 14px 16px;
-		}
+        li span {
+            float: left;
+        }
 
-		li a:hover {
-			color: #F81818;
-			transition: all .5s;
-			cursor: pointer;
-		}
+        li span {
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 14px 16px;
+        }
 
-		li span:hover {
-			color: #4df3ff;
-			transition: all .5s;
-			cursor: pointer;
-		}
+        li a {
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 14px 16px;
+        }
 
-		.sidenav {
-			height: 100%;
-			/* 100% Full-height */
-			width: 0;
-			/* 0 width - change this with JavaScript */
-			position: fixed;
-			/* Stay in place */
-			z-index: 1;
-			/* Stay on top */
-			top: 0;
-			/* Stay at the top */
-			left: 0;
-			background-color: #111;
-			/* Black*/
-			overflow-x: hidden;
-			/* Disable horizontal scroll */
-			padding-top: 60px;
-			/* Place content 60px from the top */
-			transition: 0.5s;
-			/* 0.5 second transition effect to slide in the sidenav */
-		}
+        li a:hover {
+            color: #F81818;
+            transition: all .5s;
+            cursor: pointer;
+        }
 
-		/* The navigation menu links */
-		.sidenav a {
-			padding: 8px 8px 8px 32px;
-			text-decoration: none;
-			font-size: 25px;
-			color: #818181;
-			display: block;
-			transition: 0.3s;
-		}
+        li span:hover {
+            color: #4df3ff;
+            transition: all .5s;
+            cursor: pointer;
+        }
 
-		/* When you mouse over the navigation links, change their color */
-		.sidenav a:hover {
-			color: #f1f1f1;
-		}
+        .sidenav {
+            height: 100%;
+            /* 100% Full-height */
+            width: 0;
+            /* 0 width - change this with JavaScript */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Stay on top */
+            top: 0;
+            /* Stay at the top */
+            left: 0;
+            background-color: #111;
+            /* Black*/
+            overflow-x: hidden;
+            /* Disable horizontal scroll */
+            padding-top: 60px;
+            /* Place content 60px from the top */
+            transition: 0.5s;
+            /* 0.5 second transition effect to slide in the sidenav */
+        }
 
-		/* Position and style the close button (top right corner) */
-		.sidenav .closebtn {
-			position: absolute;
-			top: 0;
-			right: 25px;
-			font-size: 36px;
-			margin-left: 50px;
-		}
+        /* The navigation menu links */
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
 
-		/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-		#main {
-			transition: margin-left .5s;
-			padding: 20px;
-		}
+        /* When you mouse over the navigation links, change their color */
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
 
-		/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-		@media screen and (max-height: 450px) {
-			.sidenav {
-				padding-top: 15px;
-			}
+        /* Position and style the close button (top right corner) */
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
 
-			.sidenav a {
-				font-size: 18px;
-			}
-		}
-	</style>
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s;
+            padding: 20px;
+        }
+
+        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 
 <header>
-	<div class="navbar">
-		<nav>
-			<ul>
-				<li><a th:href="@{/logout}">Logout</a></li>
-				<li class="menu"><span onclick="openNav()">Menu</span></li>
-			</ul>
-		</nav>
-	</div>
+    <div class="navbar">
+        <nav>
+            <ul>
+                <li><a th:href="@{/logout}">Logout</a></li>
+                <li class="menu"><span onclick="openNav()">Menu</span></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
 <body>
-	<div id="mySidenav" class="sidenav">
-		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a th:href="@{/adminHome}">Home</a>
-    	<a th:href="@{/listofusers}">Student List</a>
-    	<a th:href="@{/attendanceAdmin}">Attendance</a>
-    	<a th:href="@{/resultAdmin}">Result</a>
-    	<a th:href="@{/departmentlist}">Department</a>
-    	<a th:href="@{/semesterlist}">Semester List</a>
-    	<a th:href="@{/subjectDetails}">Subject Details</a>
-    	<a th:href="@{/examlist}">Exam Details</a>
-	</div>
-	
-	<div class="container">
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a th:href="@{/adminHome}">Home</a>
+        <a th:href="@{/listofusers}">Student List</a>
+        <a th:href="@{/attendanceAdmin}">Attendance</a>
+        <a th:href="@{/resultAdmin}">Result</a>
+        <a th:href="@{/departmentlist}">Department</a>
+        <a th:href="@{/semesterlist}">Semester List</a>
+        <a th:href="@{/subjectDetails}">Subject Details</a>
+        <a th:href="@{/examlist}">Exam Details</a>
+    </div>
+
+    <div class="container">
         <button><a th:href="@{/insertSubjectForm}" class="btn btn-primary btn-sm mb-3"> Add Subject </a></button>
         <button><a th:href="@{/subjectlist}" class="btn btn-primary btn-sm mb-3">Active Subjects</a></button>
         <button><a th:href="@{/inactiveSubjectlist}" class="btn btn-primary btn-sm mb-3"> Inactive Subjects</a></button>
     </div>
-	
-	<div style="height: 100%; box-sizing: border-box">
-		<div id="myGrid" style="height: 100%" class="ag-theme-alpine">
-		</div>
-	</div>
-	<input type="text" id="subject" th:value="${listOfSubject}" style="display:none;">
-    
-	<script>
-		function openNav() {
-			document.getElementById("mySidenav").style.width = "250px";
-		}
 
-		/* Set the width of the side navigation to 0 */
-		function closeNav() {
-			document.getElementById("mySidenav").style.width = "0";
-		}
-	</script>
-	<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
-	</script>
-	
-	<script>
-        const gridOptions = {
-            // define grid columns
-            columnDefs: [
-                // using number column type
-                {
-                    id: "id",
-                    name: "id",
-                    field: "id",
-                    type: 'numberColumn',
-                    width: 100,
-                    sortable:true
-                },
-                
-                // using default ColDef
-                {
-                    id: "name",
-                    name: "name",
-                    field: "name",
-                    sortable:true
-                },
-                {
-                    id: "semesterId",
-                    name: "semesterId",
-                    field: "semesterId",
-                    type: 'numberColumn',
-                    width: 100,
-                    sortable:true
-                },
-                {
-                    id: "department",
-                    name: "department",
-                    field: "department",
-                    sortable:true
-                },
-                {
-                    id: "isActive",
-                    name: "isActive",
-                    field: "isActive",
-                    sortable:true
-                },
-                
-            ],
+    <div class="table">
+        <!-- support files start  -->
+
+        <!-- import supporting files  -->
+        <script th:src="@{/SlickGrid2/lib/jquery-1.7.min.js}"></script>
+        <script th:src="@{/SlickGrid2/lib/jquery-ui-1.8.16.custom.min.js}"></script>
+        <script th:src="@{/SlickGrid2/lib/jquery.event.drag-2.2.js}"></script>
+
+        <script th:src="@{/SlickGrid2/slick.core.js}"></script>
+        <script th:src="@{/SlickGrid2/slick.dataview.js}"></script>
+        <script th:src="@{/SlickGrid2/slick.grid.js}"></script>
 
 
+        <!--grid menu model start  -->
+        <script th:src="@{/SlickGrid2/plugins/slick.rowselectionmodel.js}"></script>
+        <script th:src="@{/SlickGrid2/controls/slick.pager.js}"></script>
+        <script th:src="@{/SlickGrid2/controls/slick.columnpicker.js}"></script>
 
-            // default ColDef, gets applied to every column
-            defaultColDef: {
-                // set the default column width
-                width: 150,
-                // make every column editable
-                editable: true,
-                // make every column use 'text' filter by default
-                filter: 'agTextColumnFilter',
-                // enable floating filters by default
-                floatingFilter: true,
-                // make columns resizable
-                resizable: true,
-                // disable cell data types
-                cellDataType: false,
-            },
+        <!--grid menu model end  -->
 
-            // default ColGroupDef, get applied to every column group
-            defaultColGroupDef: {
-                marryChildren: true,
-            },
+        <!-- import script files for grid start -->
+        <script th:src="@{/JS files/SubjectGrid.js}"></script>
 
-            // define specific column types
-            columnTypes: {
-                numberColumn: { width: 130, filter: 'agNumberColumnFilter' },
-                nonEditableColumn: { editable: false },
-                dateColumn: {
-                    // specify we want to use the date filter
-                    filter: 'agDateColumnFilter',
+        <!-- import script files for grid end -->
 
-                    // add extra parameters for the date filter
-                    filterParams: {
-                        // provide comparator function
-                        comparator: (filterLocalDateAtMidnight, cellValue) => {
-                            // In the example application, dates are stored as dd/mm/yyyy
-                            // We create a Date object for comparison against the filter date
-                            const dateParts = cellValue.split('/');
-                            const day = Number(dateParts[0]);
-                            const month = Number(dateParts[1]) - 1;
-                            const year = Number(dateParts[2]);
-                            const cellDate = new Date(year, month, day);
+        <!-- support files end  -->
+      
+            <div style="height: 100%; box-sizing: border-box">
+                <div id="subjectGrid" style="height: 100%" class="ag-theme-alpine">
+                </div>
+            </div>
 
-                            // Now that both parameters are Date objects, we can compare
-                            if (cellDate < filterLocalDateAtMidnight) {
-                                return -1;
-                            } else if (cellDate > filterLocalDateAtMidnight) {
-                                return 1;
-                            } else {
-                                return 0;
-                            }
-                        },
-                    },
-                },
-            },
-            rowData: null,
-        };
+            <input type="text" id="subject" th:value="${listOfSubject}" >
 
-        // setup the grid after the page has finished loading
-        document.addEventListener('DOMContentLoaded', () => {
-            let gridDiv = document.querySelector('#myGrid');
-            new agGrid.Grid(gridDiv, gridOptions);
+			<!-- call external script  -->
+            <script th:inline="javascript">
+                subjectGrid();
+            </script>
+        
+    </div>
 
-            let data = document.getElementById("subject").value;
-            console.log(data);
 
-            var data1 = JSON.parse(data);
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
 
-            console.log(data1);
-
-            gridOptions.api.setRowData(data1);
-        });
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
     </script>
 </body>
 

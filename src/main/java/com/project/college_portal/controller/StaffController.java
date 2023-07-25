@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.college_portal.dao.StaffDao;
+import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
 import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.exception.MarkException;
@@ -36,6 +39,7 @@ import com.project.college_portal.service.StaffService;
 @Controller
 public class StaffController {
 
+	StaffDao staffDao = new StaffDao();
 	StaffService staffService = new StaffService();
 	ExistDepartmentNameException ExistDepartmentNameException = new ExistDepartmentNameException(null);
 
@@ -170,6 +174,14 @@ public class StaffController {
 		return "semester";
 	}
 
+	// method to get active Semester List
+	@GetMapping(path = "/activeSemesterlist")
+	public String activeSemesterList(Model model) throws JsonProcessingException {
+		staffService.activeOrInactiveSemester();
+		model.addAttribute("semesterList", staffService.activeSemesterList(model));
+		return "semester";
+	}
+
 	// method to get inactive Semester List
 	@GetMapping(path = "/inactiveSemesterlist")
 	public String inactiveSemesterList(Model model) throws JsonProcessingException {
@@ -225,7 +237,7 @@ public class StaffController {
 	@GetMapping(path = "/addsubject")
 	public String addSubject(@RequestParam("name") String name, @RequestParam("semesterId") int semesterId,
 			@RequestParam("department") String department, Model model)
-			throws SemesterIdException, ExistDepartmentNameException {
+			throws SemesterIdException, DepartmentException, ExistSubjectNameException {
 		Subject subject = new Subject();
 		subject.setName(name);
 		subject.setSemesterId(semesterId);
@@ -318,17 +330,45 @@ public class StaffController {
 
 	// method to Add Or Update Result
 	@GetMapping(path = "/addUpdateResult")
-	public String addOrUpdateResult(@RequestParam("examId") int examId, @RequestParam("userId") int userId,
+	public String addOrUpdateResult(@RequestParam("subject") String subjectName, @RequestParam("exam") String examName,
+			@RequestParam("examType") String examType, @RequestParam("userId") int userId,
 			@RequestParam("marks") int marks, Model model) throws MarkException, UserIdException, ExamIdException {
 		Result result = new Result();
-		result.setExamId(examId);
 		result.setUserId(userId);
+		System.out.println(userId);
 		result.setMarks(marks);
-		int value = staffService.addOrUpdateResult(result);
-		if (value == 1) {
-			return "redirect:/resultlist";
-		} else
-			return "resultAdmin";
+		System.out.println(marks);
+
+		List<User> user = staffDao.findStudentById(userId, model);
+		for (User userModel : user) {
+			if (userModel != null) {
+				String department = userModel.getDepartment();
+				System.out.println(department);
+				int semester = userModel.getSemester();
+				System.out.println(semester);
+				List<Subject> subject = staffDao.findSubjectID(department, semester, subjectName);
+				for (Subject subjectModel : subject) {
+					if (subjectModel != null) {
+						String subjectId = subjectModel.getId();
+						System.out.println(subjectId);
+						List<Exam> exam = staffDao.findExam(examName, examType, subjectId);
+						System.out.println(exam);
+						for (Exam examModel : exam) {
+							if (examModel != null) {
+								int examId = examModel.getId();
+								result.setExamId(examId);
+
+								int value = staffService.addOrUpdateResult(result);
+								if (value == 1) {
+									return "redirect:/resultlist";
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return "resultAdmin";
 	}
 
 	// method to Activate Or Deactivate one Result of particular exam and user
@@ -444,6 +484,20 @@ public class StaffController {
 	@ExceptionHandler(value = HigherAuthorityException.class)
 	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
 		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");
+		return "errorpopup";
+	}
+
+	// method to handle DepartmentException
+	@ExceptionHandler(value = DepartmentException.class)
+	public String DepartmentException(DepartmentException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Department dosen't Exist");
+		return "errorpopup";
+	}
+
+	// method to handle ExistSubjectNameException
+	@ExceptionHandler(value = ExistSubjectNameException.class)
+	public String ExistSubjectNameException(ExistSubjectNameException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Subject Already Exist");
 		return "errorpopup";
 	}
 }

@@ -15,7 +15,7 @@ public class ExamMapper implements RowMapper<Exam>{
 		String name = rs.getString("name");
 		String subjectId = rs.getString("subject_id");
 		String type = rs.getString("type");
-		Date date = rs.getDate("date");
+		Date date = rs.getDate("date_");
 		boolean isActive = rs.getBoolean("is_active");
 		exam.setId(id);
 		exam.setName(name);

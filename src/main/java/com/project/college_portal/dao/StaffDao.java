@@ -11,10 +11,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 
 import com.project.college_portal.connection.ConnectionUtil;
+import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
 import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SemesterIdException;
@@ -25,8 +27,12 @@ import com.project.college_portal.mapper.ApprovingMapper;
 import com.project.college_portal.mapper.AttendanceMapper;
 import com.project.college_portal.mapper.DepartmentMapper;
 import com.project.college_portal.mapper.ExamMapper;
+import com.project.college_portal.mapper.ExamTypeMapper;
+import com.project.college_portal.mapper.ExamnameMapper;
+import com.project.college_portal.mapper.ExamIdMapper;
 import com.project.college_portal.mapper.ResultMapper;
 import com.project.college_portal.mapper.SemesterMapper;
+import com.project.college_portal.mapper.SubjectIdMapper;
 import com.project.college_portal.mapper.SubjectMapper;
 import com.project.college_portal.mapper.SubjectNameMapper;
 import com.project.college_portal.mapper.UserDepartmentMapper;
@@ -61,8 +67,14 @@ public class StaffDao implements StaffInterface {
 		}
 		throw new HigherAuthorityException("HigherAuthority Exception");
 	}
+	
+	public List<User> findStudentById(int UserId,Model model) {
+		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and id=?)";
+		List<User> userList = jdbcTemplate.query(select, new UserMapper(),UserId);
+		return userList;
+	}
 
-	public User findDepartmentById(int UserId) {
+	public User findStudentDepartmentById(int UserId) {
 		String select = "select department from user where (roll='student' and id=?)";
 		User userDepartment = jdbcTemplate.queryForObject(select, new UserDepartmentMapper(), UserId);
 		return userDepartment;
@@ -91,8 +103,8 @@ public class StaffDao implements StaffInterface {
 				List<User> user2 = jdbcTemplate.query(select, new ApprovingMapper());
 				List<User> user3 = user2.stream().filter(id -> id.getUserId() == (approveUser.getUserId()))
 						.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
-				for (User userMode2 : user3) {
-					if (userModel != null) {
+				for (User userModel2 : user3) {
+					if (userModel2 != null) {
 						String approve = "update user set status='approved'  where (roll='student' and id=?)";
 						Object[] params = { approveUser.getUserId() };
 						int noOfRows = jdbcTemplate.update(approve, params);
@@ -490,7 +502,7 @@ public class StaffDao implements StaffInterface {
 
 	// --------- Subject methods ------------
 
-	public int addSubject(Subject subject) throws SemesterIdException, ExistDepartmentNameException {
+	public int addSubject(Subject subject) throws SemesterIdException,DepartmentException, ExistSubjectNameException {
 		int semesterId = subject.getSemesterId();
 		String select = "Select id,is_active from semester";
 		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
@@ -507,6 +519,19 @@ public class StaffDao implements StaffInterface {
 				for (Department departmentModel1 : department1) {
 					if (departmentModel1 != null) {
 
+						String subjectName = subject.getDepartment();
+						String select2 = "Select id,name,semester_id,department,is_active from subjects";
+						List<Subject> sub = jdbcTemplate.query(select2, new SubjectMapper());
+						List<Subject> subjectName1 = sub.stream()
+								.filter(name -> name.getName().equals(subject.getName()))
+								.filter(dep -> dep.getDepartment().equals(department))
+								.filter(sem -> sem.getSemesterId() == (semesterId)).collect(Collectors.toList());
+						for (Subject subjectModel1 : subjectName1) {
+							if (departmentModel1 != null) {
+								throw new ExistSubjectNameException("Subject Alredy exist");
+							}
+						}
+
 						String add = "insert into subjects(name,semester_id,department) values(?,?,?)";
 						Object[] params = { subject.getName(), semesterId, department };
 						int noOfRow = jdbcTemplate.update(add, params);
@@ -519,8 +544,9 @@ public class StaffDao implements StaffInterface {
 						} else
 							return 0;
 					}
+
 				}
-				throw new ExistDepartmentNameException("Department dosen't exist");
+				throw new DepartmentException("Department dosen't exist");
 			}
 		}
 		throw new SemesterIdException("Semester Id dosen't exist");
@@ -560,11 +586,23 @@ public class StaffDao implements StaffInterface {
 		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectMapper(), id);
 		return subjectNameList;
 	}
-
-	public Subject findSubjectNameByDepartment(String department) {
-		String find = "select name from subjects where (is_active =true and department =?)";
-		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectNameMapper(), department);
+	
+	public List<Subject> findSubjectID(String department, int semester, String name) {
+		String find = "select id from subjects where (is_active =true and department =? and semester_id=? and name=?)";
+		List<Subject> subjectNameList = jdbcTemplate.query(find, new SubjectIdMapper(),department,semester,name );
 		return subjectNameList;
+	}
+
+	public List<Subject> findSubjectNameByDepartmentSemester(String department, int semester) {
+		String find = "select name from subjects where (is_active =true and department =? and semester_id=?)";
+		List<Subject> subjectNameList = jdbcTemplate.query(find, new SubjectNameMapper(), department, semester);
+		return  subjectNameList;
+	}
+
+	public List<Subject> findSubjectIdByName(String name) {
+		String find = "select id from subjects where (is_active =true and name =?)";
+		List<Subject> subjectIdList = jdbcTemplate.query(find, new SubjectIdMapper(), name);
+		return subjectIdList;
 	}
 
 	public List<Subject> findSubjectListBySemester(int semesterId, Model model) throws JsonProcessingException {
@@ -610,11 +648,11 @@ public class StaffDao implements StaffInterface {
 		String subjectId = exam.getSubjectId();
 		String select = "Select id,name,semester_id,department,is_active from subjects";
 		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
-		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (subjectId))
+		List<Subject> subject1 = subject.stream().filter(id -> id.getId().equals(subjectId))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
 		for (Subject subjectModel1 : subject1) {
 			if (subjectModel1 != null) {
-				String select1 = "Select id,subject_id,name,type,is_active from exam";
+				String select1 = "Select id,subject_id,name,date_,type,is_active from exam";
 				List<Exam> exam1 = jdbcTemplate.query(select1, new ExamMapper());
 				List<Exam> exam2 = exam1.stream().filter(subjectid -> (subjectid.getSubjectId()).equals(subjectId))
 						.filter(name -> name.getName().equals(exam.getName()))
@@ -624,7 +662,7 @@ public class StaffDao implements StaffInterface {
 						throw new ExistExamException("Exist Exam Exception");
 					}
 				}
-				String add = "insert into exam(subject_id,name,date,type) values(?,?,?,?)";
+				String add = "insert into exam(subject_id,name,date_,type) values(?,?,?,?)";
 				Object[] params = { subjectId, exam.getName(), exam.getDate(), exam.getType() };
 				int noOfRows = jdbcTemplate.update(add, params);
 				if (noOfRows > 0) {
@@ -640,7 +678,7 @@ public class StaffDao implements StaffInterface {
 
 	public int activateOrDeactivateExam(Exam Exam) {
 		// TODO Auto-generated method stub
-		String select = "Select id,subject_id,name,type,is_active from exam";
+		String select = "Select id,subject_id,name,date_,type,is_active from exam";
 		List<Exam> exam = jdbcTemplate.query(select, new ExamMapper());
 		List<Exam> exam1 = exam.stream().filter(id -> id.getId() == (Exam.getId()))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
@@ -668,7 +706,7 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public List<Exam> examList(Model model) throws JsonProcessingException {
-		String select = "select id,subject_id,name,type,is_active from exam where (is_active =true)";
+		String select = "select id,subject_id,name,date_,type,is_active from exam where (is_active =true)";
 		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
 		ObjectMapper object = new ObjectMapper();
 		String exam = object.writeValueAsString(examList);
@@ -677,12 +715,30 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public List<Exam> inactiveExamList(Model model) throws JsonProcessingException {
-		String select = "select id,subject_id,name,type,is_active from exam where (is_active =false)";
+		String select = "select id,subject_id,name,date_,type,is_active from exam where (is_active =false)";
 		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
 		ObjectMapper object = new ObjectMapper();
 		String exam = object.writeValueAsString(examList);
 		model.addAttribute("listOfExam", exam);
 		return examList;
+	}
+
+	public List<Exam> findExamNameBySubjectID(String subjectID) {
+		String find = "select name from exam where (subject_id=?)";
+		List<Exam> examNameList = jdbcTemplate.query(find, new ExamnameMapper(), subjectID);
+		return examNameList;
+	}
+	
+	public List<Exam> findExamTypeBySubjectID(String subjectID) {
+		String find = "select type from exam where (subject_id=?)";
+		List<Exam> examNameList = jdbcTemplate.query(find, new ExamTypeMapper(), subjectID);
+		return examNameList;
+	}
+	
+	public List<Exam> findExam(String name,String type,String subjectID) {
+		String find = "select id from exam where (name=? and type=? and subject_id=?)";
+		List<Exam> examNameList = jdbcTemplate.query(find, new ExamIdMapper(),name,type,subjectID );
+		return examNameList;
 	}
 
 	// --------- Result methods ------------

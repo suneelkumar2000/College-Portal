@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
 import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.exception.MarkException;
@@ -59,13 +61,13 @@ public class UserController {
 
 	// method to get Login success
 	@GetMapping(path = "/loginSubmit")
-	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password,Model model,
+	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password, Model model,
 			HttpSession session) throws InvalidMailIdException, JsonProcessingException {
 		User user = new User();
 		user.setEmail(email);
 		user.setPassword(password);
 		int value = userService.loginUser(user, session);
-		
+
 		if (value == 1) {
 			return "redirect:/studentHome";
 		} else if (value == 2) {
@@ -193,6 +195,20 @@ public class UserController {
 	@ExceptionHandler(value = HigherAuthorityException.class)
 	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
 		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");
+		return "errorpopup";
+	}
+
+	// method to handle DepartmentException
+	@ExceptionHandler(value = DepartmentException.class)
+	public String DepartmentException(DepartmentException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Department dosen't Exist");
+		return "errorpopup";
+	}
+
+	// method to handle ExistSubjectNameException
+	@ExceptionHandler(value = ExistSubjectNameException.class)
+	public String ExistSubjectNameException(ExistSubjectNameException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Subject Already Exist");
 		return "errorpopup";
 	}
 }

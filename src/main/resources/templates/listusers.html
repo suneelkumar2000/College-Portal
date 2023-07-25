@@ -261,8 +261,7 @@
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
-    </script>
+    
     <script>
         const gridOptions = {
             // define grid columns
@@ -272,8 +271,8 @@
                     id: "select",
                     name: "Select",
                     field: "select",
-                    width: 100,
-                    formatter: checkboxFormatter
+                    checkboxSelection: true,
+                    width: 100
 
                 },
                 {
@@ -422,17 +421,7 @@
             return '<form action="/aprove" metod="get"><button type="submit"  class="but" name="user_id" value="' + a + '">Aprove</button></form>';
 
         }
-        /* check box funtion start */
-        function checkboxFormatter(row, cell, value, columnDef, dataContext) {
-            let a = dataContext.userCode;
-            return '<input type="checkbox" value="' + a + '" name="checkName" id="checkBox"' + (value ? 'checked="checked"' : '') + '/>';
-        }
-
-        //var check= document.getElementById("checkBox");
-        let check = document.querySelectorAll('input[type="checkbox"]:checked');
-        console.log(check);
-
-        /* check box funtion end */
+        
 
         // setup the grid after the page has finished loading
         document.addEventListener('DOMContentLoaded', () => {
@@ -449,6 +438,8 @@
         });
 
 
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@30.0.2/dist/ag-grid-community.min.js">
     </script>
 </body>
 

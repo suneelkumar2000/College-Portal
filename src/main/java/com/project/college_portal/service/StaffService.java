@@ -7,10 +7,12 @@ import org.springframework.ui.Model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.dao.StaffDao;
 import com.project.college_portal.dao.UserDao;
+import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
 import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistSemesterIdException;
+import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SemesterIdException;
@@ -59,7 +61,8 @@ public class StaffService {
 	}
 
 	// method to add department
-	public int addDepartment(int staffId,Department depart) throws ExistDepartmentNameException, HigherAuthorityException {
+	public int addDepartment(int staffId, Department depart)
+			throws ExistDepartmentNameException, HigherAuthorityException {
 		int department = staffDao.addDepartment(staffId, depart);
 		return department;
 	}
@@ -118,6 +121,12 @@ public class StaffService {
 		return semester;
 	}
 
+	// method to get active Semester List
+	public List<Semester> activeSemesterList(Model model) throws JsonProcessingException {
+		List<Semester> semester = staffDao.activeSemesterList(model);
+		return semester;
+	}
+
 	// method to get inactive Semester List
 	public List<Semester> inactiveSemesterList(Model model) throws JsonProcessingException {
 		List<Semester> semester = staffDao.inactiveSemesterList(model);
@@ -149,7 +158,7 @@ public class StaffService {
 	}
 
 	// method to add subject
-	public int addSubject(Subject subject) throws SemesterIdException, ExistDepartmentNameException {
+	public int addSubject(Subject subject) throws SemesterIdException, DepartmentException, ExistSubjectNameException {
 		int subject1 = staffDao.addSubject(subject);
 		return subject1;
 	}
@@ -225,9 +234,9 @@ public class StaffService {
 		List<Subject> subject = staffDao.findSubjectList(value, department, model);
 		return subject;
 	}
-	
+
 	// method to check Higher Authority
-	public int checkHigherAuthority(int staffId) throws HigherAuthorityException{
+	public int checkHigherAuthority(int staffId) throws HigherAuthorityException {
 		int value = staffDao.checkHigherAuthority(staffId);
 		return value;
 	}

@@ -18,7 +18,7 @@ public class Exam {
 		this.subjectId = subjectId;
 		this.name = name;
 		this.type = type;
-		this.setDate(date);
+		this.date=date;
 		this.isActive = isActive;
 	}
 
