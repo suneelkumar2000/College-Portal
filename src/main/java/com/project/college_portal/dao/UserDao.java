@@ -257,14 +257,12 @@ public class UserDao implements UserInterface {
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
-								System.out.println(2);
 							} else if (yearDifference < 3 && yearDifference >= 2) {
 								if ((semesterId <= 6) && (semesterId > 4)) {
 									String update = "update user set semester =? where id=?";
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
-								System.out.println(3);
 							} else if (yearDifference < 4 && yearDifference >= 3) {
 								if ((semesterId <= 8) && (semesterId > 6)) {
 									String update = "update user set semester =? where id=?";

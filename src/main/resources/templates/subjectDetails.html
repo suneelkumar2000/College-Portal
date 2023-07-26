@@ -186,7 +186,7 @@
         <button><a th:href="@{/inactiveSubjectlist}" class="btn btn-primary btn-sm mb-3"> Inactive Subjects</a></button>
     </div>
 
-    <div class="table">
+    <div class="exam-table">
         <!-- support files start  -->
 
         <!-- import supporting files  -->
@@ -207,26 +207,24 @@
         <!--grid menu model end  -->
 
         <!-- import script files for grid start -->
-        <script th:src="@{/JS files/SubjectGrid.js}"></script>
+        <script th:src="@{/JS files/subjectGrid.js}"></script>
 
         <!-- import script files for grid end -->
 
         <!-- support files end  -->
-      
-            <div style="height: 100%; box-sizing: border-box">
-                <div id="subjectGrid" style="height: 100%" class="ag-theme-alpine">
-                </div>
+        <div id="exam-info">
+            <div style="width:100%; box-sizing: border-box">
+                <div id="subjectGrid" style="width: 100%; height: 420px;"></div>
             </div>
-
-            <input type="text" id="subject" th:value="${listOfSubject}" >
-
-			<!-- call external script  -->
+            <input type="text" id="subject" th:value="${listOfSubject}" style="display:none;">
+            <!-- call external script  -->
             <script th:inline="javascript">
-                subjectGrid();
+                 subjectGrid();
             </script>
-        
+        </div>
+        <!-- donation table end -->
     </div>
-
+    
 
     <script>
         function openNav() {

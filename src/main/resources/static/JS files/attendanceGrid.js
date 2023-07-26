@@ -1,8 +1,8 @@
-function subjectGrid() {
+function attendanceGrid() {
 
 	var dataView;
 	var grid;
-	var data1 = document.getElementById("subject").value;
+	var data1 = document.getElementById("users").value;
 	var data = JSON.parse(data1);
 	console.log(data);
 
@@ -11,7 +11,7 @@ function subjectGrid() {
 	var nextId = 1;
 	data.forEach(function(item) {
 		// Generate a unique id using the nextId value
-		var itemId = "item_" + nextId;
+		var itemId = "user_" + nextId;
 
 		// Set the id property of the item object
 		item.id = itemId;
@@ -48,33 +48,56 @@ function subjectGrid() {
 
 	/* check box funtion end */
 	
-	var columns = [{
-		id: "id",
-		name: "id",
-		field: "id",
+	function buttonFormatter(row, cell, value, columnDef, dataContext) {
+	let a = dataContext.userId ;
+    return '<form action="/addUpdatePresentbyone" metod="get"><button type="submit"  class="buttons" name="userId"  value="'+a+'">Present</button></form>';
+    }
+    
+    function buttonFormatter2(row, cell, value, columnDef, dataContext) {
+	let a = dataContext.userId ;
+    return '<form action="/addUpdateAbsentbyone" metod="get"><button type="submit"  class="buttons" name="userId"  value="'+a+'">Absent</button></form>';
+    }
+	
+	var columns = [ {
+		id: "userId",
+		name: "userId",
+		field: "userId",
+		type: 'numberColumn',
 		width: 100,
 		sortable: true
-	}, {
-		id: "name",
-		name: "name",
-		field: "name",
+	},{
+		id: "firstName",
+		name: "firstName",
+		field: "firstName",
 		sortable: true
-	}, {
-		id: "semesterId",
-		name: "semesterId",
-		field: "semesterId",
-		width: 100,
+	},{
+		id: "lastName",
+		name: "lastName",
+		field: "lastName",
 		sortable: true
-	}, {
+	},{
 		id: "department",
 		name: "department",
 		field: "department",
 		sortable: true
-	}, {
-		id: "isActive",
-		name: "isActive",
-		field: "isActive",
+	},{
+		id: "semester",
+		name: "semester",
+		field: "semester",
+		width: 100,
 		sortable: true
+	},{
+		id : "present",
+		name : "present",
+		field : "present",
+		formatter:buttonFormatter,
+		width:200
+	},{
+		id : "absent",
+		name : "absent",
+		field : "absent",
+		formatter:buttonFormatter2,
+		width:200
 	}];
 
 	var options = {
@@ -165,7 +188,7 @@ function subjectGrid() {
 
 		//		dataView = new Slick.Data.DataView({ inlineFilters: true });
 		dataView = new Slick.Data.DataView();
-		grid = new Slick.Grid("#subjectGrid", dataView, columns, options);
+		grid = new Slick.Grid("#attendanceGrid", dataView, columns, options);
 		grid.setSelectionModel(new Slick.RowSelectionModel());
 
 	//	var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));

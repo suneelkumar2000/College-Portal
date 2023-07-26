@@ -107,13 +107,6 @@ public class StaffController {
 
 	// --------- Attendance methods ------------
 
-	// method to get Attendance Admin page
-	@GetMapping(path = "/attendanceAdmin")
-	public String adminAttendance(Model model) throws JsonProcessingException {
-		model.addAttribute("studentList", staffService.approvedStudentList(model));
-		return "attendanceAdmin";
-	}
-
 	// method to get attendance List
 	@GetMapping(path = "/attendancelist")
 	public String attendanceList(Model model) {
@@ -129,8 +122,8 @@ public class StaffController {
 	}
 
 	// method to add present
-	@GetMapping(path = "/addUpdatePresentbyone/{userId}")
-	public String addOrUpdatePresentByOne(@PathVariable(value = "userId") int userId, Model model)
+	@GetMapping(path = "/addUpdatePresentbyone")
+	public String addOrUpdatePresentByOne(@RequestParam("userId") int userId, Model model)
 			throws UserIdException, JsonProcessingException {
 		int value = staffService.addOrUpdatePresentByOne(userId);
 		if (value == 1) {
@@ -140,8 +133,8 @@ public class StaffController {
 	}
 
 	// method to add absent
-	@GetMapping(path = "/addUpdateAbsentbyone/{userId}")
-	public String addOrUpdateAbsentByOne(@PathVariable(value = "userId") int userId, Model model)
+	@GetMapping(path = "/addUpdateAbsentbyone")
+	public String addOrUpdateAbsentByOne(@RequestParam("userId") int userId, Model model)
 			throws UserIdException, JsonProcessingException {
 
 		int value = staffService.addOrUpdateAbsentByOne(userId);
@@ -357,7 +350,7 @@ public class StaffController {
 							if (examModel != null) {
 								int examId = examModel.getId();
 								result.setExamId(examId);
-
+								System.out.println(examId);
 								int value = staffService.addOrUpdateResult(result);
 								if (value == 1) {
 									return "redirect:/resultlist";

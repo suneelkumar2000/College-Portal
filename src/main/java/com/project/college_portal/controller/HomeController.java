@@ -94,6 +94,13 @@ public class HomeController {
 		return "attendance";
 	}
 
+	// method to get Attendance Admin page
+	@GetMapping(path = "/attendanceAdmin")
+	public String adminAttendance(Model model) throws JsonProcessingException {
+		model.addAttribute("studentList", staffService.approvedStudentList(model));
+		return "attendanceAdmin";
+	}
+
 	// method to get logout
 	@GetMapping(path = "/logout")
 	public String logout(HttpSession session) {
@@ -125,7 +132,7 @@ public class HomeController {
 						String name = subjectModel.getName();
 						map.addAttribute("subjectName", subject);
 						List<Subject> id = staffDao.findSubjectIdByName(name);
-						for (Subject subjectModel2 :id) {
+						for (Subject subjectModel2 : id) {
 							if (subjectModel2 != null) {
 								String SubjectID = subjectModel2.getId();
 								map.addAttribute("Exam", staffDao.findExamNameBySubjectID(SubjectID));
