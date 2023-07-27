@@ -280,7 +280,10 @@ public class StaffDao implements StaffInterface {
 						int daysAttended = attendanceModel1.getDaysAttended() + 1;
 						int daysLeave = attendanceModel1.getDaysLeave();
 						int totalDays = daysAttended + daysLeave;
-						double attendancePercentage = (daysAttended / totalDays) * 100;
+						double daysAttended2=Double.valueOf(daysAttended);
+						double totalDays2=Double.valueOf(totalDays);
+						double attendance = (daysAttended2 / totalDays2);
+						double attendancePercentage = attendance * 100;
 						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
 						Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
 						int noOfRows = jdbcTemplate.update(update, params);
@@ -291,7 +294,9 @@ public class StaffDao implements StaffInterface {
 				int daysAttended = 1;
 				int daysLeave = 0;
 				int totalDays = daysAttended + daysLeave;
-				double attendance = (daysAttended / totalDays);
+				double daysAttended2=Double.valueOf(daysAttended);
+				double totalDays2=Double.valueOf(totalDays);
+				double attendance = (daysAttended2 / totalDays2);
 				double attendancePercentage = attendance * 100;
 				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
 				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
@@ -321,7 +326,9 @@ public class StaffDao implements StaffInterface {
 						int daysAttended = attendanceModel1.getDaysAttended();
 						int daysLeave = attendanceModel1.getDaysLeave() + 1;
 						int totalDays = daysAttended + daysLeave;
-						double attendance = (daysAttended / totalDays);
+						double daysAttended2=Double.valueOf(daysAttended);
+						double totalDays2=Double.valueOf(totalDays);
+						double attendance = (daysAttended2 / totalDays2);
 						double attendancePercentage = attendance * 100;
 						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
 						Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
@@ -333,7 +340,10 @@ public class StaffDao implements StaffInterface {
 				int daysAttended = 0;
 				int daysLeave = 1;
 				int totalDays = daysAttended + daysLeave;
-				double attendancePercentage = (daysAttended / totalDays) * 100;
+				double daysAttended2=Double.valueOf(daysAttended);
+				double totalDays2=Double.valueOf(totalDays);
+				double attendance = (daysAttended2 / totalDays2);
+				double attendancePercentage = attendance * 100;
 				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
 				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
 				int noOfRows = jdbcTemplate.update(add, params);

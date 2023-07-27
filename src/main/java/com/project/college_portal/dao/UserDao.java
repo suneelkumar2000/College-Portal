@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExistMailIdException;
+import com.project.college_portal.exception.ForgotPasswordException;
 import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.interfaces.UserInterface;
 import com.project.college_portal.mapper.ApprovingMapper;
@@ -120,7 +121,7 @@ public class UserDao implements UserInterface {
 	}
 
 	// forgotPassword method
-	public int forgotPassword(User user) {
+	public int forgotPassword(User user) throws ForgotPasswordException {
 		// TODO Auto-generated method stub
 		String email = user.getEmail();
 		long phone = user.getPhone();
@@ -157,7 +158,7 @@ public class UserDao implements UserInterface {
 			}
 
 		}
-		return 0;
+		throw new ForgotPasswordException("Email dosen't exist");
 	}
 
 	// method to find user ID by email

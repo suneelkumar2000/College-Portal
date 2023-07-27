@@ -5,6 +5,8 @@
 	<title>Staff Home</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css"
+	th:href="@{/CSS file/footer.css}">
 	<style media="only screen">
 		html,
 		body {
@@ -42,10 +44,7 @@
 			width: 100%;
 		}
 
-		li a {
-			float: right;
-		}
-
+		
 		li span {
 			float: left;
 			align-items: center;
@@ -55,9 +54,16 @@
 			font-size: 20px;
 			font-weight: 600;
 			padding: 14px 16px;
+			font-family: "Times New Roman", Times, serif;
+		}
+
+		.logoimage {
+			width: 1.2em;
+			border-radius: 12px;
 		}
 
 		li a {
+			float: right;
 			align-items: center;
 			text-decoration: none;
 			color: #ffffff;
@@ -91,7 +97,7 @@
 			top: 0;
 			/* Stay at the top */
 			left: 0;
-			background-color: #111;
+			background: linear-gradient(180deg, #000000,#272d3f,#1e2436,#1e2436);
 			/* Black*/
 			overflow-x: hidden;
 			/* Disable horizontal scroll */
@@ -149,7 +155,9 @@
 		<nav>
 			<ul>
 				<li><a th:href="@{/logout}">Logout</a></li>
-				<li class="menu"><span onclick="openNav()">Menu</span></li>
+				<li class="menu"><span onclick="openNav()"><img
+							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE3SVASwK26QRvzCN9g96xpBMkouozClzxiQ&usqp=CAU"
+							class="logoimage"> BRIGHT</span></li>
 			</ul>
 		</nav>
 	</div>
@@ -167,6 +175,10 @@
 	<center>
 		<h1>WELCOME <span th:text="${session.firstName}"></span></h1>
 	</center>
+	
+	<div id="contactUs">
+		<div th:replace="footer.html::footer"></div>
+	</div>
 
 	<script>
 		function openNav() {

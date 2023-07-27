@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.dao.UserDao;
 import com.project.college_portal.exception.ExistMailIdException;
+import com.project.college_portal.exception.ForgotPasswordException;
 import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.model.User;
 
@@ -32,7 +33,7 @@ public class UserService {
 	}
 
 	// method for forgot Password
-	public int forgotPassword(User user, HttpSession session) {
+	public int forgotPassword(User user, HttpSession session) throws ForgotPasswordException {
 		int value = userDao.forgotPassword(user);
 		String email = user.getEmail();
 

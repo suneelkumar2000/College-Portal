@@ -2,9 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Department List</title>
+	<title>Semester List</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css"
+	th:href="@{/CSS file/footer.css}">
 	<style media="only screen">
 		html,
 		body {
@@ -45,15 +47,8 @@
 			width: 100%;
 		}
 
-		li a {
-			float: right;
-		}
-
 		li span {
 			float: left;
-		}
-
-		li span {
 			align-items: center;
 			text-decoration: none;
 			color: #ffffff;
@@ -61,9 +56,16 @@
 			font-size: 20px;
 			font-weight: 600;
 			padding: 14px 16px;
+			font-family: "Times New Roman", Times, serif;
+		}
+
+		.logoimage {
+			width: 1.2em;
+			border-radius: 12px;
 		}
 
 		li a {
+			float: right;
 			align-items: center;
 			text-decoration: none;
 			color: #ffffff;
@@ -97,7 +99,7 @@
 			top: 0;
 			/* Stay at the top */
 			left: 0;
-			background-color: #111;
+			background: linear-gradient(180deg, #000000,#272d3f,#1e2436,#1e2436);
 			/* Black*/
 			overflow-x: hidden;
 			/* Disable horizontal scroll */
@@ -159,11 +161,11 @@
         }
 
         .row:hover {
-            background-color: rgb(120, 233, 171);
+            background-color: rgb(105, 130, 201);
         }
 
         th {
-            background-color: #04AA6D;
+            background-color: #333955;
             color: white;
         }
 
@@ -179,7 +181,9 @@
 		<nav>
 			<ul>
 				<li><a th:href="@{/logout}">Logout</a></li>
-				<li class="menu"><span onclick="openNav()">Menu</span></li>
+				<li class="menu"><span onclick="openNav()"><img
+							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE3SVASwK26QRvzCN9g96xpBMkouozClzxiQ&usqp=CAU"
+							class="logoimage"> BRIGHT</span></li>
 			</ul>
 		</nav>
 	</div>
@@ -222,6 +226,10 @@
                 </tr>
             </tbody>
         </table>
+	</div>
+	
+	<div id="contactUs">
+		<div th:replace="footer.html::footer"></div>
 	</div>
 
     <script>

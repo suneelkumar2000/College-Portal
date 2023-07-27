@@ -50,7 +50,7 @@ function resultGrid() {
 	
 	function buttonFormatter(row, cell, value, columnDef, dataContext) {
 	let a = dataContext.userId ;
-    return '<form action="/resultPopup" metod="get"><button type="submit"  class="buttons" name="userId"  value="'+a+'">Add Marks</button></form>';
+    return '<form action="/resultPopup" metod="get"><button type="submit"  class="tablebutton1" name="userId"  value="'+a+'">Add Marks</button></form>';
     }
 	
 	var columns = [ {

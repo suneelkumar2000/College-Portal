@@ -5,6 +5,8 @@
 	<title>Student Home</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css"
+	th:href="@{/CSS file/footer.css}">
 	<style media="only screen">
 		html,
 		body {
@@ -97,7 +99,7 @@
 			top: 0;
 			/* Stay at the top */
 			left: 0;
-			background-color: #111;
+			background: linear-gradient(180deg, #000000,#272d3f,#1e2436,#1e2436);
 			/* Black*/
 			overflow-x: hidden;
 			/* Disable horizontal scroll */
@@ -216,6 +218,10 @@
 			</span>
 		</h2>
 	</center>
+	
+	<div id="contactUs">
+		<div th:replace="footer.html::footer"></div>
+	</div>
 
 	<script>
 		function openNav() {

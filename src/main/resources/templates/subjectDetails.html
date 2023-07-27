@@ -5,6 +5,7 @@
 	<title>Subject Details</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS file/footer.css}">
 
 	<link rel="stylesheet" th:href="@{/SlickGrid2/css/smoothness/jquery-ui-1.8.16.custom.css}" type="text/css" />
 	<link rel="stylesheet" th:href="@{/SlickGrid2/slick.grid.css}" type="text/css" />
@@ -32,8 +33,7 @@
 		body {
 			padding: 1rem;
 			overflow: auto;
-			background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxGztZUWNhl-4kI9iPj99J8Kg8vrYjBhI1hQ&usqp=CAU");
-			background-size: cover;
+
 		}
 
 		body h1 {
@@ -101,7 +101,7 @@
 			top: 0;
 			/* Stay at the top */
 			left: 0;
-			background-color: #111;
+			background: linear-gradient(180deg, #000000,#272d3f,#1e2436,#1e2436);
 			/* Black*/
 			overflow-x: hidden;
 			/* Disable horizontal scroll */
@@ -153,8 +153,15 @@
 		}
 
 		.container {
+			padding-left: 15px;
 			padding-top: 15px;
 			padding-bottom: 15px;
+			background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxGztZUWNhl-4kI9iPj99J8Kg8vrYjBhI1hQ&usqp=CAU");
+			background-size: cover;
+		}
+
+		.container h1 {
+			color: #000000;
 		}
 
 		.tablebutton1 {
@@ -244,6 +251,8 @@
 	</div>
 
 
+
+
 	<script>
 		function openNav() {
 			document.getElementById("mySidenav").style.width = "250px";
@@ -258,10 +267,13 @@
 			document.getElementById("mySidenav").style.width = "0";
 			document.getElementById("subject-info").style.paddingLeft = "0px";
 			document.getElementById("subject-info").style.transition = "0.5s";
-			document.getElementById("container").style.paddingLeft = "0px";
+			document.getElementById("container").style.paddingLeft = "15px";
 			document.getElementById("container").style.transition = "0.5s";
 		}
 	</script>
 </body>
+
+<div th:replace="footer.html::footer"></div>
+
 
 </html>

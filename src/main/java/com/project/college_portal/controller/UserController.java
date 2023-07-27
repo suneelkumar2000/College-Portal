@@ -20,6 +20,7 @@ import com.project.college_portal.exception.ExistExamException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ExistSemesterIdException;
 import com.project.college_portal.exception.ExistSubjectNameException;
+import com.project.college_portal.exception.ForgotPasswordException;
 import com.project.college_portal.exception.HigherAuthorityException;
 import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.exception.MarkException;
@@ -82,7 +83,7 @@ public class UserController {
 	// method to get forgot password
 	@GetMapping(path = "/forgotPassword")
 	public String forgotPassword(@RequestParam("email") String email, @RequestParam("password") String password,
-			@RequestParam("phone") Long phone, HttpSession session) {
+			@RequestParam("phone") Long phone, HttpSession session) throws ForgotPasswordException {
 		User user = new User();
 		user.setEmail(email);
 		user.setPhone(phone);
@@ -128,15 +129,14 @@ public class UserController {
 		model.addAttribute("subjectList", staffService.findSubjectListBySemester(semesterId, model));
 		return "subjectDetails";
 	}
-	
-	//method to view student result
+
+	// method to view student result
 	@GetMapping(path = "/studentResult")
 	public String findStudentResult(Model model, HttpSession session) throws JsonProcessingException {
 		int userId = (int) session.getAttribute("userId");
 		model.addAttribute("subjectList", userDao.findStudentResult(userId, model));
 		return "studentResult";
 	}
-	
 
 	// ----------Exception methods---------
 
@@ -221,6 +221,13 @@ public class UserController {
 	@ExceptionHandler(value = ExistSubjectNameException.class)
 	public String ExistSubjectNameException(ExistSubjectNameException exception, Model model) {
 		model.addAttribute("ErrorMessage", "Subject Already Exist");
+		return "errorpopup";
+	}
+
+	// method to handle ForgotPasswordException
+	@ExceptionHandler(value = ForgotPasswordException.class)
+	public String ExistSubjectNameException(ForgotPasswordException exception, Model model) {
+		model.addAttribute("ErrorMessage", "Sorry! Invalid Email Id or Phone Number");
 		return "errorpopup";
 	}
 }

@@ -5,6 +5,8 @@
 	<title>Department List</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css"
+	th:href="@{/CSS file/footer.css}">
 
 	<link rel="stylesheet" th:href="@{/SlickGrid2/css/smoothness/jquery-ui-1.8.16.custom.css}" type="text/css" />
 	<link rel="stylesheet" th:href="@{/SlickGrid2/slick.grid.css}" type="text/css" />
@@ -99,7 +101,7 @@
 			top: 0;
 			/* Stay at the top */
 			left: 0;
-			background-color: #111;
+			background: linear-gradient(180deg, #000000,#272d3f,#1e2436,#1e2436);
 			/* Black*/
 			overflow-x: hidden;
 			/* Disable horizontal scroll */
@@ -241,6 +243,10 @@
 			</script>
 		</div>
 		<!-- donation table end -->
+	</div>
+	
+	<div id="contactUs">
+		<div th:replace="footer.html::footer"></div>
 	</div>
 
 

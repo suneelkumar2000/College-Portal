@@ -5,6 +5,7 @@
 	<title>Student Home</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS file/footer.css}">
 	<style media="only screen">
 		html,
 		body {
@@ -97,7 +98,7 @@
 			top: 0;
 			/* Stay at the top */
 			left: 0;
-			background-color: #111;
+			background: linear-gradient(180deg, #000000, #272d3f, #1e2436, #1e2436);
 			/* Black*/
 			overflow-x: hidden;
 			/* Disable horizontal scroll */
@@ -147,23 +148,23 @@
 				font-size: 18px;
 			}
 		}
-		
+
 		svg {
-            margin: auto;
-        }
+			margin: auto;
+		}
 
-        svg text {
-            font-family: Roboto;
-        }
+		svg text {
+			font-family: Roboto;
+		}
 
-        svg text.label {
-            font-size: 22px;
-        }
+		svg text.label {
+			font-size: 22px;
+		}
 
-        svg text.rate {
-            font-weight: bold;
-            font-size: 35px;
-        }
+		svg text.rate {
+			font-weight: bold;
+			font-size: 35px;
+		}
 	</style>
 </head>
 
@@ -183,69 +184,80 @@
 		<a th:href="@{/studentResult}">Result</a>
 	</div>
 	<center>
-		<h1>WELCOME </h1><h1 th:text="${session.firstName}"></h1>
-		
+		<h1>WELCOME </h1>
+		<h1 th:text="${session.firstName}"></h1>
+
 	</center>
-	<svg id="gauge" height="180" width="300">
-        <defs>
-            <mask id="donut">
-                <path d="M 0 150
+	<div class="attendance" id="attendance">
+		<svg id="gauge" height="180" width="300">
+			<defs>
+				<mask id="donut">
+					<path d="M 0 150
                  A 45 45, 0, 0, 1, 300 150
                  L 230 150
                  A 45 45, 0, 0, 0, 70, 150
                  L 0 150" fill="white" stroke="black" />
-            </mask>
-        </defs>
+				</mask>
+			</defs>
 
-        <path d="M 0 150
+			<path d="M 0 150
                  A 45 45, 0, 0, 1, 300 150
                  L 230 150
                  A 45 45, 0, 0, 0, 70, 150
                  L 0 150" fill="white" stroke="#BBBBBB" />
 
-        <g mask="url(#donut)">
-            <rect x="0" y="150" height="150" width="300" :fill="color" :transform="`rotate(${rotation} 150 150)`" />
-        </g>
+			<g mask="url(#donut)">
+				<rect x="0" y="150" height="150" width="300" :fill="color" :transform="`rotate(${rotation} 150 150)`" />
+			</g>
 
-        <text class="rate" x="150" y="135" text-anchor="middle">%</text>
-        <text class="label" x="150" y="180" text-anchor="middle">Attendance</text>
-    </svg>
+			<text class="rate" x="150" y="135" text-anchor="middle">%</text>
+			<text class="label" x="150" y="180" text-anchor="middle">Attendance</text>
+		</svg>
+	</div>
+
+	<div id="contactUs">
+		<div th:replace="footer.html::footer"></div>
+	</div>
 	<script>
 		function openNav() {
 			document.getElementById("mySidenav").style.width = "250px";
+			document.getElementById("attendance").style.paddingLeft = "250px";
+			document.getElementById("attendance").style.transition = "0.5s";
 		}
 
 		/* Set the width of the side navigation to 0 */
 		function closeNav() {
 			document.getElementById("mySidenav").style.width = "0";
+			document.getElementById("attendance").style.paddingLeft = "15px";
+			document.getElementById("attendance").style.transition = "0.5s";
 		}
 	</script>
 	<script>
-        new Vue({
-            el: '#gauge',
-            data: {
-                label: 'Attendance',
-                rate: .9378,
-            },
-            computed: {
-                rotation() { return this.scale(this.rate, 1, 180); },
-                color() {
-                    if (this.rate >= .9) return '#007A3D'; // Green
-                    if (this.rate >= .75) return '#F9D616'; // Yellow
-                    return '#CE1126'; // Red
-                },
-            },
-            methods: {
-                scale(n, domainMax, rangeMax) {
-                    const rate = n / domainMax;
-                    return rangeMax * rate;
-                },
-            },
-            filters: {
-                percentage: n => '${(n * 100).toFixed(1)}%',
-            },
-        })
-    </script>
+		new Vue({
+			el: '#gauge',
+			data: {
+				label: 'Attendance',
+				rate: .9378,
+			},
+			computed: {
+				rotation() {return this.scale(this.rate, 1, 180);},
+				color() {
+					if (this.rate >= .9) return '#007A3D'; // Green
+					if (this.rate >= .75) return '#F9D616'; // Yellow
+					return '#CE1126'; // Red
+				},
+			},
+			methods: {
+				scale(n, domainMax, rangeMax) {
+					const rate = n / domainMax;
+					return rangeMax * rate;
+				},
+			},
+			filters: {
+				percentage: n => '${(n * 100).toFixed(1)}%',
+			},
+		})
+	</script>
 </body>
 
 </html>
