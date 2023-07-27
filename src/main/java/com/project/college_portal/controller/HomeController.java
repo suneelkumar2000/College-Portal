@@ -54,7 +54,7 @@ public class HomeController {
 	// method to get index page
 	@GetMapping(path = "/index")
 	public String index() {
-		logger.info("Email : " + email);
+		logger.info("Email : " , email);
 		return "index";
 	}
 
@@ -75,15 +75,14 @@ public class HomeController {
 	@GetMapping(path = "/studentHome")
 	public String studentHome(ModelMap map, Model model, HttpSession session) throws JsonProcessingException {
 		userService.updateStudentSemester(model);
-		int UserId = (int) session.getAttribute(sessionUserId);
-		userService.setUserSessionById(UserId, session);
-		int value = userService.findStudentSemesterById(UserId, model);
+		int userId = (int) session.getAttribute(sessionUserId);
+		userService.setUserSessionById(userId, session);
+		int value = userService.findStudentSemesterById(userId, model);
 		if (value > 0) {
 			String department = (String) session.getAttribute(sessionDepartment);
 			session.setAttribute(sessionSemester, value);
 			map.addAttribute(modelSemester, value);
 			map.addAttribute("subjectList", staffService.findSubjectList(value, department, model));
-			System.out.println();
 		} else {
 			model.addAttribute(modelSemester, value);
 		}
@@ -143,9 +142,9 @@ public class HomeController {
 						List<Subject> id = staffDao.findSubjectIdByName(name);
 						for (Subject subjectModel2 : id) {
 							if (subjectModel2 != null) {
-								String SubjectID = subjectModel2.getId();
-								map.addAttribute("Exam", staffDao.findExamNameBySubjectID(SubjectID));
-								map.addAttribute("ExamType", staffDao.findExamTypeBySubjectID(SubjectID));
+								String subjectID = subjectModel2.getId();
+								map.addAttribute("Exam", staffDao.findExamNameBySubjectID(subjectID));
+								map.addAttribute("ExamType", staffDao.findExamTypeBySubjectID(subjectID));
 							}
 						}
 					}

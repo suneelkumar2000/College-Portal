@@ -15,13 +15,13 @@ public class MailScheduler {
 	@Scheduled(fixedDelayString = "12000")
 	public void notifyMail() {
 		LocalDateTime todayDateTime = LocalDateTime.now();
-		logger.info("notifymail :" + todayDateTime);
+		logger.info("notifymail :" ,todayDateTime);
 	}
 
 	@Scheduled(cron = "0 */1 * * * *")
 	public void notifyMailCron() {
 		LocalDateTime todayDateTime = LocalDateTime.now();
-		logger.info("notifymailcron :" + todayDateTime);
+		logger.info("notifymailcron :" ,todayDateTime);
 	}
 
 }
