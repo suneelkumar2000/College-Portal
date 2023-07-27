@@ -56,51 +56,51 @@ function userGrid() {
 		formatter: checkboxFormatter
 	}, {
 		id: "userId",
-		name: "userId",
+		name: "UserId",
 		field: "userId",
 		type: 'numberColumn',
 		width: 100,
 		sortable: true
 	}, {
 		id: "firstName",
-		name: "firstName",
+		name: "First Name",
 		field: "firstName",
 		sortable: true
 	}, {
 		id: "lastName",
-		name: "lastName",
+		name: "Last Name",
 		field: "lastName",
 		sortable: true
 	}, {
 		id: "gender",
-		name: "gender",
+		name: "Gender",
 		field: "gender",
 		width: 100,
 		sortable: true
 	},{
 		id: "parentName",
-		name: "parentName",
+		name: "parent Name",
 		field: "parentName",
 		sortable: true
 	}, {
 		id: "email",
-		name: "email",
+		name: "Email Id",
 		field: "email",
 		sortable: true
 	}, {
 		id: "phone",
-		name: "phone",
+		name: "Phone Number",
 		field: "phone",
 		type: 'numberColumn',
 		sortable: true
 	}, {
 		id: "department",
-		name: "department",
+		name: "Department",
 		field: "department",
 		sortable: true
 	}, {
 		id: "status",
-		name: "status",
+		name: "Status",
 		field: "status",
 		width: 100,
 		sortable: true

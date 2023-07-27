@@ -55,29 +55,29 @@ function studentResultGrid() {
 	
 	var columns = [ {
 		id: "examId",
-		name: "examId",
+		name: "Exam Id",
 		field: "examId",
 		type: 'numberColumn',
 		width: 100,
 		sortable: true
 	}, {
 		id: "subjectId",
-		name: "subjectId",
+		name: "Subject Id",
 		field: "subjectId",
 		sortable: true
 	}, {
 		id: "subjectName",
-		name: "subjectName",
+		name: "Subject Name",
 		field: "subjectName",
 		sortable: true
 	},{
 		id: "semesterId",
-		name: "semesterId",
+		name: "Semester Id",
 		field: "semesterId",
 		sortable: true
 	},{
 		id : "marks",
-		name : "marks",
+		name : "Marks",
 		field : "marks",
 		width:200
 	}];

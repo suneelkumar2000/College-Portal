@@ -55,35 +55,35 @@ function resultGrid() {
 	
 	var columns = [ {
 		id: "userId",
-		name: "userId",
+		name: "User Id",
 		field: "userId",
 		type: 'numberColumn',
 		width: 100,
 		sortable: true
 	}, {
 		id: "firstName",
-		name: "firstName",
+		name: "First Name",
 		field: "firstName",
 		sortable: true
 	}, {
 		id: "lastName",
-		name: "lastName",
+		name: "Last Name",
 		field: "lastName",
 		sortable: true
 	},{
 		id: "department",
-		name: "department",
+		name: "Department",
 		field: "department",
 		sortable: true
 	}, {
 		id: "semester",
-		name: "semester",
+		name: "Semester",
 		field: "semester",
 		width: 100,
 		sortable: true
 	},{
 		id : "addMarks",
-		name : "addMarks",
+		name : "Add Marks",
 		field : "addMarks",
 		formatter:buttonFormatter,
 		width:200

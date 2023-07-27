@@ -51,35 +51,35 @@ function subjectGrid() {
 	
 	var columns = [{
 		id: "id",
-		name: "id",
+		name: "Id",
 		field: "id",
 		width: 100,
 		sortable: true
 	}, {
 		id: "name",
-		name: "name",
+		name: "Name",
 		field: "name",
 		sortable: true
 	}, {
 		id: "semesterId",
-		name: "semesterId",
+		name: "Semester Id",
 		field: "semesterId",
 		width: 100,
 		sortable: true
 	}, {
 		id: "department",
-		name: "department",
+		name: "Department",
 		field: "department",
 		sortable: true
 	},{
 		id: "isActive",
-		name: "isActive",
+		name: "Status",
 		field: "isActive",
 		//formatter: messageFormatter,
 		sortable: true
 	},{
 		id: "actions",
-		name: "actions",
+		name: "Action",
 		field: "actions",
 		formatter: buttonFormatter,
 		width: 200

@@ -51,25 +51,25 @@ function departmentGrid() {
 
 	var columns = [{
 		id: "id",
-		name: "id",
+		name: "Id",
 		field: "id",
 		type: 'numberColumn',
 		width: 100,
 		sortable: true
 	}, {
 		id: "department",
-		name: "department",
+		name: "Department",
 		field: "department",
 		sortable: true
 	}, {
 		id: "isActive",
-		name: "isActive",
+		name: "Status",
 		field: "isActive",
 		formatter: messageFormatter,
 		sortable: true
 	},{
 		id: "actions",
-		name: "actions",
+		name: "Actions",
 		field: "actions",
 		formatter: buttonFormatter,
 		width: 200

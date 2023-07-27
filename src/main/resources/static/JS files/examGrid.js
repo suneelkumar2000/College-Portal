@@ -52,41 +52,41 @@ function examGrid() {
 	
 	var columns = [{
 		id: "id",
-		name: "id",
+		name: "Id",
 		field: "id",
 		type: 'numberColumn',
 		width: 100,
 		sortable:true
 	}, {
 		id: "subjectId",
-		name: "subjectId",
+		name: "Subject Id",
 		field: "subjectId",
 		sortable:true
 	},{
 		id: "name",
-		name: "name",
+		name: "Exam Name",
 		field: "name",
 		sortable:true
 	},{
 		id: "date",
-		name: "date",
+		name: "Exam Date",
 		field: "date",
 		sortable:true,
 		formatter:dateFormatter
 	}, {
 		id: "type",
-		name: "type",
+		name: "Exam Type",
 		field: "type",
 		sortable:true
 	},{
 		id: "isActive",
-		name: "isActive",
+		name: "Status",
 		field: "isActive",
 		//formatter: messageFormatter,
 		sortable: true
 	},{
 		id: "actions",
-		name: "actions",
+		name: "Action",
 		field: "actions",
 		formatter: buttonFormatter,
 		width: 200
