@@ -1,17 +1,17 @@
 function attendanceGrid() {
 
-	var dataView;
-	var grid;
-	var data1 = document.getElementById("users").value;
-	var data = JSON.parse(data1);
+	let dataView;
+	let grid;
+	let data1 = document.getElementById("users").value;
+	let data = JSON.parse(data1);
 	console.log(data);
 
 	/* set unique it to array */
 
-	var nextId = 1;
+	let nextId = 1;
 	data.forEach(function(item) {
 		// Generate a unique id using the nextId value
-		var itemId = "user_" + nextId;
+		let itemId = "user_" + nextId;
 
 		// Set the id property of the item object
 		item.id = itemId;
@@ -28,9 +28,9 @@ function attendanceGrid() {
 	/*date formator start */
 	function dateFormatter(row, cell, value, columnDef, dataContext) {
 		const date = new Date(value);
-		var getDay = date.toLocaleString("default", { day: "2-digit" });
-		var getMonth = date.toLocaleString("default", { month: "2-digit" });
-		var getYear = date.toLocaleString("default", { year: "numeric" }); // Set the desired date format
+		let getDay = date.toLocaleString("default", { day: "2-digit" });
+		let getMonth = date.toLocaleString("default", { month: "2-digit" });
+		let getYear = date.toLocaleString("default", { year: "numeric" }); // Set the desired date format
 		const formattedDate = getDay + "-" + getMonth + "-" + getYear;// Format the date as a string
 		return formattedDate; // Return the formatted date string
 	}
@@ -42,8 +42,8 @@ function attendanceGrid() {
 		return '<input type="checkbox" value="' + a + '" name="checkName" id="checkBox"' + (value ? 'checked="checked"' : '') + '/>';
 	}
 
-	//var check= document.getElementById("checkBox");
-	var check = document.querySelectorAll('input[type="checkbox"]:checked');
+	//let check= document.getElementById("checkBox");
+	let check = document.querySelectorAll('input[type="checkbox"]:checked');
 	console.log(check);
 
 	/* check box funtion end */
@@ -58,7 +58,7 @@ function attendanceGrid() {
     return '<form action="/addUpdateAbsentbyone" metod="get"><button type="submit"  class="tablebutton1" name="userId"  value="'+a+'">Absent</button></form>';
     }
 	
-	var columns = [ {
+	let columns = [ {
 		id: "userId",
 		name: "User Id",
 		field: "userId",
@@ -100,7 +100,7 @@ function attendanceGrid() {
 		width:200
 	}];
 
-	var options = {
+	let options = {
 		editable: true,
 		enableAddRow: false,
 		enableCellNavigation: true,
@@ -112,12 +112,12 @@ function attendanceGrid() {
 		topPanelHeight: 25
 	};
 
-	var columnFilters = {};
+	let columnFilters = {};
 
-	var sortcol = "title";
-	var sortdir = 1;
-	var percentCompleteThreshold = 0;
-	var searchString = "";
+	let sortcol = "title";
+	let sortdir = 1;
+	let percentCompleteThreshold = 0;
+	let searchString = "";
 
 	function requiredFieldValidator(value) {
 		if (value === null || value === undefined || !value.length) {
@@ -145,7 +145,7 @@ function attendanceGrid() {
 	}
 
 	function comparer(a, b) {
-		var x = a[sortcol], y = b[sortcol];
+		let x = a[sortcol], y = b[sortcol];
 		return (x === y ? 0 : (x > y ? 1 : -1));
 	}
 
@@ -166,12 +166,12 @@ function attendanceGrid() {
 	$(function() {
 		/* filter start */
 		function filter(item) {
-			for (var columnId in columnFilters) {
+			for (let columnId in columnFilters) {
 				if (columnId !== undefined && columnFilters[columnId] !== "") {
-					var column = grid.getColumns()[grid.getColumnIndex(columnId)];
+					let column = grid.getColumns()[grid.getColumnIndex(columnId)];
 
 					if (item[column.field] !== undefined) {
-						var filterResult = typeof item[column.field].indexOf === 'function'
+						let filterResult = typeof item[column.field].indexOf === 'function'
 							? (item[column.field].indexOf(columnFilters[columnId]) === -1)
 							: (item[column.field] !== columnFilters[columnId]);
 
@@ -191,8 +191,8 @@ function attendanceGrid() {
 		grid = new Slick.Grid("#attendanceGrid", dataView, columns, options);
 		grid.setSelectionModel(new Slick.RowSelectionModel());
 
-	//	var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
-	//	var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
+	//	let pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
+	//	let columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
 		// header row start
 		dataView.onRowCountChanged.subscribe(function(e, args) {
@@ -207,7 +207,7 @@ function attendanceGrid() {
 
 		$(grid.getHeaderRow()).delegate(":input", "change keyup",
 			function(e) {
-				var columnId = $(this).data("columnId");
+				let columnId = $(this).data("columnId");
 				if (columnId != null) {
 					columnFilters[columnId] = $.trim($(this).val());
 					dataView.refresh();
@@ -233,7 +233,7 @@ function attendanceGrid() {
 		});
 /*
 		grid.onAddNewRow.subscribe(function(e, args) {
-			var item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
+			let item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
 			$.extend(item, args.item);
 			dataView.addItem(item);
 		});
@@ -244,8 +244,8 @@ function attendanceGrid() {
 				return false;
 			}
 
-			var rows = [];
-			for (var i = 0; i < dataView.getLength(); i++) {
+			let rows = [];
+			for (let i = 0; i < dataView.getLength(); i++) {
 				rows.push(i);
 			}
 
@@ -261,8 +261,8 @@ function attendanceGrid() {
 				// using temporary Object.prototype.toString override
 				// more limited and does lexicographic sort only by default, but can be much faster
 
-				var percentCompleteValueFn = function() {
-					var val = this["percentComplete"];
+				let percentCompleteValueFn = function() {
+					let val = this["percentComplete"];
 					if (val < 10) {
 						return "00" + val;
 					} else if (val < 100) {
@@ -293,9 +293,9 @@ function attendanceGrid() {
 		});
 
 		dataView.onPagingInfoChanged.subscribe(function(e, pagingInfo) {
-			var isLastPage = pagingInfo.pageNum === pagingInfo.totalPages - 1;
-			var enableAddRow = isLastPage || pagingInfo.pageSize === 0;
-			var options = grid.getOptions();
+			let isLastPage = pagingInfo.pageNum === pagingInfo.totalPages - 1;
+			let enableAddRow = isLastPage || pagingInfo.pageSize === 0;
+			let options = grid.getOptions();
 
 			if (options.enableAddRow !== enableAddRow) {
 				grid.setOptions({ enableAddRow: enableAddRow });
@@ -303,7 +303,7 @@ function attendanceGrid() {
 		});
 
 
-		var h_runfilters = null;
+		let h_runfilters = null;
 		/*
 				// wire up the slider to apply the filter to the model
 				$("#pcSlider,#pcSlider2").slider({
@@ -346,8 +346,8 @@ function attendanceGrid() {
 				return;
 			}
 
-			var rows = [];
-			for (var i = 0; i < 10 && i < dataView.getLength(); i++) {
+			let rows = [];
+			for (let i = 0; i < 10 && i < dataView.getLength(); i++) {
 				rows.push(i);
 			}
 

@@ -4,13 +4,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,7 +36,14 @@ import com.project.college_portal.exception.HigherAuthorityException;
 
 @Controller
 public class HomeController {
+	
+	String sessionUserId= "userId";
+	String sessionDepartment= "department";
+	String sessionSemester="semester";
+	String modelUserId= "userId";
+	String modelSemester= "semester";
 
+	Logger logger = LoggerFactory.getLogger(HomeController.class);
 	StaffDao staffDao = new StaffDao();
 	UserDao userDao = new UserDao();
 	UserService userService = new UserService();
@@ -46,7 +54,7 @@ public class HomeController {
 	// method to get index page
 	@GetMapping(path = "/index")
 	public String index() {
-		System.out.println("Email : " + email);
+		logger.info("Email : " + email);
 		return "index";
 	}
 
@@ -67,17 +75,17 @@ public class HomeController {
 	@GetMapping(path = "/studentHome")
 	public String studentHome(ModelMap map, Model model, HttpSession session) throws JsonProcessingException {
 		userService.updateStudentSemester(model);
-		int UserId = (int) session.getAttribute("userId");
+		int UserId = (int) session.getAttribute(sessionUserId);
 		userService.setUserSessionById(UserId, session);
 		int value = userService.findStudentSemesterById(UserId, model);
 		if (value > 0) {
-			String department = (String) session.getAttribute("department");
-			session.setAttribute("semester", value);
-			map.addAttribute("semester", value);
+			String department = (String) session.getAttribute(sessionDepartment);
+			session.setAttribute(sessionSemester, value);
+			map.addAttribute(modelSemester, value);
 			map.addAttribute("subjectList", staffService.findSubjectList(value, department, model));
 			System.out.println();
 		} else {
-			model.addAttribute("semester", value);
+			model.addAttribute(modelSemester, value);
 		}
 		return "Home";
 	}
@@ -123,7 +131,7 @@ public class HomeController {
 		List<User> user = staffDao.findStudentById(userId, model);
 		for (User userModel : user) {
 			if (userModel != null) {
-				map.addAttribute("userId", userId);
+				map.addAttribute(modelUserId, userId);
 				map.addAttribute("userName", userModel.getFirstName());
 				String department = userModel.getDepartment();
 				int semester = userModel.getSemester();
@@ -156,7 +164,7 @@ public class HomeController {
 	// method to get department form
 	@GetMapping(path = "/insertDepartmentForm")
 	public String departmentForm(HttpSession session) throws HigherAuthorityException {
-		int staffId = (int) session.getAttribute("userId");
+		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
 		return "departmentForm";
 	}
@@ -164,7 +172,7 @@ public class HomeController {
 	// method to get semester form
 	@GetMapping(path = "/insertSemesterForm")
 	public String semesterForm(HttpSession session) throws HigherAuthorityException {
-		int staffId = (int) session.getAttribute("userId");
+		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
 		return "semesterForm";
 	}
@@ -173,7 +181,7 @@ public class HomeController {
 	@GetMapping(path = "/insertSubjectForm")
 	public String subjectForm(ModelMap map, Model model, HttpSession session)
 			throws JsonProcessingException, HigherAuthorityException {
-		int staffId = (int) session.getAttribute("userId");
+		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
 		map.addAttribute("departmentList", staffService.departmentList(model));
 		map.addAttribute("semesterList", staffService.semesterList(model));
