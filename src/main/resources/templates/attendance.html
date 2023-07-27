@@ -154,7 +154,7 @@
 		}
 
 		svg text {
-			font-family: Roboto;
+			font-family: Roboto, sans-serif;
 		}
 
 		svg text.label {
@@ -165,6 +165,11 @@
 			font-weight: bold;
 			font-size: 35px;
 		}
+
+		.center {
+			align-items: center;
+			text-align: center;
+		}
 	</style>
 </head>
 
@@ -174,8 +179,8 @@
 			<ul>
 				<li><a th:href="@{/logout}">Logout</a></li>
 				<li class="menu"><span onclick="openNav()"><img
-							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE3SVASwK26QRvzCN9g96xpBMkouozClzxiQ&usqp=CAU" alt="logo"
-							class="logoimage"> BRIGHT</span></li>
+							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE3SVASwK26QRvzCN9g96xpBMkouozClzxiQ&usqp=CAU"
+							alt="logo" class="logoimage"> BRIGHT</span></li>
 			</ul>
 		</nav>
 	</div>
@@ -185,36 +190,13 @@
 		<a th:href="@{/attendance}">Attendance</a>
 		<a th:href="@{/studentResult}">Result</a>
 	</div>
-	<center>
+	<div class="center">
 		<h1>WELCOME </h1>
 		<h1 th:text="${session.firstName}"></h1>
 
-	</center>
+	</div>
 	<div class="attendance" id="attendance">
-		<svg id="gauge" height="180" width="300">
-			<defs>
-				<mask id="donut">
-					<path d="M 0 150
-                 A 45 45, 0, 0, 1, 300 150
-                 L 230 150
-                 A 45 45, 0, 0, 0, 70, 150
-                 L 0 150" fill="white" stroke="black" />
-				</mask>
-			</defs>
-
-			<path d="M 0 150
-                 A 45 45, 0, 0, 1, 300 150
-                 L 230 150
-                 A 45 45, 0, 0, 0, 70, 150
-                 L 0 150" fill="white" stroke="#BBBBBB" />
-
-			<g mask="url(#donut)">
-				<rect x="0" y="150" height="150" width="300" :fill="color" :transform="`rotate(${rotation} 150 150)`" />
-			</g>
-
-			<text class="rate" x="150" y="135" text-anchor="middle">%</text>
-			<text class="label" x="150" y="180" text-anchor="middle">Attendance</text>
-		</svg>
+		
 	</div>
 
 	<div id="contactUs">
@@ -234,32 +216,7 @@
 			document.getElementById("attendance").style.transition = "0.5s";
 		}
 	</script>
-	<script>
-		new Vue({
-			el: '#gauge',
-			data: {
-				label: 'Attendance',
-				rate: .9378,
-			},
-			computed: {
-				rotation() {return this.scale(this.rate, 1, 180);},
-				color() {
-					if (this.rate >= .9) return '#007A3D'; // Green
-					if (this.rate >= .75) return '#F9D616'; // Yellow
-					return '#CE1126'; // Red
-				},
-			},
-			methods: {
-				scale(n, domainMax, rangeMax) {
-					const rate = n / domainMax;
-					return rangeMax * rate;
-				},
-			},
-			filters: {
-				percentage: n => '${(n * 100).toFixed(1)}%',
-			},
-		})
-	</script>
+	
 </body>
 
 </html>

@@ -177,7 +177,6 @@ public class UserDao implements UserInterface {
 	public int setUserSessionById(int UserId, HttpSession session) {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (id=?)";
 		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), UserId);
-		session.setAttribute("userList", userDetails);
 		for (User userModel : userDetails) {
 			if (userModel != null) {
 				session.setAttribute("firstName", userModel.getFirstName());

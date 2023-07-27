@@ -147,6 +147,10 @@
 				font-size: 18px;
 			}
 		}
+		.center {
+			align-items: center;
+			text-align: center;
+		}
 	</style>
 </head>
 
@@ -172,9 +176,9 @@
     	<a th:href="@{/subjectDetails}">Subject Details</a>
     	<a th:href="@{/examlist}">Exam Details</a>
 	</div>
-	<center>
+	<div class="center">
 		<h1>WELCOME <span th:text="${session.firstName}"></span></h1>
-	</center>
+	</div>
 	
 	<div id="contactUs">
 		<div th:replace="footer.html::footer"></div>
