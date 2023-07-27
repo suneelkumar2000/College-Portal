@@ -251,7 +251,6 @@ public class UserDao implements UserInterface {
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
-								System.out.println(1);
 							} else if ((yearDifference < 2 && yearDifference >= 1)) {
 								if ((semesterId <= 4) && (semesterId > 2)) {
 									String update = "update user set semester =? where id=?";

@@ -3,12 +3,10 @@ package com.project.college_portal.dao;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.DepartmentException;
@@ -50,8 +48,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Repository
 public class StaffDao implements StaffInterface {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
-	Logger logger = LoggerFactory.getLogger(StaffDao.class);
 	
+	String modelUserId= "userId";
 	String selectdepartment ="Select id,department,is_active from classroom";
 
 	// --------- Students methods ------------
@@ -108,8 +106,7 @@ public class StaffDao implements StaffInterface {
 					if (userModel2 != null) {
 						String approve = "update user set status='approved'  where (roll='student' and id=?)";
 						Object[] params = { approveUser.getUserId() };
-						int noOfRows = jdbcTemplate.update(approve, params);
-						logger.info(noOfRows + " student are approved");
+						jdbcTemplate.update(approve, params);
 						return 1;
 					}
 				}
@@ -152,8 +149,7 @@ public class StaffDao implements StaffInterface {
 			if (userModel1 != null) {
 				String deactivate = "update user set is_active = false  where (roll='student' and id=?)";
 				Object[] params = { users.getUserId() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.warn(noOfRows + " student are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -161,8 +157,7 @@ public class StaffDao implements StaffInterface {
 			if (userModel2 != null) {
 				String activate = "update user set is_active = true where (roll='student' and id=?)";
 				Object[] params = { users.getUserId() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " student are activated");
+				jdbcTemplate.update(activate, params);
 				return 1;
 			}
 		}
@@ -200,7 +195,6 @@ public class StaffDao implements StaffInterface {
 				Object[] params = { name };
 				int noOfRows = jdbcTemplate.update(add, params);
 				if (noOfRows > 0) {
-					logger.info(noOfRows + "Saved");
 					return 1;
 				} else
 					return 0;
@@ -222,8 +216,7 @@ public class StaffDao implements StaffInterface {
 			if (departmentModel1 != null) {
 				String deactivate = "update classroom set is_active =false where department=?";
 				Object[] params = { Department.getDepartment() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.warn(noOfRows + " department are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -231,8 +224,7 @@ public class StaffDao implements StaffInterface {
 			if (departmentModel2 != null) {
 				String activate = "update classroom set is_active =true where department=?";
 				Object[] params = { Department.getDepartment() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " department are activated");
+				jdbcTemplate.update(activate, params);
 				return 2;
 			}
 		}
@@ -244,8 +236,6 @@ public class StaffDao implements StaffInterface {
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		ObjectMapper object = new ObjectMapper();
 		String department = object.writeValueAsString(departmentList);
-		System.out.println(departmentList);
-		System.out.println(department);
 		model.addAttribute("listOfDepartment", department);
 		return departmentList;
 	}
@@ -285,8 +275,7 @@ public class StaffDao implements StaffInterface {
 						double attendancePercentage = attendance * 100;
 						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
 						Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
-						int noOfRows = jdbcTemplate.update(update, params);
-						logger.info(noOfRows + " updated");
+						jdbcTemplate.update(update, params);
 						return 1;
 					}
 				}
@@ -299,8 +288,7 @@ public class StaffDao implements StaffInterface {
 				double attendancePercentage = attendance * 100;
 				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
 				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
-				int noOfRows = jdbcTemplate.update(add, params);
-				logger.info(noOfRows + " inserted");
+				jdbcTemplate.update(add, params);
 				return 1;
 			}
 		}
@@ -331,8 +319,7 @@ public class StaffDao implements StaffInterface {
 						double attendancePercentage = attendance * 100;
 						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
 						Object[] params = { totalDays, daysAttended, daysLeave, attendancePercentage, userId };
-						int noOfRows = jdbcTemplate.update(update, params);
-						logger.info(noOfRows + " updated");
+						jdbcTemplate.update(update, params);
 						return 1;
 					}
 				}
@@ -345,8 +332,7 @@ public class StaffDao implements StaffInterface {
 				double attendancePercentage = attendance * 100;
 				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
 				Object[] params = { userId, totalDays, daysAttended, daysLeave, attendancePercentage };
-				int noOfRows = jdbcTemplate.update(add, params);
-				logger.info(noOfRows + " insert");
+				jdbcTemplate.update(add, params);
 				return 1;
 			}
 		}
@@ -366,8 +352,7 @@ public class StaffDao implements StaffInterface {
 			if (attendanceModel1 != null) {
 				String deactivate = "update attendance set is_active =false where user_id=?";
 				Object[] params = { attendance.getUserId() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.info(noOfRows + " user attendance are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -375,8 +360,7 @@ public class StaffDao implements StaffInterface {
 			if (attendanceModel2 != null) {
 				String activate = "update attendance set is_active =true where user_id=?";
 				Object[] params = { attendance.getUserId() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " user attendance are activated");
+				jdbcTemplate.update(activate, params);
 				return 1;
 			}
 		}
@@ -412,7 +396,6 @@ public class StaffDao implements StaffInterface {
 		Object[] params = { semester.getId() };
 		int noOfRows = jdbcTemplate.update(add, params);
 		if (noOfRows > 0) {
-			logger.info(noOfRows + "Saved");
 			return 1;
 		} else
 			return 0;
@@ -429,8 +412,7 @@ public class StaffDao implements StaffInterface {
 			if (semesterModel1 != null) {
 				String deactivate = "update semester set is_active =false where id=?";
 				Object[] params = { Semester.getId() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.info(noOfRows + " Semester are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -438,8 +420,7 @@ public class StaffDao implements StaffInterface {
 			if (semesterModel2 != null) {
 				String activate = "update semester set is_active =true where id=?";
 				Object[] params = { Semester.getId() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " Semester are activated");
+				jdbcTemplate.update(activate, params);
 				return 2;
 			}
 		}
@@ -459,25 +440,21 @@ public class StaffDao implements StaffInterface {
 					if (SemesterId % 2 == 0) {
 						String deactivate = "update semester set is_active =false where id=?";
 						Object[] params = { SemesterId };
-						int noOfRows = jdbcTemplate.update(deactivate, params);
-						logger.info(noOfRows + " even Semester are deactivated");
+						jdbcTemplate.update(deactivate, params);
 					} else {
 						String deactivate = "update semester set is_active =true where id=?";
 						Object[] params = { SemesterId };
-						int noOfRows = jdbcTemplate.update(deactivate, params);
-						logger.info(noOfRows + " odd Semester are activated");
+						jdbcTemplate.update(deactivate, params);
 					}
 				} else {
 					if (SemesterId % 2 == 0) {
 						String deactivate = "update semester set is_active =true where id=?";
 						Object[] params = { SemesterId };
-						int noOfRows = jdbcTemplate.update(deactivate, params);
-						logger.info(noOfRows + " even Semester are activated");
+						jdbcTemplate.update(deactivate, params);
 					} else {
 						String deactivate = "update semester set is_active =false where id=?";
 						Object[] params = { SemesterId };
-						int noOfRows = jdbcTemplate.update(deactivate, params);
-						logger.info(noOfRows + " odd Semester are deactivated");
+						jdbcTemplate.update(deactivate, params);
 					}
 				}
 
@@ -553,7 +530,6 @@ public class StaffDao implements StaffInterface {
 						Object[] param = { subject.getName(), semesterId, department };
 						int noOfRows = jdbcTemplate.update(update, param);
 						if (noOfRows > 0) {
-							logger.info(noOfRows + "Saved");
 							return 1;
 						} else
 							return 0;
@@ -577,8 +553,7 @@ public class StaffDao implements StaffInterface {
 			if (subjectModel1 != null) {
 				String deactivate = "update subjects set is_active =false where id=?";
 				Object[] params = { Subject.getId() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.info(noOfRows + " subjects are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -586,8 +561,7 @@ public class StaffDao implements StaffInterface {
 			if (subjectModel2 != null) {
 				String activate = "update subjects set is_active =true where id=?";
 				Object[] params = { Subject.getId() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " subjects are activated");
+				jdbcTemplate.update(activate, params);
 				return 2;
 			}
 		}
@@ -643,8 +617,6 @@ public class StaffDao implements StaffInterface {
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
 		model.addAttribute("listOfSubject", subject);
-		System.out.println(subjectList);
-		System.out.println(subject);
 		return subjectList;
 	}
 
@@ -654,7 +626,6 @@ public class StaffDao implements StaffInterface {
 		ObjectMapper object = new ObjectMapper();
 		String subject1 = object.writeValueAsString(subjectList);
 		model.addAttribute("listOfSubject", subject1);
-		System.out.println(subject1);
 		return subjectList;
 	}
 
@@ -682,7 +653,6 @@ public class StaffDao implements StaffInterface {
 				Object[] params = { subjectId, exam.getName(), exam.getDate(), exam.getType() };
 				int noOfRows = jdbcTemplate.update(add, params);
 				if (noOfRows > 0) {
-					System.out.println(noOfRows + "Saved");
 					return 1;
 				} else {
 					return 0;
@@ -703,8 +673,7 @@ public class StaffDao implements StaffInterface {
 			if (examModel1 != null) {
 				String deactivate = "update exam set is_active =false where id=?";
 				Object[] params = { Exam.getId() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.info(noOfRows + " Exams are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -712,8 +681,7 @@ public class StaffDao implements StaffInterface {
 			if (examModel2 != null) {
 				String activate = "update exam set is_active =true where id=?";
 				Object[] params = { Exam.getId() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " Exams are activated");
+				jdbcTemplate.update(activate, params);
 				return 2;
 			}
 		}
@@ -786,18 +754,15 @@ public class StaffDao implements StaffInterface {
 									.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
 							for (Result resultModel1 : result1) {
 								if (resultModel1 != null) {
-									System.out.println("Result already exist");
 									String update = "update result set marks =? where (exam_id=? and user_id=?)";
 									Object[] params = { marks, Result.getExamId(), userId };
-									int noOfRows = jdbcTemplate.update(update, params);
-									logger.info(noOfRows + " updated");
+									jdbcTemplate.update(update, params);
 									return 1;
 								}
 							}
 							String add = "insert into result(exam_id,user_id,marks) values(?,?,?)";
 							Object[] params = { Result.getExamId(), Result.getUserId(), marks };
-							int noOfRows = jdbcTemplate.update(add, params);
-							logger.info(noOfRows + " Saved");
+							jdbcTemplate.update(add, params);
 							return 2;
 						} else {
 							throw new MarkException("Invalid Marks");
@@ -823,8 +788,7 @@ public class StaffDao implements StaffInterface {
 			if (resultModel1 != null) {
 				String deactivate = "update result set is_active =false where (exam_id=? and user_id=?)";
 				Object[] params = { Result.getExamId(), Result.getUserId() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.info(noOfRows + " Results are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -832,8 +796,7 @@ public class StaffDao implements StaffInterface {
 			if (resultModel2 != null) {
 				String activate = "update result set is_active =true where (exam_id=? and user_id=?)";
 				Object[] params = { Result.getExamId(), Result.getUserId() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " Results are activated");
+				jdbcTemplate.update(activate, params);
 				return 2;
 			}
 		}
@@ -851,8 +814,7 @@ public class StaffDao implements StaffInterface {
 			if (resultModel1 != null) {
 				String deactivate = "update result set is_active =false where exam_id=?";
 				Object[] params = { Result.getExamId() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.info(noOfRows + " Results are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -860,8 +822,7 @@ public class StaffDao implements StaffInterface {
 			if (resultModel2 != null) {
 				String activate = "update result set is_active =true where exam_id=?";
 				Object[] params = { Result.getExamId() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " Results are activated");
+				jdbcTemplate.update(activate, params);
 				return 2;
 			}
 		}
@@ -879,8 +840,7 @@ public class StaffDao implements StaffInterface {
 			if (resultModel1 != null) {
 				String deactivate = "update result set is_active =false where user_id=?";
 				Object[] params = { Result.getUserId() };
-				int noOfRows = jdbcTemplate.update(deactivate, params);
-				logger.info(noOfRows + " Results are deactivated");
+				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
@@ -888,8 +848,7 @@ public class StaffDao implements StaffInterface {
 			if (resultModel2 != null) {
 				String activate = "update result set is_active =true where user_id=?";
 				Object[] params = { Result.getUserId() };
-				int noOfRows = jdbcTemplate.update(activate, params);
-				logger.info(noOfRows + " Results are activated");
+				jdbcTemplate.update(activate, params);
 				return 2;
 			}
 		}
@@ -912,6 +871,33 @@ public class StaffDao implements StaffInterface {
 		String result = object.writeValueAsString(resultList);
 		model.addAttribute("listOfResult", result);
 		return resultList;
+	}
+	
+	public void resultPopup(int userId, ModelMap map, Model model) throws JsonProcessingException{
+		List<User> user = findStudentById(userId, model);
+		for (User userModel : user) {
+			if (userModel != null) {
+				map.addAttribute(modelUserId, userId);
+				map.addAttribute("userName", userModel.getFirstName());
+				String department = userModel.getDepartment();
+				int semester = userModel.getSemester();
+				List<Subject> subject = findSubjectNameByDepartmentSemester(department, semester);
+				for (Subject subjectModel : subject) {
+					if (subjectModel != null) {
+						String name = subjectModel.getName();
+						map.addAttribute("subjectName", subject);
+						List<Subject> id = findSubjectIdByName(name);
+						for (Subject subjectModel2 : id) {
+							if (subjectModel2 != null) {
+								String subjectID = subjectModel2.getId();
+								map.addAttribute("Exam", findExamNameBySubjectID(subjectID));
+								map.addAttribute("ExamType", findExamTypeBySubjectID(subjectID));
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

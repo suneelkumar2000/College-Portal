@@ -3,6 +3,7 @@ package com.project.college_portal.interfaces;
 import java.util.List;
 
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.exception.DepartmentException;
@@ -77,4 +78,6 @@ public interface StaffInterface {
 	public int activateOrDeactivateWholeUserResult(Result Result);
 	public List<Result> resultList(Model model) throws JsonProcessingException;
 	public List<Result> inactiveResultList(Model model) throws JsonProcessingException;
+	public void resultPopup(int userId, ModelMap map, Model model) throws JsonProcessingException;
+	
 }

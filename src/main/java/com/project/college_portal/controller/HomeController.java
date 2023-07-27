@@ -1,7 +1,5 @@
 package com.project.college_portal.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -21,30 +19,26 @@ import com.project.college_portal.exception.ExistSemesterIdException;
 import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
-import com.project.college_portal.dao.StaffDao;
 import com.project.college_portal.dao.UserDao;
 import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SubjectIdException;
 import com.project.college_portal.exception.UserIdException;
-import com.project.college_portal.model.Subject;
-import com.project.college_portal.model.User;
 import com.project.college_portal.service.StaffService;
 import com.project.college_portal.service.UserService;
 import com.project.college_portal.exception.HigherAuthorityException;
 
 @Controller
 public class HomeController {
-	
-	String sessionUserId= "userId";
-	String sessionDepartment= "department";
-	String sessionSemester="semester";
-	String modelUserId= "userId";
-	String modelSemester= "semester";
+
+	String sessionUserId = "userId";
+	String sessionDepartment = "department";
+	String sessionSemester = "semester";
+	String modelUserId = "userId";
+	String modelSemester = "semester";
 
 	Logger logger = LoggerFactory.getLogger(HomeController.class);
-	StaffDao staffDao = new StaffDao();
 	UserDao userDao = new UserDao();
 	UserService userService = new UserService();
 	StaffService staffService = new StaffService();
@@ -54,7 +48,7 @@ public class HomeController {
 	// method to get index page
 	@GetMapping(path = "/index")
 	public String index() {
-		logger.info("Email : " , email);
+		logger.info("Email : ", email);
 		return "index";
 	}
 
@@ -127,30 +121,7 @@ public class HomeController {
 	@GetMapping(path = "/resultPopup")
 	public String resultPopup(@RequestParam("userId") int userId, ModelMap map, Model model)
 			throws JsonProcessingException {
-		List<User> user = staffDao.findStudentById(userId, model);
-		for (User userModel : user) {
-			if (userModel != null) {
-				map.addAttribute(modelUserId, userId);
-				map.addAttribute("userName", userModel.getFirstName());
-				String department = userModel.getDepartment();
-				int semester = userModel.getSemester();
-				List<Subject> subject = staffDao.findSubjectNameByDepartmentSemester(department, semester);
-				for (Subject subjectModel : subject) {
-					if (subjectModel != null) {
-						String name = subjectModel.getName();
-						map.addAttribute("subjectName", subject);
-						List<Subject> id = staffDao.findSubjectIdByName(name);
-						for (Subject subjectModel2 : id) {
-							if (subjectModel2 != null) {
-								String subjectID = subjectModel2.getId();
-								map.addAttribute("Exam", staffDao.findExamNameBySubjectID(subjectID));
-								map.addAttribute("ExamType", staffDao.findExamTypeBySubjectID(subjectID));
-							}
-						}
-					}
-				}
-			}
-		}
+		staffService.resultPopup(userId, map, model);
 		return "resultPopup";
 	}
 

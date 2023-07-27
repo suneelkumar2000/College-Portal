@@ -3,6 +3,7 @@ package com.project.college_portal.service;
 import java.util.List;
 
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.dao.StaffDao;
@@ -239,5 +240,10 @@ public class StaffService {
 	public int checkHigherAuthority(int staffId) throws HigherAuthorityException {
 		int value = staffDao.checkHigherAuthority(staffId);
 		return value;
+	}
+
+	// method to get result popup page
+	public void resultPopup(int userId, ModelMap map, Model model) throws JsonProcessingException {
+		staffDao.resultPopup(userId, map, model);
 	}
 }
