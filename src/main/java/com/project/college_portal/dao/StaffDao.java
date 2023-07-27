@@ -280,8 +280,8 @@ public class StaffDao implements StaffInterface {
 						int daysAttended = attendanceModel1.getDaysAttended() + 1;
 						int daysLeave = attendanceModel1.getDaysLeave();
 						int totalDays = daysAttended + daysLeave;
-						double daysAttended2=Double.valueOf(daysAttended);
-						double totalDays2=Double.valueOf(totalDays);
+						double daysAttended2=(double)daysAttended;
+						double totalDays2=(double)totalDays;
 						double attendance = (daysAttended2 / totalDays2);
 						double attendancePercentage = attendance * 100;
 						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
@@ -294,8 +294,8 @@ public class StaffDao implements StaffInterface {
 				int daysAttended = 1;
 				int daysLeave = 0;
 				int totalDays = daysAttended + daysLeave;
-				double daysAttended2=Double.valueOf(daysAttended);
-				double totalDays2=Double.valueOf(totalDays);
+				double daysAttended2=(double)daysAttended;
+				double totalDays2=(double)totalDays;
 				double attendance = (daysAttended2 / totalDays2);
 				double attendancePercentage = attendance * 100;
 				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
@@ -326,8 +326,8 @@ public class StaffDao implements StaffInterface {
 						int daysAttended = attendanceModel1.getDaysAttended();
 						int daysLeave = attendanceModel1.getDaysLeave() + 1;
 						int totalDays = daysAttended + daysLeave;
-						double daysAttended2=Double.valueOf(daysAttended);
-						double totalDays2=Double.valueOf(totalDays);
+						double daysAttended2=(double)daysAttended;
+						double totalDays2=(double)totalDays;
 						double attendance = (daysAttended2 / totalDays2);
 						double attendancePercentage = attendance * 100;
 						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
@@ -340,8 +340,8 @@ public class StaffDao implements StaffInterface {
 				int daysAttended = 0;
 				int daysLeave = 1;
 				int totalDays = daysAttended + daysLeave;
-				double daysAttended2=Double.valueOf(daysAttended);
-				double totalDays2=Double.valueOf(totalDays);
+				double daysAttended2=(double)daysAttended;
+				double totalDays2=(double)totalDays;
 				double attendance = (daysAttended2 / totalDays2);
 				double attendancePercentage = attendance * 100;
 				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
@@ -537,22 +537,22 @@ public class StaffDao implements StaffInterface {
 				for (Department departmentModel1 : department1) {
 					if (departmentModel1 != null) {
 
-						String subjectName = subject.getDepartment();
+						String subjectName = subject.getName();
 						String select2 = "Select id,name,semester_id,department,is_active from subjects";
 						List<Subject> sub = jdbcTemplate.query(select2, new SubjectMapper());
 						List<Subject> subjectName1 = sub.stream()
-								.filter(name -> name.getName().equals(subject.getName()))
+								.filter(name -> name.getName().equals(subjectName))
 								.filter(dep -> dep.getDepartment().equals(department))
 								.filter(sem -> sem.getSemesterId() == (semesterId)).collect(Collectors.toList());
 						for (Subject subjectModel1 : subjectName1) {
-							if (departmentModel1 != null) {
+							if (subjectModel1 != null) {
 								throw new ExistSubjectNameException("Subject Alredy exist");
 							}
 						}
 
 						String add = "insert into subjects(name,semester_id,department) values(?,?,?)";
 						Object[] params = { subject.getName(), semesterId, department };
-						int noOfRow = jdbcTemplate.update(add, params);
+						jdbcTemplate.update(add, params);
 						String update = "update subjects set id=(concat(SUBSTR(department, 1, 2),SUBSTR(name, 1, 2),semester_id)) where (name=? and semester_id=? and department=?)";
 						Object[] param = { subject.getName(), semesterId, department };
 						int noOfRows = jdbcTemplate.update(update, param);

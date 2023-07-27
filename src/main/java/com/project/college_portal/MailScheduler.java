@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.project.college_portal.dao.StaffDao;
-
 @Component
 //@ConditionalOnProperty(value = "email", havingValue = "true", matchIfMissing = false)
 public class MailScheduler {

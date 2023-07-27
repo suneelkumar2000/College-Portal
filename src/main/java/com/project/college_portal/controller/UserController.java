@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.project.college_portal.dao.StaffDao;
 import com.project.college_portal.dao.UserDao;
 import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
@@ -32,6 +31,9 @@ import com.project.college_portal.service.UserService;
 
 @Controller
 public class UserController {
+	
+	String ErrorMessage = "ErrorMessage";
+	String subjectList ="subjectList";
 
 	UserDao userDao = new UserDao();
 	UserService userService = new UserService();
@@ -126,7 +128,7 @@ public class UserController {
 	@GetMapping(path = "/findsubjectListbySemester")
 	public String findSubjectListBySemester(Model model, HttpSession session) throws JsonProcessingException {
 		int semesterId = (int) session.getAttribute("semester");
-		model.addAttribute("subjectList", staffService.findSubjectListBySemester(semesterId, model));
+		model.addAttribute(subjectList, staffService.findSubjectListBySemester(semesterId, model));
 		return "subjectDetails";
 	}
 
@@ -134,7 +136,7 @@ public class UserController {
 	@GetMapping(path = "/studentResult")
 	public String findStudentResult(Model model, HttpSession session) throws JsonProcessingException {
 		int userId = (int) session.getAttribute("userId");
-		model.addAttribute("subjectList", userDao.findStudentResult(userId, model));
+		model.addAttribute(subjectList, userDao.findStudentResult(userId, model));
 		return "studentResult";
 	}
 
@@ -143,91 +145,91 @@ public class UserController {
 	// method to handle ExistDepartmentNameException
 	@ExceptionHandler(value = ExistDepartmentNameException.class)
 	public String ExistDepartmentNameException(ExistDepartmentNameException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Department Already Exist");
+		model.addAttribute(ErrorMessage, "Department Already Exist");
 		return "errorpopup";
 	}
 
 	// method to handle ExistExamException
 	@ExceptionHandler(value = ExistExamException.class)
 	public String ExistExamException(ExistExamException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Exam Already Exist");
+		model.addAttribute(ErrorMessage, "Exam Already Exist");
 		return "errorpopup";
 	}
 
 	// method to handle ExistMailIdException
 	@ExceptionHandler(value = ExistMailIdException.class)
 	public String ExistMailIdException(ExistMailIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Sorry! This Email Id Already Exist");
+		model.addAttribute(ErrorMessage, "Sorry! This Email Id Already Exist");
 		return "errorpopup";
 	}
 
 	// method to handle InvalidMailIdException
 	@ExceptionHandler(value = InvalidMailIdException.class)
 	public String InvalidMailIdException(InvalidMailIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Sorry! Invalid Email Id And Password");
+		model.addAttribute(ErrorMessage, "Sorry! Invalid Email Id And Password");
 		return "errorpopup";
 	}
 
 	// method to handle ExamIdException
 	@ExceptionHandler(value = ExamIdException.class)
 	public String ExamIdException(ExamIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Exam Id dosen't Exist");
+		model.addAttribute(ErrorMessage, "Exam Id dosen't Exist");
 		return "errorpopup";
 	}
 
 	// method to handle MarkException
 	@ExceptionHandler(value = MarkException.class)
 	public String MarkException(MarkException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Invalid Marks ,Marks should be between 0 to 100");
+		model.addAttribute(ErrorMessage, "Invalid Marks ,Marks should be between 0 to 100");
 		return "errorpopup";
 	}
 
 	// method to handle ExistSemesterIdException
 	@ExceptionHandler(value = ExistSemesterIdException.class)
 	public String ExistSemesterIdException(ExistSemesterIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Semester Already Exist");
+		model.addAttribute(ErrorMessage, "Semester Already Exist");
 		return "errorpopup";
 	}
 
 	// method to handle SubjectIdException
 	@ExceptionHandler(value = SubjectIdException.class)
 	public String SubjectIdException(SubjectIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Subject Id dosen't Exist");
+		model.addAttribute(ErrorMessage, "Subject Id dosen't Exist");
 		return "errorpopup";
 	}
 
 	// method to handle UserIdException
 	@ExceptionHandler(value = UserIdException.class)
 	public String UserIdException(UserIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "User dosen't Exist");
+		model.addAttribute(ErrorMessage, "User dosen't Exist");
 		return "errorpopup";
 	}
 
 	// method to handle HigherAuthorityException
 	@ExceptionHandler(value = HigherAuthorityException.class)
 	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
-		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");
+		model.addAttribute(ErrorMessage, "opps sorry! only HigherAuthority can do this Process");
 		return "errorpopup";
 	}
 
 	// method to handle DepartmentException
 	@ExceptionHandler(value = DepartmentException.class)
 	public String DepartmentException(DepartmentException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Department dosen't Exist");
+		model.addAttribute(ErrorMessage, "Department dosen't Exist");
 		return "errorpopup";
 	}
 
 	// method to handle ExistSubjectNameException
 	@ExceptionHandler(value = ExistSubjectNameException.class)
 	public String ExistSubjectNameException(ExistSubjectNameException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Subject Already Exist");
+		model.addAttribute(ErrorMessage, "Subject Already Exist");
 		return "errorpopup";
 	}
 
 	// method to handle ForgotPasswordException
 	@ExceptionHandler(value = ForgotPasswordException.class)
-	public String ExistSubjectNameException(ForgotPasswordException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Sorry! Invalid Email Id or Phone Number");
+	public String ForgotPasswordException(ForgotPasswordException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Sorry! Invalid Email Id or Phone Number");
 		return "errorpopup";
 	}
 }

@@ -1,6 +1,5 @@
 package com.project.college_portal.mapper;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
