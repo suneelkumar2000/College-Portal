@@ -122,7 +122,6 @@ public class UserDao implements UserInterface {
 
 	// forgotPassword method
 	public int forgotPassword(User user) throws ForgotPasswordException {
-		// TODO Auto-generated method stub
 		String email = user.getEmail();
 		long phone = user.getPhone();
 		String password = user.getPassword();
@@ -210,7 +209,6 @@ public class UserDao implements UserInterface {
 
 	// method to update student details
 	public int studentsave(User User) {
-		// TODO Auto-generated method stub
 		String select = "Select id,roll,status,is_active from user";
 		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))

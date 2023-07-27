@@ -51,6 +51,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class StaffDao implements StaffInterface {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
 	Logger logger = LoggerFactory.getLogger(StaffDao.class);
+	
+	String selectdepartment ="Select id,department,is_active from classroom";
 
 	// --------- Students methods ------------
 
@@ -90,7 +92,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int approve(int staffId, User approveUser) throws UserIdException, HigherAuthorityException {
-		// TODO Auto-generated method stub
 		String selectStaff = "Select id,roll,status,is_active from user";
 		List<User> user = jdbcTemplate.query(selectStaff, new ApprovingMapper());
 		List<User> user1 = user.stream().filter(id -> id.getUserId() == (staffId))
@@ -138,20 +139,19 @@ public class StaffDao implements StaffInterface {
 		return userList;
 	}
 
-	public int activateOrDeactivateStudent(User User) {
-		// TODO Auto-generated method stub
+	public int activateOrDeactivateStudent(User users) {
 		String select = "Select id,roll,status,is_active from user";
 		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
-		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == (users.getUserId()))
 				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isActive() == (true))
 				.collect(Collectors.toList());
-		List<User> user2 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
+		List<User> user2 = user.stream().filter(id -> id.getUserId() == (users.getUserId()))
 				.filter(roll1 -> roll1.getRoll().equals("student")).filter(isActive -> isActive.isActive() == (false))
 				.collect(Collectors.toList());
 		for (User userModel1 : user1) {
 			if (userModel1 != null) {
 				String deactivate = "update user set is_active = false  where (roll='student' and id=?)";
-				Object[] params = { User.getUserId() };
+				Object[] params = { users.getUserId() };
 				int noOfRows = jdbcTemplate.update(deactivate, params);
 				logger.warn(noOfRows + " student are deactivated");
 				return 1;
@@ -160,7 +160,7 @@ public class StaffDao implements StaffInterface {
 		for (User userModel2 : user2) {
 			if (userModel2 != null) {
 				String activate = "update user set is_active = true where (roll='student' and id=?)";
-				Object[] params = { User.getUserId() };
+				Object[] params = { users.getUserId() };
 				int noOfRows = jdbcTemplate.update(activate, params);
 				logger.info(noOfRows + " student are activated");
 				return 1;
@@ -187,7 +187,7 @@ public class StaffDao implements StaffInterface {
 		for (User userModel : user1) {
 			if (userModel != null) {
 				String name = department.getDepartment();
-				String select = "Select id,department,is_active from classroom";
+				String select = selectdepartment;
 				List<Department> department1 = (jdbcTemplate.query(select, new DepartmentMapper())).stream()
 						.filter(dep -> ((dep.getDepartment()).toLowerCase()).equals((name).toLowerCase()))
 						.collect(Collectors.toList());
@@ -210,8 +210,7 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activateOrDeactivateDepartment(Department Department) {
-		// TODO Auto-generated method stub
-		String select = "Select id,department,is_active from classroom";
+		String select = selectdepartment;
 		List<Department> department = jdbcTemplate.query(select, new DepartmentMapper());
 		List<Department> department1 = department.stream()
 				.filter(dep -> dep.getDepartment().equals(Department.getDepartment()))
@@ -355,7 +354,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activateOrDeactivateAttendance(Attendance attendance) {
-		// TODO Auto-generated method stub
 		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
 		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
 		List<Attendance> attendanceList1 = attendanceList.stream()
@@ -421,7 +419,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activateOrDeactivateSemester(Semester Semester) {
-		// TODO Auto-generated method stub
 		String select = "Select id,is_active from semester";
 		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
 		List<Semester> semester1 = semester.stream().filter(id -> id.getId() == (Semester.getId()))
@@ -450,7 +447,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activeOrInactiveSemester() {
-		// TODO Auto-generated method stub
 		String select = "Select id,is_active from semester";
 		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
 
@@ -530,7 +526,7 @@ public class StaffDao implements StaffInterface {
 			if (semesterModel1 != null) {
 
 				String department = subject.getDepartment();
-				String select1 = "Select id,department,is_active from classroom";
+				String select1 = selectdepartment;
 				List<Department> depart = jdbcTemplate.query(select1, new DepartmentMapper());
 				List<Department> department1 = depart.stream().filter(dep -> dep.getDepartment().equals(department))
 						.collect(Collectors.toList());
@@ -571,7 +567,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activateOrDeactivateSubject(Subject Subject) {
-		// TODO Auto-generated method stub
 		String select = "Select id,name,semester_id,department,is_active from subjects";
 		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
 		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (Subject.getId()))
@@ -698,7 +693,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activateOrDeactivateExam(Exam Exam) {
-		// TODO Auto-generated method stub
 		String select = "Select id,subject_id,name,date_,type,is_active from exam";
 		List<Exam> exam = jdbcTemplate.query(select, new ExamMapper());
 		List<Exam> exam1 = exam.stream().filter(id -> id.getId() == (Exam.getId()))
@@ -817,7 +811,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activateOrDeactivateOneResult(Result Result) {
-		// TODO Auto-generated method stub
 		String select = "Select exam_id,user_id,marks,is_active from result";
 		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
 		List<Result> result1 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
@@ -848,7 +841,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activateOrDeactivateWholeExamResult(Result Result) {
-		// TODO Auto-generated method stub
 		String select = "Select exam_id,user_id,marks,is_active from result";
 		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
 		List<Result> result1 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
@@ -877,7 +869,6 @@ public class StaffDao implements StaffInterface {
 	}
 
 	public int activateOrDeactivateWholeUserResult(Result Result) {
-		// TODO Auto-generated method stub
 		String select = "Select exam_id,user_id,marks,is_active from result";
 		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
 		List<Result> result1 = result.stream().filter(UserId -> UserId.getUserId() == (Result.getUserId()))
