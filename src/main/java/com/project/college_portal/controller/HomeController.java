@@ -37,6 +37,10 @@ public class HomeController {
 	String sessionSemester = "semester";
 	String modelUserId = "userId";
 	String modelSemester = "semester";
+	String errorpopup = "errorpopup";
+	String ErrorMessage = "ErrorMessage";
+	String modeldepartmentList = "departmentList";
+	String modelsubjectList ="subjectList";
 
 	Logger logger = LoggerFactory.getLogger(HomeController.class);
 	UserDao userDao = new UserDao();
@@ -76,7 +80,7 @@ public class HomeController {
 			String department = (String) session.getAttribute(sessionDepartment);
 			session.setAttribute(sessionSemester, value);
 			map.addAttribute(modelSemester, value);
-			map.addAttribute("subjectList", staffService.findSubjectList(value, department, model));
+			map.addAttribute(modelsubjectList, staffService.findSubjectList(value, department, model));
 		} else {
 			model.addAttribute(modelSemester, value);
 		}
@@ -86,7 +90,7 @@ public class HomeController {
 	// method to get studentRegistration form
 	@GetMapping(path = "/studentRegistration")
 	public String studentProfile(Model model) throws JsonProcessingException {
-		model.addAttribute("departmentList", staffService.departmentList(model));
+		model.addAttribute(modeldepartmentList, staffService.departmentList(model));
 		return "studentRegistrationForm";
 	}
 
@@ -153,7 +157,7 @@ public class HomeController {
 			throws JsonProcessingException, HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
-		map.addAttribute("departmentList", staffService.departmentList(model));
+		map.addAttribute(modeldepartmentList, staffService.departmentList(model));
 		map.addAttribute("semesterList", staffService.semesterList(model));
 		return "subjectForm";
 	}
@@ -161,7 +165,7 @@ public class HomeController {
 	// method to get exam form
 	@GetMapping(path = "/insertExamForm")
 	public String examForm(Model model) throws JsonProcessingException {
-		model.addAttribute("subjectList", staffService.subjectList(model));
+		model.addAttribute(modelsubjectList, staffService.subjectList(model));
 		return "examForm";
 	}
 
@@ -169,85 +173,85 @@ public class HomeController {
 
 	// method to handle ExistDepartmentNameException
 	@ExceptionHandler(value = ExistDepartmentNameException.class)
-	public String ExistDepartmentNameException(ExistDepartmentNameException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Department Already Exist");
-		return "errorpopup";
+	public String existDepartmentNameException(ExistDepartmentNameException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Department Already Exist");
+		return errorpopup;
 	}
 
 	// method to handle ExistExamException
 	@ExceptionHandler(value = ExistExamException.class)
-	public String ExistExamException(ExistExamException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Exam Already Exist");
-		return "errorpopup";
+	public String existExamException(ExistExamException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Exam Already Exist");
+		return errorpopup;
 	}
 
 	// method to handle ExistMailIdException
 	@ExceptionHandler(value = ExistMailIdException.class)
-	public String ExistMailIdException(ExistMailIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Sorry! This Email Id Already Exist");
-		return "errorpopup";
+	public String existMailIdException(ExistMailIdException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Sorry! This Email Id Already Exist");
+		return errorpopup;
 	}
 
 	// method to handle InvalidMailIdException
 	@ExceptionHandler(value = InvalidMailIdException.class)
-	public String InvalidMailIdException(InvalidMailIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Sorry! Invalid Email Id And Password");
-		return "errorpopup";
+	public String invalidMailIdException(InvalidMailIdException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Sorry! Invalid Email Id And Password");
+		return errorpopup;
 	}
 
 	// method to handle ExamIdException
 	@ExceptionHandler(value = ExamIdException.class)
-	public String ExamIdException(ExamIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Exam Id dosen't Exist");
-		return "errorpopup";
+	public String examIdException(ExamIdException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Exam Id dosen't Exist");
+		return errorpopup;
 	}
 
 	// method to handle MarkException
 	@ExceptionHandler(value = MarkException.class)
-	public String MarkException(MarkException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Invalid Marks ,Marks should be between 0 to 100");
-		return "errorpopup";
+	public String markException(MarkException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Invalid Marks ,Marks should be between 0 to 100");
+		return errorpopup;
 	}
 
 	// method to handle ExistSemesterIdException
 	@ExceptionHandler(value = ExistSemesterIdException.class)
-	public String ExistSemesterIdException(ExistSemesterIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Semester Already Exist");
-		return "errorpopup";
+	public String existSemesterIdException(ExistSemesterIdException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Semester Already Exist");
+		return errorpopup;
 	}
 
 	// method to handle SubjectIdException
 	@ExceptionHandler(value = SubjectIdException.class)
-	public String SubjectIdException(SubjectIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Subject Id dosen't Exist");
-		return "errorpopup";
+	public String subjectIdException(SubjectIdException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Subject Id dosen't Exist");
+		return errorpopup;
 	}
 
 	// method to handle UserIdException
 	@ExceptionHandler(value = UserIdException.class)
-	public String UserIdException(UserIdException exception, Model model) {
-		model.addAttribute("ErrorMessage", "User dosen't Exist");
-		return "errorpopup";
+	public String userIdException(UserIdException exception, Model model) {
+		model.addAttribute(ErrorMessage, "User dosen't Exist");
+		return errorpopup;
 	}
 
 	// method to handle HigherAuthorityException
 	@ExceptionHandler(value = HigherAuthorityException.class)
-	public String HigherAuthorityException(HigherAuthorityException exception, Model model) {
-		model.addAttribute("ErrorMessage", "opps sorry! only HigherAuthority can do this Process");
-		return "errorpopup";
+	public String higherAuthorityException(HigherAuthorityException exception, Model model) {
+		model.addAttribute(ErrorMessage, "opps sorry! only HigherAuthority can do this Process");
+		return errorpopup;
 	}
 
 	// method to handle DepartmentException
 	@ExceptionHandler(value = DepartmentException.class)
-	public String DepartmentException(DepartmentException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Department dosen't Exist");
-		return "errorpopup";
+	public String departmentException(DepartmentException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Department dosen't Exist");
+		return errorpopup;
 	}
 
 	// method to handle ExistSubjectNameException
 	@ExceptionHandler(value = ExistSubjectNameException.class)
-	public String ExistSubjectNameException(ExistSubjectNameException exception, Model model) {
-		model.addAttribute("ErrorMessage", "Subject Already Exist");
-		return "errorpopup";
+	public String existSubjectNameException(ExistSubjectNameException exception, Model model) {
+		model.addAttribute(ErrorMessage, "Subject Already Exist");
+		return errorpopup;
 	}
 }

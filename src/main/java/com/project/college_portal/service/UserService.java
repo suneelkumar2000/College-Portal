@@ -13,11 +13,12 @@ import com.project.college_portal.model.User;
 
 public class UserService {
 	UserDao userDao = new UserDao();
+	
+	String sessionUserId="userId";
 
 	// method to save register details
 	public int saveUser(User user) throws ExistMailIdException {
-		int value = userDao.save(user);
-		return value;
+		return userDao.save(user);
 	}
 
 	// method to get Login success
@@ -25,8 +26,8 @@ public class UserService {
 		int value = userDao.login(user);
 		String email = user.getEmail();
 
-		session.setAttribute("userId", userDao.findIdByEmail(email));
-		int UserId = (int) session.getAttribute("userId");
+		session.setAttribute(sessionUserId, userDao.findIdByEmail(email));
+		int UserId = (int) session.getAttribute(sessionUserId);
 		userDao.setUserSessionById(UserId, session);
 
 		return value;
@@ -37,8 +38,8 @@ public class UserService {
 		int value = userDao.forgotPassword(user);
 		String email = user.getEmail();
 
-		session.setAttribute("userId", userDao.findIdByEmail(email));
-		int UserId = (int) session.getAttribute("userId");
+		session.setAttribute(sessionUserId, userDao.findIdByEmail(email));
+		int UserId = (int) session.getAttribute(sessionUserId);
 		userDao.setUserSessionById(UserId, session);
 
 		return value;
@@ -46,21 +47,17 @@ public class UserService {
 
 	// method to update student Registration details
 	public int studentsave(User user) {
-		int value = userDao.studentsave(user);
-
-		return value;
+		return userDao.studentsave(user);
 	}
 
 	// method to find Student Semester By Id
 	public int findStudentSemesterById(int UserId, Model model) throws JsonProcessingException {
-		int semester = userDao.findStudentSemesterById(UserId, model);
-		return semester;
+		return userDao.findStudentSemesterById(UserId, model);
 	}
 
 	// method to set User Session By Id
 	public int setUserSessionById(int UserId, HttpSession session) throws JsonProcessingException {
-		int semester = userDao.setUserSessionById(UserId, session);
-		return semester;
+		return userDao.setUserSessionById(UserId, session);
 	}
 
 	// method to update student Semester details

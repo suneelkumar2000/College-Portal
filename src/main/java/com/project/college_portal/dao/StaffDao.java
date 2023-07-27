@@ -269,8 +269,8 @@ public class StaffDao implements StaffInterface {
 						int daysAttended = attendanceModel1.getDaysAttended() + 1;
 						int daysLeave = attendanceModel1.getDaysLeave();
 						int totalDays = daysAttended + daysLeave;
-						double daysAttended2=(double)daysAttended;
-						double totalDays2=(double)totalDays;
+						double daysAttended2=daysAttended;
+						double totalDays2=totalDays;
 						double attendance = (daysAttended2 / totalDays2);
 						double attendancePercentage = attendance * 100;
 						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
@@ -282,8 +282,8 @@ public class StaffDao implements StaffInterface {
 				int daysAttended = 1;
 				int daysLeave = 0;
 				int totalDays = daysAttended + daysLeave;
-				double daysAttended2=(double)daysAttended;
-				double totalDays2=(double)totalDays;
+				double daysAttended2=daysAttended;
+				double totalDays2=totalDays;
 				double attendance = (daysAttended2 / totalDays2);
 				double attendancePercentage = attendance * 100;
 				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
@@ -313,8 +313,8 @@ public class StaffDao implements StaffInterface {
 						int daysAttended = attendanceModel1.getDaysAttended();
 						int daysLeave = attendanceModel1.getDaysLeave() + 1;
 						int totalDays = daysAttended + daysLeave;
-						double daysAttended2=(double)daysAttended;
-						double totalDays2=(double)totalDays;
+						double daysAttended2=daysAttended;
+						double totalDays2=totalDays;
 						double attendance = (daysAttended2 / totalDays2);
 						double attendancePercentage = attendance * 100;
 						String update = "update attendance set total_days=?,days_attended=?,days_leave=?,attendance=? where user_id=?";
@@ -326,8 +326,8 @@ public class StaffDao implements StaffInterface {
 				int daysAttended = 0;
 				int daysLeave = 1;
 				int totalDays = daysAttended + daysLeave;
-				double daysAttended2=(double)daysAttended;
-				double totalDays2=(double)totalDays;
+				double daysAttended2=daysAttended;
+				double totalDays2=totalDays;
 				double attendance = (daysAttended2 / totalDays2);
 				double attendancePercentage = attendance * 100;
 				String add = "insert into attendance(user_id,total_days,days_attended,days_leave,attendance) values(?,?,?,?,?)";
