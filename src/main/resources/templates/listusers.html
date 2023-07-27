@@ -2,363 +2,370 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Student List</title>
-    <meta charSet="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Student List</title>
+	<meta charSet="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" th:href="@{/SlickGrid2/css/smoothness/jquery-ui-1.8.16.custom.css}" type="text/css" />
-    <link rel="stylesheet" th:href="@{/SlickGrid2/slick.grid.css}" type="text/css" />
-    <link rel="stylesheet" th:href="@{/SlickGrid2/controls/slick.gridmenu.css}" type="text/css" />
-    <link rel="stylesheet" th:href="@{/SlickGrid2/controls/slick.columnpicker.css}" type="text/css" />
+	<link rel="stylesheet" th:href="@{/SlickGrid2/css/smoothness/jquery-ui-1.8.16.custom.css}" type="text/css" />
+	<link rel="stylesheet" th:href="@{/SlickGrid2/slick.grid.css}" type="text/css" />
+	<link rel="stylesheet" th:href="@{/SlickGrid2/controls/slick.gridmenu.css}" type="text/css" />
+	<link rel="stylesheet" th:href="@{/SlickGrid2/controls/slick.columnpicker.css}" type="text/css" />
 
-    <style media="only screen">
-        html,
-        body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            box-sizing: border-box;
-            -webkit-overflow-scrolling: touch;
-        }
+	<style media="only screen">
+		html,
+		body {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			box-sizing: border-box;
+			-webkit-overflow-scrolling: touch;
+		}
 
-        html {
-            position: absolute;
-            top: 0;
-            left: 0;
-            padding: 0;
-            overflow: auto;
-        }
+		html {
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding: 0;
+			overflow: auto;
+		}
 
-        body {
-            padding: 1rem;
-            overflow: auto;
-        }
+		body {
+			padding: 1rem;
+			overflow: auto;
+		}
 
-        body {
-            background: #fffefe;
-        }
+		body {
+			background: #fffefe;
+		}
 
-        body h1 {
-            align-items: center;
-        }
+		body h1 {
+			align-items: center;
+		}
 
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #000000;
-            width: 100%;
-        }
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: #000000;
+			width: 100%;
+		}
 
-        li a {
-            float: right;
-        }
+		li a {
+			float: right;
+		}
 
-        li span {
-            float: left;
-        }
+		li span {
+			float: left;
+		}
 
-        li span {
-            align-items: center;
-            text-decoration: none;
-            color: #ffffff;
-            text-transform: uppercase;
-            font-size: 20px;
-            font-weight: 600;
-            padding: 14px 16px;
-        }
+		li span {
+			align-items: center;
+			text-decoration: none;
+			color: #ffffff;
+			text-transform: uppercase;
+			font-size: 20px;
+			font-weight: 600;
+			padding: 14px 16px;
+		}
 
-        li a {
-            align-items: center;
-            text-decoration: none;
-            color: #ffffff;
-            text-transform: uppercase;
-            font-size: 20px;
-            font-weight: 600;
-            padding: 14px 16px;
-        }
+		li a {
+			align-items: center;
+			text-decoration: none;
+			color: #ffffff;
+			text-transform: uppercase;
+			font-size: 20px;
+			font-weight: 600;
+			padding: 14px 16px;
+		}
 
-        li a:hover {
-            color: #F81818;
-            transition: all .5s;
-            cursor: pointer;
-        }
+		li a:hover {
+			color: #F81818;
+			transition: all .5s;
+			cursor: pointer;
+		}
 
-        li span:hover {
-            color: #4df3ff;
-            transition: all .5s;
-            cursor: pointer;
-        }
+		li span:hover {
+			color: #4df3ff;
+			transition: all .5s;
+			cursor: pointer;
+		}
 
-        .sidenav {
-            height: 100%;
-            /* 100% Full-height */
-            width: 0;
-            /* 0 width - change this with JavaScript */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Stay on top */
-            top: 0;
-            /* Stay at the top */
-            left: 0;
-            background-color: #111;
-            /* Black*/
-            overflow-x: hidden;
-            /* Disable horizontal scroll */
-            padding-top: 60px;
-            /* Place content 60px from the top */
-            transition: 0.5s;
-            /* 0.5 second transition effect to slide in the sidenav */
-        }
+		.sidenav {
+			height: 100%;
+			/* 100% Full-height */
+			width: 0;
+			/* 0 width - change this with JavaScript */
+			position: fixed;
+			/* Stay in place */
+			z-index: 1;
+			/* Stay on top */
+			top: 0;
+			/* Stay at the top */
+			left: 0;
+			background-color: #111;
+			/* Black*/
+			overflow-x: hidden;
+			/* Disable horizontal scroll */
+			padding-top: 60px;
+			/* Place content 60px from the top */
+			transition: 0.5s;
+			/* 0.5 second transition effect to slide in the sidenav */
+		}
 
-        /* The navigation menu links */
-        .sidenav a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #818181;
-            display: block;
-            transition: 0.3s;
-        }
+		/* The navigation menu links */
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none;
+			font-size: 25px;
+			color: #818181;
+			display: block;
+			transition: 0.3s;
+		}
 
-        /* When you mouse over the navigation links, change their color */
-        .sidenav a:hover {
-            color: #f1f1f1;
-        }
+		/* When you mouse over the navigation links, change their color */
+		.sidenav a:hover {
+			color: #f1f1f1;
+		}
 
-        /* Position and style the close button (top right corner) */
-        .sidenav .closebtn {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-        }
+		/* Position and style the close button (top right corner) */
+		.sidenav .closebtn {
+			position: absolute;
+			top: 0;
+			right: 25px;
+			font-size: 36px;
+			margin-left: 50px;
+		}
 
-        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-        #main {
-            transition: margin-left .5s;
-            padding: 20px;
-        }
+		/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+		#main {
+			transition: margin-left .5s;
+			padding: 20px;
+		}
 
-        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-        @media screen and (max-height: 450px) {
-            .sidenav {
-                padding-top: 15px;
-            }
+		/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+		@media screen and (max-height: 450px) {
+			.sidenav {
+				padding-top: 15px;
+			}
 
-            .sidenav a {
-                font-size: 18px;
-            }
-        }
+			.sidenav a {
+				font-size: 18px;
+			}
+		}
 
-        .but {
-            background: green;
-            color: white;
-            border: none;
-            width: 140px;
-            height: 40px;
-            border-radius: 3px 3px 3px 3px;
-            margin-left: 30px;
-            margin-top: 100px;
-            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
+		.but {
+			background: green;
+			color: white;
+			border: none;
+			width: 140px;
+			height: 40px;
+			border-radius: 3px 3px 3px 3px;
+			margin-left: 30px;
+			margin-top: 100px;
+			box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
 
-        }
+		}
 
-        .but:hover {
-            background: rgba(16, 150, 47);
-        }
-    </style>
+		.but:hover {
+			background: rgba(16, 150, 47);
+		}
+	</style>
 </head>
 
 <body>
-    <div class="navbar">
-        <nav>
-            <ul>
-                <li><a th:href="@{/logout}">Logout</a></li>
-                <li class="menu"><span onclick="openNav()">Menu</span></li>
-            </ul>
-        </nav>
-    </div>
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a th:href="@{/adminHome}">Home</a>
-        <a th:href="@{/listofusers}">Student List</a>
-        <a th:href="@{/attendanceAdmin}">Attendance</a>
-        <a th:href="@{/resultAdmin}">Result</a>
-        <a th:href="@{/departmentlist}">Department</a>
-        <a th:href="@{/semesterlist}">Semester List</a>
-        <a th:href="@{/subjectDetails}">Subject Details</a>
-        <a th:href="@{/examlist}">Exam Details</a>
-    </div>
+	<div class="navbar">
+		<nav>
+			<ul>
+				<li><a th:href="@{/logout}">Logout</a></li>
+				<li class="menu"><span onclick="openNav()">Menu</span></li>
+			</ul>
+		</nav>
+	</div>
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a th:href="@{/adminHome}">Home</a>
+		<a th:href="@{/listofusers}">Student List</a>
+		<a th:href="@{/attendanceAdmin}">Attendance</a>
+		<a th:href="@{/resultAdmin}">Result</a>
+		<a th:href="@{/departmentlist}">Department</a>
+		<a th:href="@{/semesterlist}">Semester List</a>
+		<a th:href="@{/subjectDetails}">Subject Details</a>
+		<a th:href="@{/examlist}">Exam Details</a>
+	</div>
 
-    <div class="student-table">
+	<div class="student-table" id="student-info">
+		
+		<h1>Students List</h1>
 
-        <!-- support files start  -->
+		<!-- support files start  -->
 
-        <!-- import supporting files  -->
-        <script th:src="@{/SlickGrid2/lib/jquery-1.7.min.js}"></script>
-        <script th:src="@{/SlickGrid2/lib/jquery-ui-1.8.16.custom.min.js}"></script>
-        <script th:src="@{/SlickGrid2/lib/jquery.event.drag-2.2.js}"></script>
+		<!-- import supporting files  -->
+		<script th:src="@{/SlickGrid2/lib/jquery-1.7.min.js}"></script>
+		<script th:src="@{/SlickGrid2/lib/jquery-ui-1.8.16.custom.min.js}"></script>
+		<script th:src="@{/SlickGrid2/lib/jquery.event.drag-2.2.js}"></script>
 
-        <script th:src="@{/SlickGrid2/slick.core.js}"></script>
-        <script th:src="@{/SlickGrid2/slick.dataview.js}"></script>
-        <script th:src="@{/SlickGrid2/slick.grid.js}"></script>
+		<script th:src="@{/SlickGrid2/slick.core.js}"></script>
+		<script th:src="@{/SlickGrid2/slick.dataview.js}"></script>
+		<script th:src="@{/SlickGrid2/slick.grid.js}"></script>
 
 
-        <!--grid menu model start  -->
-        <script th:src="@{/SlickGrid2/plugins/slick.rowselectionmodel.js}"></script>
-        <script th:src="@{/SlickGrid2/controls/slick.pager.js}"></script>
-        <script th:src="@{/SlickGrid2/controls/slick.columnpicker.js}"></script>
+		<!--grid menu model start  -->
+		<script th:src="@{/SlickGrid2/plugins/slick.rowselectionmodel.js}"></script>
+		<script th:src="@{/SlickGrid2/controls/slick.pager.js}"></script>
+		<script th:src="@{/SlickGrid2/controls/slick.columnpicker.js}"></script>
 
-        <!--grid menu model end  -->
+		<!--grid menu model end  -->
 
-        <!-- import script files for grid start -->
-        <script th:src="@{/JS files/userGrid.js}"></script>
+		<!-- import script files for grid start -->
+		<script th:src="@{/JS files/userGrid.js}"></script>
 
-        <!-- import script files for grid end -->
+		<!-- import script files for grid end -->
 
-        <!-- support files end  -->
-        <div id="student-info">
+		<!-- support files end  -->
 
-            <div style="width:100%; box-sizing: border-box">
-                <div id="myGrid" style="width: 100%; height: 420px;"></div>
-            </div>
 
-            <input type="text" id="users" th:value="${listOfStudents}" style="display:none;">
+		<div style="width:100%; box-sizing: border-box">
+			<div id="myGrid" style="width: 100%; height: 420px;"></div>
+		</div>
 
-            <!-- call external script  -->
-            <script th:inline="javascript">
-                userGrid();
-            </script>
+		<input type="text" id="users" th:value="${listOfStudents}" style="display:none;">
 
-        </div>
+		<!-- call external script  -->
+		<script th:inline="javascript">
+			userGrid();
+		</script>
 
-        <!-- donation table end -->
-        <form th:action="@{/approve}" method="get" th:onclick="return checkForm()">
 
-            <div class="button">
-                <button type="button" class="approve-button" id="approve-btn">Approve</button>
-                <button type="button" class="reject-button" id="reject-btn">Reject</button>
-            </div>
-            <!-- confirmation popup start -->
-            <div class="modal">
-                <div class="modalContent">
-                    <span class="close">×</span>
-                    <p>Are you sure you want to Approve</p>
-                    <button class="confirm" type="submit">Approve</button>
-                    <button class="cancel" type="button" th:onclick="hideModal()">Cancel</button>
-                </div>
-            </div>
-            <!-- confirmation popup end -->
-            <!-- reject popup start -->
-            <div class="modalReject">
-                <div class="modalContent">
-                    <span class="close" id="reject-close">×</span>
-                    <p>Are you sure you want to Reject</p>
-                    <button class="confirm" type="submit" id="reject-button" th:formaction="@{/}">Reject</button>
-                    <button class="cancel" id="reject-cancel" type="button" th:onclick="hideModal()">Cancel</button>
-                </div>
-            </div>
-            <!-- reject popup end -->
-        </form>
-    </div>
-    <script>
-        //confirmation popup start
-        var approveBtn = '';
-        var rejectBtn = '';
-        var modal = document.querySelector(".modal");
-        var modalReject = document.querySelector(".modalReject");
-        var approveButton = document.querySelector(".approve-button");
-        var rejectButton = document.querySelector(".reject-button");
-        var cancel = document.querySelector(".cancel");
-        var span = document.querySelector(".close");
-        var rejectCancel = document.getElementById("reject-cancel")
-        var rejectSpan = document.getElementById("reject-close")
 
-        function hideModal() {
-            modal.style.display = "none";
-            modalReject.style.display = "none";
-        }
-        window.onclick = function (event) {
-            if (event.target == cancel || event.target == span ||
-                event.target == rejectCancel || event.target == rejectSpan) {
-                hideModal();
-            }
-        };
-        //confirmation popup start
+		<!-- donation table end -->
+		<form th:action="@{/approve}" method="get" th:onclick="return checkForm()">
 
-        document.getElementById('approve-btn').onclick = function () {
-            var markedCheckbox = document.getElementsByName('checkName');
-            var inputField = document.getElementById('userCode');
-            var value = [];
-            for (var checkbox of markedCheckbox) {
-                if (checkbox.checked) {
+			<div class="button">
+				<button type="button" class="approve-button" id="approve-btn">Approve</button>
+				<button type="button" class="reject-button" id="reject-btn">Reject</button>
+			</div>
+			<!-- confirmation popup start -->
+			<div class="modal">
+				<div class="modalContent">
+					<span class="close">×</span>
+					<p>Are you sure you want to Approve</p>
+					<button class="confirm" type="submit">Approve</button>
+					<button class="cancel" type="button" th:onclick="hideModal()">Cancel</button>
+				</div>
+			</div>
+			<!-- confirmation popup end -->
+			<!-- reject popup start -->
+			<div class="modalReject">
+				<div class="modalContent">
+					<span class="close" id="reject-close">×</span>
+					<p>Are you sure you want to Reject</p>
+					<button class="confirm" type="submit" id="reject-button" th:formaction="@{/}">Reject</button>
+					<button class="cancel" id="reject-cancel" type="button" th:onclick="hideModal()">Cancel</button>
+				</div>
+			</div>
+			<!-- reject popup end -->
+		</form>
+	</div>
 
-                    console.log(value);
-                    value.push(checkbox.value);
-                    // document.body.append(checkbox.value + ',');  
-                }
-            }
-            inputField.value = value;
-        }
-        document.getElementById('reject-btn').onclick = function () {
-            var markedCheckbox = document.getElementsByName('checkName');
-            var inputField = document.getElementById('userCode');
-            var value = [];
-            for (var checkbox of markedCheckbox) {
-                if (checkbox.checked) {
+	<script>
+		//confirmation popup start
+		var approveBtn = '';
+		var rejectBtn = '';
+		var modal = document.querySelector(".modal");
+		var modalReject = document.querySelector(".modalReject");
+		var approveButton = document.querySelector(".approve-button");
+		var rejectButton = document.querySelector(".reject-button");
+		var cancel = document.querySelector(".cancel");
+		var span = document.querySelector(".close");
+		var rejectCancel = document.getElementById("reject-cancel")
+		var rejectSpan = document.getElementById("reject-close")
 
-                    console.log(value);
-                    value.push(checkbox.value);
-                    // document.body.append(checkbox.value + ',');  
-                }
-            }
-            inputField.value = value;
-        }
+		function hideModal() {
+			modal.style.display = "none";
+			modalReject.style.display = "none";
+		}
+		window.onclick = function (event) {
+			if (event.target == cancel || event.target == span ||
+				event.target == rejectCancel || event.target == rejectSpan) {
+				hideModal();
+			}
+		};
+		//confirmation popup start
 
-        approveButton.addEventListener("click", () => {
-            approveBtn = 'clicked';
-            rejectBtn = '';
-        });
-        rejectButton.addEventListener("click", () => {
-            rejectBtn = 'clicked';
-            approveBtn = '';
-        });
+		document.getElementById('approve-btn').onclick = function () {
+			var markedCheckbox = document.getElementsByName('checkName');
+			var inputField = document.getElementById('userCode');
+			var value = [];
+			for (var checkbox of markedCheckbox) {
+				if (checkbox.checked) {
 
-        function checkForm() {
-            var inputField = document.getElementById('userCode').value;
-            if (inputField == "") {
-                alert('Please select the donation')
-                return false;
-            }
+					console.log(value);
+					value.push(checkbox.value);
+					// document.body.append(checkbox.value + ',');  
+				}
+			}
+			inputField.value = value;
+		}
+		document.getElementById('reject-btn').onclick = function () {
+			var markedCheckbox = document.getElementsByName('checkName');
+			var inputField = document.getElementById('userCode');
+			var value = [];
+			for (var checkbox of markedCheckbox) {
+				if (checkbox.checked) {
 
-            if (approveBtn == 'clicked') {
+					console.log(value);
+					value.push(checkbox.value);
+					// document.body.append(checkbox.value + ',');  
+				}
+			}
+			inputField.value = value;
+		}
 
-                modal.style.display = "block";
+		approveButton.addEventListener("click", () => {
+			approveBtn = 'clicked';
+			rejectBtn = '';
+		});
+		rejectButton.addEventListener("click", () => {
+			rejectBtn = 'clicked';
+			approveBtn = '';
+		});
 
-            }
-            if (rejectBtn == 'clicked') {
+		function checkForm() {
+			var inputField = document.getElementById('userCode').value;
+			if (inputField == "") {
+				alert('Please select the donation')
+				return false;
+			}
 
-                modalReject.style.display = "block";
+			if (approveBtn == 'clicked') {
 
-            }
-            return true;
-        }
-    </script>
+				modal.style.display = "block";
 
-    <script>
-        function openNav() {
-            document.getElementById("mySidenav").style.width = "250px";
-        }
+			}
+			if (rejectBtn == 'clicked') {
 
-        /* Set the width of the side navigation to 0 */
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-        }
-    </script>
+				modalReject.style.display = "block";
+
+			}
+			return true;
+		}
+	</script>
+
+	<script>
+		function openNav() {
+			document.getElementById("mySidenav").style.width = "250px";
+			document.getElementById("student-info").style.paddingLeft = "250px";
+			document.getElementById("student-info").style.transition = "0.5s";
+		}
+
+		/* Set the width of the side navigation to 0 */
+		function closeNav() {
+			document.getElementById("mySidenav").style.width = "0";
+			document.getElementById("student-info").style.paddingLeft = "0px";
+			document.getElementById("student-info").style.transition = "0.5s";
+		}
+	</script>
 </body>
 
 </html>

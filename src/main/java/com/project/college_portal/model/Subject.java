@@ -51,7 +51,7 @@ public class Subject {
 		this.department = department;
 	}
 
-	public boolean isActive() {
+	public boolean IsActive() {
 		return isActive;
 	}
 
@@ -61,8 +61,7 @@ public class Subject {
 
 	@Override
 	public String toString() {
-		return "Subject [id=" + id + ", name=" + name + ", semesterId=" + semesterId + ", department=" + department
-				+ ", isActive=" + isActive + "]";
+		return "Subject [id=" + id + ", name=" + name + ", semesterId=" + semesterId + ", department=" + department+ ", isActive=" + isActive + "]";
 	}
 	
 }

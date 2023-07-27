@@ -48,14 +48,14 @@ function attendanceGrid() {
 
 	/* check box funtion end */
 	
-	function buttonFormatter(row, cell, value, columnDef, dataContext) {
+	function buttonFormatter2(row, cell, value, columnDef, dataContext) {
 	let a = dataContext.userId ;
-    return '<form action="/addUpdatePresentbyone" metod="get"><button type="submit"  class="buttons" name="userId"  value="'+a+'">Present</button></form>';
+    return '<form action="/addUpdatePresentbyone" metod="get"><button type="submit"  class="tablebutton2" name="userId"  value="'+a+'">Present</button></form>';
     }
     
-    function buttonFormatter2(row, cell, value, columnDef, dataContext) {
+    function buttonFormatter(row, cell, value, columnDef, dataContext) {
 	let a = dataContext.userId ;
-    return '<form action="/addUpdateAbsentbyone" metod="get"><button type="submit"  class="buttons" name="userId"  value="'+a+'">Absent</button></form>';
+    return '<form action="/addUpdateAbsentbyone" metod="get"><button type="submit"  class="tablebutton1" name="userId"  value="'+a+'">Absent</button></form>';
     }
 	
 	var columns = [ {
@@ -90,13 +90,13 @@ function attendanceGrid() {
 		id : "present",
 		name : "present",
 		field : "present",
-		formatter:buttonFormatter,
+		formatter:buttonFormatter2,
 		width:200
 	},{
 		id : "absent",
 		name : "absent",
 		field : "absent",
-		formatter:buttonFormatter2,
+		formatter:buttonFormatter,
 		width:200
 	}];
 

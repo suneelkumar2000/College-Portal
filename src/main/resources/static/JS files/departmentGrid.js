@@ -6,7 +6,7 @@ function departmentGrid() {
 	var data = JSON.parse(data1);
 	console.log(data);
 
-	
+
 	/*date formator start */
 	function dateFormatter(row, cell, value, columnDef, dataContext) {
 		const date = new Date(value);
@@ -17,7 +17,7 @@ function departmentGrid() {
 		return formattedDate; // Return the formatted date string
 	}
 	/*date formator end */
-	
+
 	/* check box funtion start */
 	function checkboxFormatter(row, cell, value, columnDef, dataContext) {
 		let a = dataContext.donationCode;
@@ -30,23 +30,49 @@ function departmentGrid() {
 
 	/* check box funtion end */
 	
+	function messageFormatter(row, cell, value, columnDef, dataContext) {
+		let status = dataContext.isActive;
+		if (status) {
+			return '<span>Active</span>';
+		} else {
+			return '<span>Inactive</span>';
+		}
+	}
+
+	function buttonFormatter(row, cell, value, columnDef, dataContext) {
+		let a = dataContext.department;
+		let status = dataContext.isActive;
+		if (status) {
+			return '<form action="/activateDeactivateDepartment" metod="get"><button type="submit" class="tablebutton1" name="name"  value="' + a + '" >Deactivate</button></form>';
+		} else {
+			return '<form action="/activateDeactivateDepartment" metod="get"><button type="submit" class="tablebutton2" name="name"  value="' + a + '" >Activate</button></form>';
+		}
+	}
+
 	var columns = [{
 		id: "id",
 		name: "id",
 		field: "id",
 		type: 'numberColumn',
 		width: 100,
-		sortable:true
+		sortable: true
 	}, {
 		id: "department",
 		name: "department",
 		field: "department",
-		sortable:true
+		sortable: true
 	}, {
 		id: "isActive",
 		name: "isActive",
 		field: "isActive",
-		sortable:true
+		formatter: messageFormatter,
+		sortable: true
+	},{
+		id: "actions",
+		name: "actions",
+		field: "actions",
+		formatter: buttonFormatter,
+		width: 200
 	}];
 
 	var options = {
@@ -140,8 +166,8 @@ function departmentGrid() {
 		grid = new Slick.Grid("#departmentGrid", dataView, columns, options);
 		grid.setSelectionModel(new Slick.RowSelectionModel());
 
-	//	var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
-	//	var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
+		//	var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
+		//	var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
 		// header row start
 		dataView.onRowCountChanged.subscribe(function(e, args) {
@@ -180,13 +206,13 @@ function departmentGrid() {
 		grid.onCellChange.subscribe(function(e, args) {
 			dataView.updateItem(args.item.id, args.item);
 		});
-/*
-		grid.onAddNewRow.subscribe(function(e, args) {
-			var item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
-			$.extend(item, args.item);
-			dataView.addItem(item);
-		});
-*/
+		/*
+				grid.onAddNewRow.subscribe(function(e, args) {
+					var item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
+					$.extend(item, args.item);
+					dataView.addItem(item);
+				});
+		*/
 		grid.onKeyDown.subscribe(function(e) {
 			// select all rows on ctrl-a
 			if (e.which !== 65 || !e.ctrlKey) {

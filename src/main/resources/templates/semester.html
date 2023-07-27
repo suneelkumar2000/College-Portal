@@ -199,7 +199,7 @@
 	</div>
 	<br>
 	
-	<div class="container">
+	<div class="container" id="container">
 	
 
         <button><a th:href="@{/insertSemesterForm}" class="btn btn-primary btn-sm mb-3"> Add Semester</a></button>
@@ -227,11 +227,15 @@
     <script>
         function openNav() {
             document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("container").style.paddingLeft = "250px";
+            document.getElementById("container").style.transition= "0.5s";
         }
 
         /* Set the width of the side navigation to 0 */
         function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("container").style.paddingLeft = "0px";
+            document.getElementById("container").style.transition= "0.5s";
         }
     </script>
     

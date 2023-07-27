@@ -1,12 +1,29 @@
-function examGrid() {
+function studentResultGrid() {
 
 	var dataView;
 	var grid;
-	var data1 = document.getElementById("exam").value;
+	var data1 = document.getElementById("result").value;
 	var data = JSON.parse(data1);
 	console.log(data);
 
-	
+	/* set unique it to array */
+
+	var nextId = 1;
+	data.forEach(function(item) {
+		// Generate a unique id using the nextId value
+		var itemId = "item_" + nextId;
+
+		// Set the id property of the item object
+		item.id = itemId;
+
+		// Increment the nextId value
+		nextId++;
+	});
+
+	// Use the updated items array list with unique ids
+	console.log(data);
+	//console.log(dataList);
+	/* unique id end */
 	
 	/*date formator start */
 	function dateFormatter(row, cell, value, columnDef, dataContext) {
@@ -31,65 +48,38 @@ function examGrid() {
 
 	/* check box funtion end */
 	
-	function messageFormatter(row, cell, value, columnDef, dataContext) {
-		let status = dataContext.isActive;
-		if (status) {
-			return '<span>Active</span>';
-		} else {
-			return '<span>Inactive</span>';
-		}
-	}
-
 	function buttonFormatter(row, cell, value, columnDef, dataContext) {
-		let a = dataContext.id;
-		let status = dataContext.isActive;
-		if (status) {
-			return '<form action="/activateDeactivateDepartment" metod="get"><button type="submit" class="tablebutton1" name="examId"  value="' + a + '" >Deactivate</button></form>';
-		} else {
-			return '<form action="/activateDeactivateDepartment" metod="get"><button type="submit" class="tablebutton2" name="examId"  value="' + a + '" >Activate</button></form>';
-		}
-	}
+	let a = dataContext.userId ;
+    return '<form action="/resultPopup" metod="get"><button type="submit"  class="buttons" name="userId"  value="'+a+'">Add Marks</button></form>';
+    }
 	
-	var columns = [{
-		id: "id",
-		name: "id",
-		field: "id",
+	var columns = [ {
+		id: "examId",
+		name: "examId",
+		field: "examId",
 		type: 'numberColumn',
 		width: 100,
-		sortable:true
+		sortable: true
 	}, {
 		id: "subjectId",
 		name: "subjectId",
 		field: "subjectId",
-		sortable:true
-	},{
-		id: "name",
-		name: "name",
-		field: "name",
-		sortable:true
-	},{
-		id: "date",
-		name: "date",
-		field: "date",
-		sortable:true,
-		formatter:dateFormatter
+		sortable: true
 	}, {
-		id: "type",
-		name: "type",
-		field: "type",
-		sortable:true
-	},{
-		id: "isActive",
-		name: "isActive",
-		field: "isActive",
-		//formatter: messageFormatter,
+		id: "subjectName",
+		name: "subjectName",
+		field: "subjectName",
 		sortable: true
 	},{
-		id: "actions",
-		name: "actions",
-		field: "actions",
-		formatter: buttonFormatter,
-		width: 200
+		id: "semesterId",
+		name: "semesterId",
+		field: "semesterId",
+		sortable: true
+	},{
+		id : "marks",
+		name : "marks",
+		field : "marks",
+		width:200
 	}];
 
 	var options = {
@@ -180,7 +170,7 @@ function examGrid() {
 
 		//		dataView = new Slick.Data.DataView({ inlineFilters: true });
 		dataView = new Slick.Data.DataView();
-		grid = new Slick.Grid("#examGrid", dataView, columns, options);
+		grid = new Slick.Grid("#studentResultGrid", dataView, columns, options);
 		grid.setSelectionModel(new Slick.RowSelectionModel());
 
 	//	var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));

@@ -48,6 +48,11 @@ function resultGrid() {
 
 	/* check box funtion end */
 	
+	function buttonFormatter(row, cell, value, columnDef, dataContext) {
+	let a = dataContext.userId ;
+    return '<form action="/resultPopup" metod="get"><button type="submit"  class="buttons" name="userId"  value="'+a+'">Add Marks</button></form>';
+    }
+	
 	var columns = [ {
 		id: "userId",
 		name: "userId",
@@ -76,6 +81,12 @@ function resultGrid() {
 		field: "semester",
 		width: 100,
 		sortable: true
+	},{
+		id : "addMarks",
+		name : "addMarks",
+		field : "addMarks",
+		formatter:buttonFormatter,
+		width:200
 	}];
 
 	var options = {

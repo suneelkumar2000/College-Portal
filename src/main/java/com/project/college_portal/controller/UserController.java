@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.college_portal.dao.StaffDao;
+import com.project.college_portal.dao.UserDao;
 import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
@@ -30,6 +32,7 @@ import com.project.college_portal.service.UserService;
 @Controller
 public class UserController {
 
+	UserDao userDao = new UserDao();
 	UserService userService = new UserService();
 	StaffService staffService = new StaffService();
 
@@ -125,6 +128,15 @@ public class UserController {
 		model.addAttribute("subjectList", staffService.findSubjectListBySemester(semesterId, model));
 		return "subjectDetails";
 	}
+	
+	//method to view student result
+	@GetMapping(path = "/studentResult")
+	public String findStudentResult(Model model, HttpSession session) throws JsonProcessingException {
+		int userId = (int) session.getAttribute("userId");
+		model.addAttribute("subjectList", userDao.findStudentResult(userId, model));
+		return "studentResult";
+	}
+	
 
 	// ----------Exception methods---------
 

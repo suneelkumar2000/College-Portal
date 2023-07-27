@@ -92,8 +92,10 @@ public class StaffController {
 	}
 
 	// method to activate/Deactivate Department
-	@GetMapping(path = "/activateDeactivateDepartment/{name}")
-	public String activateOrDeactivateDepartment(@PathVariable(value = "name") String name, Model model) {
+	@GetMapping(path = "/activateDeactivateDepartment")
+	public String activateOrDeactivateDepartment(@RequestParam("name") String name, Model model,HttpSession session) throws HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		Department department = new Department();
 		department.setDepartment(name);
 		int value = staffService.activateOrDeactivateDepartment(department);
@@ -245,8 +247,10 @@ public class StaffController {
 	// method to find Subject By ID
 
 	// method to activate/Deactivate Subject
-	@GetMapping(path = "/activateDeactivateSubject/{subjectId}")
-	public String activateOrDeactivateSubject(@PathVariable(value = "subjectId") String subjectId, Model model) {
+	@GetMapping(path = "/activateDeactivateSubject")
+	public String activateOrDeactivateSubject(@RequestParam("subjectId") String subjectId, Model model,HttpSession session) throws HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		Subject subject = new Subject();
 		subject.setId(subjectId);
 		int value = staffService.activateOrDeactivateSubject(subject);
@@ -292,8 +296,10 @@ public class StaffController {
 	}
 
 	// method to activate Or Deactivate Exam
-	@GetMapping(path = "/activateDeactivateExam/{examId}")
-	public String activateOrDeactivateExam(@PathVariable(value = "examId") int examId, Model model) {
+	@GetMapping(path = "/activateDeactivateExam")
+	public String activateOrDeactivateExam(@RequestParam("examId") int examId, Model model,HttpSession session) throws HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		Exam exam = new Exam();
 		exam.setId(examId);
 		int value = staffService.activateOrDeactivateExam(exam);
@@ -353,7 +359,7 @@ public class StaffController {
 								System.out.println(examId);
 								int value = staffService.addOrUpdateResult(result);
 								if (value == 1) {
-									return "redirect:/resultlist";
+									return "redirect:/resultAdmin";
 								}
 							}
 						}
@@ -361,13 +367,15 @@ public class StaffController {
 				}
 			}
 		}
-		return "resultAdmin";
+		return "redirect:/resultAdmin";
 	}
 
 	// method to Activate Or Deactivate one Result of particular exam and user
 	@GetMapping(path = "/activateDeactivateOneResult/{examId}/{userId}")
-	public String activateOrDeactivateOneResult(@PathVariable(value = "examId") int examId,
-			@PathVariable(value = "userId") int userId, Model model) {
+	public String activateOrDeactivateOneResult(@RequestParam("examId") int examId,
+			@RequestParam("userId") int userId, Model model,HttpSession session) throws HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		Result result = new Result();
 		result.setExamId(examId);
 		result.setUserId(userId);
@@ -382,7 +390,9 @@ public class StaffController {
 
 	// method to Activate Or Deactivate Result of one whole exam
 	@GetMapping(path = "/activateDeactivateWholeExamresult/{examId}")
-	public String activateOrDeactivateWholeExamResult(@PathVariable(value = "examId") int examId, Model model) {
+	public String activateOrDeactivateWholeExamResult(@RequestParam("examId") int examId, Model model,HttpSession session) throws HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		Result result = new Result();
 		result.setExamId(examId);
 		int value = staffService.activateOrDeactivateWholeExamResult(result);
@@ -396,7 +406,9 @@ public class StaffController {
 
 	// method to Activate Or Deactivate one Result of one whole user
 	@GetMapping(path = "/activateDeactivateWholeUserresult/{userId}")
-	public String activateOrDeactivateWholeUserResult(@PathVariable(value = "userId") int userId, Model model) {
+	public String activateOrDeactivateWholeUserResult(@RequestParam("userId") int userId, Model model,HttpSession session) throws HigherAuthorityException {
+		int staffId = (int) session.getAttribute("userId");
+		staffService.checkHigherAuthority(staffId);
 		Result result = new Result();
 		result.setUserId(userId);
 		int value = staffService.activateOrDeactivateWholeUserResult(result);

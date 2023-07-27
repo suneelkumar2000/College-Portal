@@ -245,6 +245,8 @@ public class StaffDao implements StaffInterface {
 		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		ObjectMapper object = new ObjectMapper();
 		String department = object.writeValueAsString(departmentList);
+		System.out.println(departmentList);
+		System.out.println(department);
 		model.addAttribute("listOfDepartment", department);
 		return departmentList;
 	}
@@ -563,9 +565,9 @@ public class StaffDao implements StaffInterface {
 		String select = "Select id,name,semester_id,department,is_active from subjects";
 		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
 		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (Subject.getId()))
-				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+				.filter(isActive -> isActive.IsActive() == (true)).collect(Collectors.toList());
 		List<Subject> subject2 = subject.stream().filter(id -> id.getId() == (Subject.getId()))
-				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
+				.filter(isActive -> isActive.IsActive() == (false)).collect(Collectors.toList());
 		for (Subject subjectModel1 : subject1) {
 			if (subjectModel1 != null) {
 				String deactivate = "update subjects set is_active =false where id=?";
@@ -636,6 +638,8 @@ public class StaffDao implements StaffInterface {
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
 		model.addAttribute("listOfSubject", subject);
+		System.out.println(subjectList);
+		System.out.println(subject);
 		return subjectList;
 	}
 
@@ -643,8 +647,9 @@ public class StaffDao implements StaffInterface {
 		String select = "select id,name,semester_id,department,is_active from subjects where (is_active =false)";
 		List<Subject> subjectList = jdbcTemplate.query(select, new SubjectMapper());
 		ObjectMapper object = new ObjectMapper();
-		String subject = object.writeValueAsString(subjectList);
-		model.addAttribute("listOfSubject", subject);
+		String subject1 = object.writeValueAsString(subjectList);
+		model.addAttribute("listOfSubject", subject1);
+		System.out.println(subject1);
 		return subjectList;
 	}
 
@@ -655,7 +660,7 @@ public class StaffDao implements StaffInterface {
 		String select = "Select id,name,semester_id,department,is_active from subjects";
 		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
 		List<Subject> subject1 = subject.stream().filter(id -> id.getId().equals(subjectId))
-				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+				.filter(isActive -> isActive.IsActive() == (true)).collect(Collectors.toList());
 		for (Subject subjectModel1 : subject1) {
 			if (subjectModel1 != null) {
 				String select1 = "Select id,subject_id,name,date_,type,is_active from exam";

@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.exception.ExistDepartmentNameException;
@@ -116,8 +117,8 @@ public class HomeController {
 	}
 
 	// method to get result popup page
-	@GetMapping(path = "/resultPopup/{userId}")
-	public String resultPopup(@PathVariable(value = "userId") int userId, ModelMap map, Model model)
+	@GetMapping(path = "/resultPopup")
+	public String resultPopup(@RequestParam("userId") int userId, ModelMap map, Model model)
 			throws JsonProcessingException {
 		List<User> user = staffDao.findStudentById(userId, model);
 		for (User userModel : user) {

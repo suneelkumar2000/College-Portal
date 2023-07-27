@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.college_portal.connection.ConnectionUtil;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
@@ -19,7 +20,9 @@ import com.project.college_portal.mapper.ApprovingMapper;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
 import com.project.college_portal.mapper.UserMapper;
+import com.project.college_portal.mapper.StudentResultMapper;
 import com.project.college_portal.model.Semester;
+import com.project.college_portal.model.StudentResult;
 import com.project.college_portal.model.User;
 import com.project.college_portal.validation.Validation;
 
@@ -338,5 +341,14 @@ public class UserDao implements UserInterface {
 		return -1;
 	}
 	
-	
+	// method to find Student result
+		public List<StudentResult> findStudentResult(int userid, Model model) throws JsonProcessingException {
+			String select = "select result.exam_id,exam.subject_id,subjects.name,subjects.semester_id,result.marks from result left join exam left join subjects on exam.subject_id = subjects.id on result.exam_id = exam.id  where (result.user_id=?) ; ";
+			List<StudentResult> resultList = jdbcTemplate.query(select, new StudentResultMapper(), userid);
+			ObjectMapper object = new ObjectMapper();
+			String result = object.writeValueAsString(resultList);
+			model.addAttribute("listOfResult", result);
+			return resultList;
+			
+		}
 }

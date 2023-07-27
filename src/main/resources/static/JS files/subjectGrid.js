@@ -30,10 +30,30 @@ function subjectGrid() {
 
 	/* check box funtion end */
 	
+	function messageFormatter(row, cell, value, columnDef, dataContext) {
+		let status = dataContext.isActive;
+		if (status) {
+			return '<span>Active</span>';
+		} else {
+			return '<span>Inactive</span>';
+		}
+	}
+	
+	function buttonFormatter(row, cell, value, columnDef, dataContext) {
+		let a = dataContext.id;
+		let status = dataContext.isActive;
+		if (status) {
+			return '<form action="/activateDeactivateSubject" metod="get"><button type="submit" class="tablebutton1" name="subjectId"  value="' + a + '" >Deactivate</button></form>';
+		} else {
+			return '<form action="/activateDeactivateSubject" metod="get"><button type="submit" class="tablebutton2" name="subjectId"  value="' + a + '" >Activate</button></form>';
+		}
+	}
+	
 	var columns = [{
 		id: "id",
 		name: "id",
 		field: "id",
+		width: 100,
 		sortable: true
 	}, {
 		id: "name",
@@ -51,11 +71,18 @@ function subjectGrid() {
 		name: "department",
 		field: "department",
 		sortable: true
-	}, {
+	},{
 		id: "isActive",
 		name: "isActive",
 		field: "isActive",
+		//formatter: messageFormatter,
 		sortable: true
+	},{
+		id: "actions",
+		name: "actions",
+		field: "actions",
+		formatter: buttonFormatter,
+		width: 200
 	}];
 
 	var options = {
