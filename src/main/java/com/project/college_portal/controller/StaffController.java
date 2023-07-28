@@ -55,6 +55,13 @@ public class StaffController {
 	String returnSubjectDetails="subjectDetails";
 	String returnExamDetails="examDetails";
 	String returnResultAdmin="resultAdmin";
+	String redirectDepartmentlist="redirect:/departmentlist";
+	String redirectAttendanceAdmin="redirect:/attendanceAdmin";
+	String redirectSemesterlist="redirect:/semesterlist";
+	String redirectSubjectlist="redirect:/subjectlist";
+	String redirectExamlist="redirect:/examlist";
+	String redirectResultlist="redirect:/resultlist";
+	String redirectInactiveResultlist="redirect:/inactiveResultlist";
 
 	// method to get student list
 	@GetMapping(path = "/listofusers")
@@ -99,7 +106,7 @@ public class StaffController {
 		depart.setDepartment(department);
 		int value = staffService.addDepartment(staffId, depart);
 		if (value == 1) {
-			return "redirect:/departmentlist";
+			return redirectDepartmentlist;
 		} else
 			return "departmentForm";
 	}
@@ -113,7 +120,7 @@ public class StaffController {
 		departmentPojo.setDepartment(name);
 		int value = staffService.activateOrDeactivateDepartment(departmentPojo);
 		if (value == 1) {
-			return "redirect:/departmentlist";
+			return redirectDepartmentlist;
 		} else if (value == 2) {
 			return "redirect:/inactiveDepartmentlist";
 		} else
@@ -142,7 +149,7 @@ public class StaffController {
 			throws UserIdException, JsonProcessingException {
 		int value = staffService.addOrUpdatePresentByOne(userId);
 		if (value == 1) {
-			return "redirect:/attendanceAdmin";
+			return redirectAttendanceAdmin;
 		} else
 			return returnAttendanceAdmin;
 	}
@@ -154,7 +161,7 @@ public class StaffController {
 
 		int value = staffService.addOrUpdateAbsentByOne(userId);
 		if (value == 1) {
-			return "redirect:/attendanceAdmin";
+			return redirectAttendanceAdmin;
 		} else
 			return returnAttendanceAdmin;
 	}
@@ -205,7 +212,7 @@ public class StaffController {
 		int value = staffService.addSemester(semesterPojo);
 
 		if (value == 1) {
-			return "redirect:/semesterlist";
+			return redirectSemesterlist;
 		} else
 			return returnSemester;
 	}
@@ -217,7 +224,7 @@ public class StaffController {
 		semesterPojo.setId(semesterId);
 		int value = staffService.activateOrDeactivateSemester(semesterPojo);
 		if (value == 1) {
-			return "redirect:/semesterlist";
+			return redirectSemesterlist;
 		} else if (value == 2) {
 			return "redirect:/inactiveSemesterlist";
 		} else
@@ -251,7 +258,7 @@ public class StaffController {
 		subjectPojo.setDepartment(department);
 		int value = staffService.addSubject(subjectPojo);
 		if (value == 1) {
-			return "redirect:/subjectlist";
+			return redirectSubjectlist;
 		} else
 			return returnSubjectDetails;
 	}
@@ -267,7 +274,7 @@ public class StaffController {
 		subjectPojo.setId(subjectId);
 		int value = staffService.activateOrDeactivateSubject(subjectPojo);
 		if (value == 1) {
-			return "redirect:/subjectlist";
+			return redirectSubjectlist;
 		} else if (value == 2) {
 			return "redirect:/inactiveSubjectlist";
 		} else
@@ -302,7 +309,7 @@ public class StaffController {
 		examPojo.setType(type);
 		int value = staffService.addExam(examPojo);
 		if (value == 1) {
-			return "redirect:/examlist";
+			return redirectExamlist;
 		} else
 			return returnExamDetails;
 	}
@@ -316,7 +323,7 @@ public class StaffController {
 		examPojo.setId(examId);
 		int value = staffService.activateOrDeactivateExam(examPojo);
 		if (value == 1) {
-			return "redirect:/examlist";
+			return redirectExamlist;
 		} else if (value == 2) {
 			return "redirect:/inactiveExamlist";
 		} else
@@ -346,29 +353,22 @@ public class StaffController {
 			@RequestParam("marks") int marks, Model model) throws MarkException, UserIdException, ExamIdException {
 		ResultPojo resultPojo = new ResultPojo();
 		resultPojo.setUserId(userId);
-		System.out.println(userId);
 		resultPojo.setMarks(marks);
-		System.out.println(marks);
 
 		List<User> user = staffDao.findStudentById(userId, model);
 		for (User userModel : user) {
 			if (userModel != null) {
 				String department = userModel.getDepartment();
-				System.out.println(department);
 				int semester = userModel.getSemester();
-				System.out.println(semester);
 				List<SubjectPojo> subjectPojo = staffDao.findSubjectID(department, semester, subjectName);
 				for (SubjectPojo subjectModel : subjectPojo) {
 					if (subjectModel != null) {
 						String subjectId = subjectModel.getId();
-						System.out.println(subjectId);
 						List<ExamPojo> examPojo = staffDao.findExam(examName, examType, subjectId);
-						System.out.println(examPojo);
 						for (ExamPojo examModel : examPojo) {
 							if (examModel != null) {
 								int examId = examModel.getId();
 								resultPojo.setExamId(examId);
-								System.out.println(examId);
 								int value = staffService.addOrUpdateResult(resultPojo);
 								if (value == 1) {
 									return "redirect:/resultAdmin";
@@ -395,7 +395,7 @@ public class StaffController {
 		if (value == 1) {
 			return "redirect:/resultlist";
 		} else if (value == 2) {
-			return "redirect:/inactiveResultlist";
+			return redirectInactiveResultlist;
 		} else
 			return returnResultAdmin;
 	}
@@ -409,9 +409,9 @@ public class StaffController {
 		resultPojo.setExamId(examId);
 		int value = staffService.activateOrDeactivateWholeExamResult(resultPojo);
 		if (value == 1) {
-			return "redirect:/resultlist";
+			return redirectResultlist;
 		} else if (value == 2) {
-			return "redirect:/inactiveResultlist";
+			return redirectInactiveResultlist;
 		} else
 			return returnResultAdmin;
 	}
@@ -425,9 +425,9 @@ public class StaffController {
 		resultPojo.setUserId(userId);
 		int value = staffService.activateOrDeactivateWholeUserResult(resultPojo);
 		if (value == 1) {
-			return "redirect:/resultlist";
+			return redirectResultlist;
 		} else if (value == 2) {
-			return "redirect:/inactiveResultlist";
+			return redirectInactiveResultlist;
 		} else
 			return returnResultAdmin;
 	}

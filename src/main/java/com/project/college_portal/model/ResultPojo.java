@@ -44,8 +44,8 @@ public class ResultPojo {
 		return isActive;
 	}
 
-	public void setIsActive(boolean is_active) {
-		this.isActive = is_active;
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Override

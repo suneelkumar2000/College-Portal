@@ -19,9 +19,9 @@ public interface UserInterface {
 	public List<User> listUsers();
 	public int forgotPassword(User user) throws ForgotPasswordException;
 	public int findIdByEmail(String email);
-	public int setUserSessionById(int UserId, HttpSession session);
+	public int setUserSessionById(int userId, HttpSession session);
 	public List<User> findByEmail(String email);
-	public int studentsave(User User);
+	public int studentsave(User user);
 	public void updateStudentSemester(Model model) throws JsonProcessingException ;
 	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException;
 	public List<StudentResultPojo> findStudentResult(int userid, Model model) throws JsonProcessingException ;

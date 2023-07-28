@@ -33,6 +33,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UserDao implements UserInterface {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
 	StaffDao staffDao = new StaffDao();
+	
+	String updatePasswordQuery="update user set Password =?  where Email=?";
+	String updateSemesterQuery="update user set semester =? where id=?";
 
 	// --------- user method ---------
 
@@ -141,7 +144,7 @@ public class UserDao implements UserInterface {
 
 		for (User userModel1 : user1) {
 			if (userModel1 != null) {
-				String changePassword = "update user set Password =?  where Email=?";
+				String changePassword = updatePasswordQuery;
 				Object[] params = { encodePassword, email };
 				jdbcTemplate.update(changePassword, params);
 				return 1;
@@ -149,7 +152,7 @@ public class UserDao implements UserInterface {
 		}
 		for (User userModel2 : user2) {
 			if (userModel2 != null) {
-				String changePassword = "update user set Password =?  where email=?";
+				String changePassword = updatePasswordQuery;
 				Object[] params = { encodePassword, email };
 				jdbcTemplate.update(changePassword, params);
 				return 2;
@@ -172,9 +175,9 @@ public class UserDao implements UserInterface {
 	}
 
 	// method to set User Session By Id
-	public int setUserSessionById(int UserId, HttpSession session) {
+	public int setUserSessionById(int userId, HttpSession session) {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (id=?)";
-		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), UserId);
+		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), userId);
 		for (User userModel : userDetails) {
 			if (userModel != null) {
 				session.setAttribute("firstName", userModel.getFirstName());
@@ -244,70 +247,70 @@ public class UserDao implements UserInterface {
 						if (month > 5 && month < 12) {
 							if (yearDifference == 0) {
 								if (semesterId <= 2) {
-									String update = "update user set semester =? where id=?";
+									String update = updateSemesterQuery;
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
 							} else if ((yearDifference < 2 && yearDifference >= 1)) {
 								if ((semesterId <= 4) && (semesterId > 2)) {
-									String update = "update user set semester =? where id=?";
+									String update = updateSemesterQuery;
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
 							} else if (yearDifference < 3 && yearDifference >= 2) {
 								if ((semesterId <= 6) && (semesterId > 4)) {
-									String update = "update user set semester =? where id=?";
+									String update = updateSemesterQuery;
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
 							} else if (yearDifference < 4 && yearDifference >= 3) {
 								if ((semesterId <= 8) && (semesterId > 6)) {
-									String update = "update user set semester =? where id=?";
+									String update = updateSemesterQuery;
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
 							} else {
-								String update = "update user set semester =? where id=?";
+								String update = updateSemesterQuery;
 								Object[] params = { -1, userModel.getUserId() };
 								jdbcTemplate.update(update, params);
 							}
 						} else {
 							if ((yearDifference == 1 && month != 12) && (yearDifference == 0 && month == 12)) {
 								if (semesterId <= 2) {
-									String update = "update user set semester =? where id=?";
+									String update = updateSemesterQuery;
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
 							} else if ((yearDifference == 2 && month != 12) && (yearDifference == 1 && month == 12)) {
 								if ((semesterId <= 4) && (semesterId > 2)) {
-									String update = "update user set semester =? where id=?";
+									String update = updateSemesterQuery;
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
 							} else if ((yearDifference == 3 && month != 12) && (yearDifference == 2 && month == 12)) {
 								if ((semesterId <= 6) && (semesterId > 4)) {
-									String update = "update user set semester =? where id=?";
+									String update = updateSemesterQuery;
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
 							} else if ((yearDifference == 4 && month != 12) && (yearDifference == 3 && month == 12)) {
 								if ((semesterId <= 8) && (semesterId > 6)) {
-									String update = "update user set semester =? where id=?";
+									String update = updateSemesterQuery;
 									Object[] params = { semesterId, userModel.getUserId() };
 									jdbcTemplate.update(update, params);
 								}
 							} else {
-								String update = "update user set semester =? where id=?";
+								String update = updateSemesterQuery;
 								Object[] params = { -1, userModel.getUserId() };
 								jdbcTemplate.update(update, params);
 							}
 						}
 					} else if (joiningYear == 0) {
-						String update = "update user set semester =? where id=?";
+						String update = updateSemesterQuery;
 						Object[] params = { null, userModel.getUserId() };
 						jdbcTemplate.update(update, params);
 					} else {
-						String update = "update user set semester =? where id=?";
+						String update = updateSemesterQuery;
 						Object[] params = { -1, userModel.getUserId() };
 						jdbcTemplate.update(update, params);
 					}

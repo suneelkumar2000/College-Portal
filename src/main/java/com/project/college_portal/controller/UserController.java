@@ -35,6 +35,7 @@ public class UserController {
 	String errorMessage = "ErrorMessage";
 	String sessionUserId = "userId";
 	String errorpopup = "errorpopup";
+	String index = "index";
 
 	UserDao userDao = new UserDao();
 	UserService userService = new UserService();
@@ -60,7 +61,7 @@ public class UserController {
 		int value = userService.saveUser(user);
 
 		if (value == 1) {
-			return "index";
+			return index;
 		}
 		return "signup";
 
@@ -80,7 +81,7 @@ public class UserController {
 		} else if (value == 2) {
 			return "redirect:/adminHome";
 		} else
-			return "index";
+			return index;
 	}
 
 	// method to get forgot password
@@ -98,7 +99,7 @@ public class UserController {
 		} else if (value == 2) {
 			return "adminHome";
 		} else
-			return "index";
+			return index;
 	}
 
 	// --------- student method ---------
