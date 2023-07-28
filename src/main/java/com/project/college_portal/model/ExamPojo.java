@@ -2,7 +2,7 @@ package com.project.college_portal.model;
 
 import java.sql.Date;
 
-public class Exam {
+public class ExamPojo {
 	private int id;
 	private String subjectId;
 	private String name;
@@ -10,9 +10,9 @@ public class Exam {
 	private Date date;
 	private boolean isActive ;
 	
-	public Exam() {}
+	public ExamPojo() {}
 
-	public Exam(int id, String subjectId, String name, String type,Date date, boolean isActive) {
+	public ExamPojo(int id, String subjectId, String name, String type,Date date, boolean isActive) {
 		super();
 		this.id = id;
 		this.subjectId = subjectId;

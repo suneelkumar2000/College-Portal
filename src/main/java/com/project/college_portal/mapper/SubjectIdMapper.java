@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.Subject;
+import com.project.college_portal.model.SubjectPojo;
 
-public class SubjectIdMapper implements RowMapper<Subject>{
-	public Subject mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Subject subject = new Subject();
+public class SubjectIdMapper implements RowMapper<SubjectPojo>{
+	public SubjectPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		SubjectPojo subjectPojo = new SubjectPojo();
 		String id = rs.getString("id");
-		subject.setId(id);
-		return subject;
+		subjectPojo.setId(id);
+		return subjectPojo;
 	}
 }

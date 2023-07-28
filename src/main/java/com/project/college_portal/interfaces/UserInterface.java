@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ForgotPasswordException;
 import com.project.college_portal.exception.InvalidMailIdException;
-import com.project.college_portal.model.StudentResult;
+import com.project.college_portal.model.StudentResultPojo;
 import com.project.college_portal.model.User;
 
 public interface UserInterface {
@@ -24,5 +24,5 @@ public interface UserInterface {
 	public int studentsave(User User);
 	public void updateStudentSemester(Model model) throws JsonProcessingException ;
 	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException;
-	public List<StudentResult> findStudentResult(int userid, Model model) throws JsonProcessingException ;
+	public List<StudentResultPojo> findStudentResult(int userid, Model model) throws JsonProcessingException ;
 }

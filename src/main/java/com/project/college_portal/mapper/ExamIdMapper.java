@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.Exam;
+import com.project.college_portal.model.ExamPojo;
 
-public class ExamIdMapper implements RowMapper<Exam>{
-	public Exam mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Exam exam = new Exam();
+public class ExamIdMapper implements RowMapper<ExamPojo>{
+	public ExamPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ExamPojo examPojo = new ExamPojo();
 		int id = rs.getInt("id");
-		exam.setId(id);
-		return exam;
+		examPojo.setId(id);
+		return examPojo;
 	}
 }

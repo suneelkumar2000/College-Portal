@@ -5,22 +5,22 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.Subject;
+import com.project.college_portal.model.SubjectPojo;
 
-public class SubjectMapper implements RowMapper<Subject>{
-	public Subject mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Subject subject = new Subject();
+public class SubjectMapper implements RowMapper<SubjectPojo>{
+	public SubjectPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		SubjectPojo subjectPojo = new SubjectPojo();
 		String id = rs.getString("id");
 		String name = rs.getString("name");
 		int semesterId = rs.getInt("semester_id");
 		String department = rs.getString("department");
 		boolean isActive = rs.getBoolean("is_active");
-		subject.setId(id);
-		subject.setName(name);
-		subject.setSemesterId(semesterId);
-		subject.setDepartment(department);
-		subject.setActive(isActive);
-		return subject;
+		subjectPojo.setId(id);
+		subjectPojo.setName(name);
+		subjectPojo.setSemesterId(semesterId);
+		subjectPojo.setDepartment(department);
+		subjectPojo.setActive(isActive);
+		return subjectPojo;
 	}
 
 }

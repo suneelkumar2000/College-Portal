@@ -5,19 +5,19 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.Result;
+import com.project.college_portal.model.ResultPojo;
 
-public class ResultMapper implements RowMapper<Result>{
-	public Result mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Result result = new Result();
+public class ResultMapper implements RowMapper<ResultPojo>{
+	public ResultPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ResultPojo resultPojo = new ResultPojo();
 		int examId = rs.getInt("exam_id");
 		int userId = rs.getInt("user_id");
 		int marks = rs.getInt("marks");
 		boolean isActive = rs.getBoolean("is_active");
-		result.setExamId(examId);
-		result.setUserId(userId);
-		result.setMarks(marks);
-		result.setIsActive(isActive);
-		return result;
+		resultPojo.setExamId(examId);
+		resultPojo.setUserId(userId);
+		resultPojo.setMarks(marks);
+		resultPojo.setIsActive(isActive);
+		return resultPojo;
 		}
 }

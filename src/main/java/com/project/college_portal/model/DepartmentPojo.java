@@ -1,14 +1,14 @@
 package com.project.college_portal.model;
 
-public class Department {
+public class DepartmentPojo {
 	private int id;
 	private String department;
 	private boolean isActive;
 
-	public Department() {
+	public DepartmentPojo() {
 	}
 
-	public Department(int id, String department, boolean isActive) {
+	public DepartmentPojo(int id, String department, boolean isActive) {
 		super();
 		this.id = id;
 		this.department = department;

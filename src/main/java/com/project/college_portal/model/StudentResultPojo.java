@@ -1,15 +1,15 @@
 package com.project.college_portal.model;
 
-public class StudentResult {
+public class StudentResultPojo {
 	private int examId ;
 	private String subjectId ;
 	private String subjectName;
 	private int semesterId ;
 	private int marks;
 	
-	public StudentResult() {}
+	public StudentResultPojo() {}
 
-	public StudentResult(int examId, String subjectId, String subjectName, int semesterId, int marks) {
+	public StudentResultPojo(int examId, String subjectId, String subjectName, int semesterId, int marks) {
 		super();
 		this.examId = examId;
 		this.subjectId = subjectId;

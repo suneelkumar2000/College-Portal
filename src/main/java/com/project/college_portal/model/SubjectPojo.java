@@ -1,16 +1,16 @@
 package com.project.college_portal.model;
 
-public class Subject {
+public class SubjectPojo {
 	private String id;
 	private String name;
 	private int semesterId;
 	private String department;
 	private boolean isActive;
 
-	public Subject() {
+	public SubjectPojo() {
 	}
 
-	public Subject(String id, String name, int semesterId, String department, boolean isActive) {
+	public SubjectPojo(String id, String name, int semesterId, String department, boolean isActive) {
 		super();
 		this.id = id;
 		this.name = name;

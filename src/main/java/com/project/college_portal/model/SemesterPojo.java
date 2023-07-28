@@ -1,12 +1,12 @@
 package com.project.college_portal.model;
 
-public class Semester {
+public class SemesterPojo {
 	private int id;
 	private boolean isActive;
 	
-	public Semester() {}
+	public SemesterPojo() {}
 
-	public Semester(int id, boolean isActive) {
+	public SemesterPojo(int id, boolean isActive) {
 		super();
 		this.id = id;
 		this.isActive = isActive;

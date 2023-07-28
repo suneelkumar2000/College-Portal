@@ -5,17 +5,17 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.Department;
+import com.project.college_portal.model.DepartmentPojo;
 
-public class DepartmentMapper implements RowMapper<Department> {
-	public Department mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Department department = new Department();
+public class DepartmentMapper implements RowMapper<DepartmentPojo> {
+	public DepartmentPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		DepartmentPojo departmentPojo = new DepartmentPojo();
 		int id = rs.getInt("id");
 		String department1 = rs.getString("department");
 		boolean isActive = rs.getBoolean("is_active");
-		department.setId(id);
-		department.setDepartment(department1);
-		department.setIsActive(isActive);
-		return department;
+		departmentPojo.setId(id);
+		departmentPojo.setDepartment(department1);
+		departmentPojo.setIsActive(isActive);
+		return departmentPojo;
 	}
 }

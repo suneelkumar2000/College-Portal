@@ -1,6 +1,6 @@
 package com.project.college_portal.model;
 
-public class Attendance {
+public class AttendancePojo {
 	private int userId ;
 	private int totalDays ;
 	private int daysAttended;
@@ -8,9 +8,9 @@ public class Attendance {
 	private int attendance;
 	private boolean isActive ;
 	
-	public Attendance() {}
+	public AttendancePojo() {}
 	
-	public Attendance(int userId, int totalDays, int daysAttended, int daysLeave, int attendance, boolean isActive) {
+	public AttendancePojo(int userId, int totalDays, int daysAttended, int daysLeave, int attendance, boolean isActive) {
 		super();
 		this.userId = userId;
 		this.totalDays = totalDays;

@@ -1,14 +1,14 @@
 package com.project.college_portal.model;
 
-public class Result {
+public class ResultPojo {
 	private int examId ;
 	private int userId ;
 	private int marks ;
 	private boolean isActive ;
 	
-	public Result() {}
+	public ResultPojo() {}
 	
-	public Result(int examId, int userId, int marks, boolean isActive) {
+	public ResultPojo(int examId, int userId, int marks, boolean isActive) {
 		super();
 		this.examId = examId;
 		this.userId = userId;

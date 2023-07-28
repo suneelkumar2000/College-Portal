@@ -5,15 +5,15 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.Exam;
+import com.project.college_portal.model.ExamPojo;
 
-public class ExamnameMapper implements RowMapper<Exam>{
-	public Exam mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Exam exam = new Exam();
+public class ExamnameMapper implements RowMapper<ExamPojo>{
+	public ExamPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ExamPojo examPojo = new ExamPojo();
 		String name = rs.getString("name");
 		
-		exam.setName(name);
+		examPojo.setName(name);
 		
-		return exam;
+		return examPojo;
 	}
 }

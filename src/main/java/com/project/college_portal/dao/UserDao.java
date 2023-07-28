@@ -22,8 +22,8 @@ import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
 import com.project.college_portal.mapper.UserMapper;
 import com.project.college_portal.mapper.StudentResultMapper;
-import com.project.college_portal.model.Semester;
-import com.project.college_portal.model.StudentResult;
+import com.project.college_portal.model.SemesterPojo;
+import com.project.college_portal.model.StudentResultPojo;
 import com.project.college_portal.model.User;
 import com.project.college_portal.validation.Validation;
 
@@ -116,8 +116,7 @@ public class UserDao implements UserInterface {
 	// method to show user list
 	public List<User> listUsers() {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		return userList;
+		return  jdbcTemplate.query(select, new UserMapper());
 	}
 
 	// forgotPassword method
@@ -166,8 +165,7 @@ public class UserDao implements UserInterface {
 		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
 		for (User user : userDetails) {
 			if (user != null) {
-				int userId = user.getUserId();
-				return userId;
+				return user.getUserId();
 			}
 		}
 		return 0;
@@ -202,8 +200,7 @@ public class UserDao implements UserInterface {
 	// method to find student details by Email
 	public List<User> findByEmail(String email) {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and email=?)";
-		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
-		return userDetails;
+		return  jdbcTemplate.query(select, new UserMapper(), email);
 	}
 
 	// method to update student details
@@ -239,8 +236,8 @@ public class UserDao implements UserInterface {
 				int month = currentDate.getMonthValue();
 				int year = currentDate.getYear();
 				staffDao.activeOrInactiveSemester();
-				List<Semester> semesterList = staffDao.activeSemesterList(model);
-				for (Semester semesterModel : semesterList) {
+				List<SemesterPojo> semesterList = staffDao.activeSemesterList(model);
+				for (SemesterPojo semesterModel : semesterList) {
 					int semesterId = semesterModel.getId();
 					int yearDifference = year - joiningYear;
 					if ((yearDifference) < 5) {
@@ -339,9 +336,9 @@ public class UserDao implements UserInterface {
 	}
 	
 	// method to find Student result
-		public List<StudentResult> findStudentResult(int userid, Model model) throws JsonProcessingException {
+		public List<StudentResultPojo> findStudentResult(int userid, Model model) throws JsonProcessingException {
 			String select = "select result.exam_id,exam.subject_id,subjects.name,subjects.semester_id,result.marks from result left join exam left join subjects on exam.subject_id = subjects.id on result.exam_id = exam.id  where (result.user_id=?) ; ";
-			List<StudentResult> resultList = jdbcTemplate.query(select, new StudentResultMapper(), userid);
+			List<StudentResultPojo> resultList = jdbcTemplate.query(select, new StudentResultMapper(), userid);
 			ObjectMapper object = new ObjectMapper();
 			String result = object.writeValueAsString(resultList);
 			model.addAttribute("listOfResult", result);

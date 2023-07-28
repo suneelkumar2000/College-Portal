@@ -5,16 +5,16 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.Semester;
+import com.project.college_portal.model.SemesterPojo;
 
-public class SemesterMapper implements RowMapper<Semester>{
-	public Semester mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Semester semester = new Semester();
+public class SemesterMapper implements RowMapper<SemesterPojo>{
+	public SemesterPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		SemesterPojo semesterPojo = new SemesterPojo();
 		int id = rs.getInt("id");
 		boolean isActive = rs.getBoolean("is_active");
-		semester.setId(id);
-		semester.setActive(isActive);
-		return semester;
+		semesterPojo.setId(id);
+		semesterPojo.setActive(isActive);
+		return semesterPojo;
 	}
 
 }

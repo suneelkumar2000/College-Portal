@@ -27,12 +27,12 @@ import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SemesterIdException;
 import com.project.college_portal.exception.SubjectIdException;
 import com.project.college_portal.exception.UserIdException;
-import com.project.college_portal.model.Attendance;
-import com.project.college_portal.model.Department;
-import com.project.college_portal.model.Exam;
-import com.project.college_portal.model.Result;
-import com.project.college_portal.model.Semester;
-import com.project.college_portal.model.Subject;
+import com.project.college_portal.model.AttendancePojo;
+import com.project.college_portal.model.DepartmentPojo;
+import com.project.college_portal.model.ExamPojo;
+import com.project.college_portal.model.ResultPojo;
+import com.project.college_portal.model.SemesterPojo;
+import com.project.college_portal.model.SubjectPojo;
 import com.project.college_portal.model.User;
 import com.project.college_portal.service.StaffService;
 
@@ -43,7 +43,7 @@ public class StaffController {
 	StaffService staffService = new StaffService();
 	
 	String sessionUserId = "userId";
-	String ErrorMessage = "ErrorMessage";
+	String errorMessage = "ErrorMessage";
 	String errorpopup = "errorpopup";
 	String modeldepartmentList="departmentList";
 	String modelattendanceList="attendanceList";
@@ -95,7 +95,7 @@ public class StaffController {
 	public String addDepartment(@RequestParam("department") String department, Model model, HttpSession session)
 			throws ExistDepartmentNameException, HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
-		Department depart = new Department();
+		DepartmentPojo depart = new DepartmentPojo();
 		depart.setDepartment(department);
 		int value = staffService.addDepartment(staffId, depart);
 		if (value == 1) {
@@ -109,9 +109,9 @@ public class StaffController {
 	public String activateOrDeactivateDepartment(@RequestParam("name") String name, Model model,HttpSession session) throws HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
-		Department department = new Department();
-		department.setDepartment(name);
-		int value = staffService.activateOrDeactivateDepartment(department);
+		DepartmentPojo departmentPojo = new DepartmentPojo();
+		departmentPojo.setDepartment(name);
+		int value = staffService.activateOrDeactivateDepartment(departmentPojo);
 		if (value == 1) {
 			return "redirect:/departmentlist";
 		} else if (value == 2) {
@@ -162,9 +162,9 @@ public class StaffController {
 	// method to activate Or Deactivate Attendance
 	@GetMapping(path = "/activateDeactivateAttendance/{userId}")
 	public String activateOrDeactivateAttendance(@PathVariable(value = "userId") int userId, Model model) {
-		Attendance attendance = new Attendance();
-		attendance.setUserId(userId);
-		int value = staffService.activateOrDeactivateAttendance(attendance);
+		AttendancePojo attendancePojo = new AttendancePojo();
+		attendancePojo.setUserId(userId);
+		int value = staffService.activateOrDeactivateAttendance(attendancePojo);
 		if (value == 1) {
 			return "redirect:/attendancelist";
 		} else
@@ -200,9 +200,9 @@ public class StaffController {
 	// method to add Semester
 	@GetMapping(path = "/addsemester")
 	public String addSemester(@RequestParam("semesterId") int semesterId, Model model) throws ExistSemesterIdException {
-		Semester semester = new Semester();
-		semester.setId(semesterId);
-		int value = staffService.addSemester(semester);
+		SemesterPojo semesterPojo = new SemesterPojo();
+		semesterPojo.setId(semesterId);
+		int value = staffService.addSemester(semesterPojo);
 
 		if (value == 1) {
 			return "redirect:/semesterlist";
@@ -213,9 +213,9 @@ public class StaffController {
 	// method to activate Or Deactivate Semester
 	@GetMapping(path = "/activateDeactivateSemester/{semesterId}")
 	public String activateOrDeactivateSemester(@PathVariable(value = "semesterId") int semesterId, Model model) {
-		Semester semester = new Semester();
-		semester.setId(semesterId);
-		int value = staffService.activateOrDeactivateSemester(semester);
+		SemesterPojo semesterPojo = new SemesterPojo();
+		semesterPojo.setId(semesterId);
+		int value = staffService.activateOrDeactivateSemester(semesterPojo);
 		if (value == 1) {
 			return "redirect:/semesterlist";
 		} else if (value == 2) {
@@ -245,11 +245,11 @@ public class StaffController {
 	public String addSubject(@RequestParam("name") String name, @RequestParam("semesterId") int semesterId,
 			@RequestParam("department") String department, Model model)
 			throws SemesterIdException, DepartmentException, ExistSubjectNameException {
-		Subject subject = new Subject();
-		subject.setName(name);
-		subject.setSemesterId(semesterId);
-		subject.setDepartment(department);
-		int value = staffService.addSubject(subject);
+		SubjectPojo subjectPojo = new SubjectPojo();
+		subjectPojo.setName(name);
+		subjectPojo.setSemesterId(semesterId);
+		subjectPojo.setDepartment(department);
+		int value = staffService.addSubject(subjectPojo);
 		if (value == 1) {
 			return "redirect:/subjectlist";
 		} else
@@ -263,9 +263,9 @@ public class StaffController {
 	public String activateOrDeactivateSubject(@RequestParam("subjectId") String subjectId, Model model,HttpSession session) throws HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
-		Subject subject = new Subject();
-		subject.setId(subjectId);
-		int value = staffService.activateOrDeactivateSubject(subject);
+		SubjectPojo subjectPojo = new SubjectPojo();
+		subjectPojo.setId(subjectId);
+		int value = staffService.activateOrDeactivateSubject(subjectPojo);
 		if (value == 1) {
 			return "redirect:/subjectlist";
 		} else if (value == 2) {
@@ -295,12 +295,12 @@ public class StaffController {
 	public String addExam(@RequestParam("name") String name, @RequestParam("date") Date date,
 			@RequestParam("subjectId") String subjectId, @RequestParam("type") String type, Model model)
 			throws SubjectIdException, ExistExamException {
-		Exam exam = new Exam();
-		exam.setName(name);
-		exam.setSubjectId(subjectId);
-		exam.setDate(date);
-		exam.setType(type);
-		int value = staffService.addExam(exam);
+		ExamPojo examPojo = new ExamPojo();
+		examPojo.setName(name);
+		examPojo.setSubjectId(subjectId);
+		examPojo.setDate(date);
+		examPojo.setType(type);
+		int value = staffService.addExam(examPojo);
 		if (value == 1) {
 			return "redirect:/examlist";
 		} else
@@ -312,9 +312,9 @@ public class StaffController {
 	public String activateOrDeactivateExam(@RequestParam("examId") int examId, Model model,HttpSession session) throws HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
-		Exam exam = new Exam();
-		exam.setId(examId);
-		int value = staffService.activateOrDeactivateExam(exam);
+		ExamPojo examPojo = new ExamPojo();
+		examPojo.setId(examId);
+		int value = staffService.activateOrDeactivateExam(examPojo);
 		if (value == 1) {
 			return "redirect:/examlist";
 		} else if (value == 2) {
@@ -344,10 +344,10 @@ public class StaffController {
 	public String addOrUpdateResult(@RequestParam("subject") String subjectName, @RequestParam("exam") String examName,
 			@RequestParam("examType") String examType, @RequestParam("userId") int userId,
 			@RequestParam("marks") int marks, Model model) throws MarkException, UserIdException, ExamIdException {
-		Result result = new Result();
-		result.setUserId(userId);
+		ResultPojo resultPojo = new ResultPojo();
+		resultPojo.setUserId(userId);
 		System.out.println(userId);
-		result.setMarks(marks);
+		resultPojo.setMarks(marks);
 		System.out.println(marks);
 
 		List<User> user = staffDao.findStudentById(userId, model);
@@ -357,19 +357,19 @@ public class StaffController {
 				System.out.println(department);
 				int semester = userModel.getSemester();
 				System.out.println(semester);
-				List<Subject> subject = staffDao.findSubjectID(department, semester, subjectName);
-				for (Subject subjectModel : subject) {
+				List<SubjectPojo> subjectPojo = staffDao.findSubjectID(department, semester, subjectName);
+				for (SubjectPojo subjectModel : subjectPojo) {
 					if (subjectModel != null) {
 						String subjectId = subjectModel.getId();
 						System.out.println(subjectId);
-						List<Exam> exam = staffDao.findExam(examName, examType, subjectId);
-						System.out.println(exam);
-						for (Exam examModel : exam) {
+						List<ExamPojo> examPojo = staffDao.findExam(examName, examType, subjectId);
+						System.out.println(examPojo);
+						for (ExamPojo examModel : examPojo) {
 							if (examModel != null) {
 								int examId = examModel.getId();
-								result.setExamId(examId);
+								resultPojo.setExamId(examId);
 								System.out.println(examId);
-								int value = staffService.addOrUpdateResult(result);
+								int value = staffService.addOrUpdateResult(resultPojo);
 								if (value == 1) {
 									return "redirect:/resultAdmin";
 								}
@@ -388,10 +388,10 @@ public class StaffController {
 			@RequestParam("userId") int userId, Model model,HttpSession session) throws HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
-		Result result = new Result();
-		result.setExamId(examId);
-		result.setUserId(userId);
-		int value = staffService.activateOrDeactivateOneResult(result);
+		ResultPojo resultPojo = new ResultPojo();
+		resultPojo.setExamId(examId);
+		resultPojo.setUserId(userId);
+		int value = staffService.activateOrDeactivateOneResult(resultPojo);
 		if (value == 1) {
 			return "redirect:/resultlist";
 		} else if (value == 2) {
@@ -405,9 +405,9 @@ public class StaffController {
 	public String activateOrDeactivateWholeExamResult(@RequestParam("examId") int examId, Model model,HttpSession session) throws HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
-		Result result = new Result();
-		result.setExamId(examId);
-		int value = staffService.activateOrDeactivateWholeExamResult(result);
+		ResultPojo resultPojo = new ResultPojo();
+		resultPojo.setExamId(examId);
+		int value = staffService.activateOrDeactivateWholeExamResult(resultPojo);
 		if (value == 1) {
 			return "redirect:/resultlist";
 		} else if (value == 2) {
@@ -421,9 +421,9 @@ public class StaffController {
 	public String activateOrDeactivateWholeUserResult(@RequestParam("userId") int userId, Model model,HttpSession session) throws HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
 		staffService.checkHigherAuthority(staffId);
-		Result result = new Result();
-		result.setUserId(userId);
-		int value = staffService.activateOrDeactivateWholeUserResult(result);
+		ResultPojo resultPojo = new ResultPojo();
+		resultPojo.setUserId(userId);
+		int value = staffService.activateOrDeactivateWholeUserResult(resultPojo);
 		if (value == 1) {
 			return "redirect:/resultlist";
 		} else if (value == 2) {
@@ -437,84 +437,84 @@ public class StaffController {
 	// method to handle ExistDepartmentNameException
 	@ExceptionHandler(value = ExistDepartmentNameException.class)
 	public String existDepartmentNameException(ExistDepartmentNameException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Department Already Exist");
+		model.addAttribute(errorMessage, "Department Already Exist");
 		return errorpopup;
 	}
 
 	// method to handle ExistExamException
 	@ExceptionHandler(value = ExistExamException.class)
 	public String existExamException(ExistExamException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Exam Already Exist");
+		model.addAttribute(errorMessage, "Exam Already Exist");
 		return errorpopup;
 	}
 
 	// method to handle ExistMailIdException
 	@ExceptionHandler(value = ExistMailIdException.class)
 	public String existMailIdException(ExistMailIdException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Sorry! This Email Id Already Exist");
+		model.addAttribute(errorMessage, "Sorry! This Email Id Already Exist");
 		return errorpopup;
 	}
 
 	// method to handle InvalidMailIdException
 	@ExceptionHandler(value = InvalidMailIdException.class)
 	public String invalidMailIdException(InvalidMailIdException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Sorry! Invalid Email Id And Password");
+		model.addAttribute(errorMessage, "Sorry! Invalid Email Id And Password");
 		return errorpopup;
 	}
 
 	// method to handle ExamIdException
 	@ExceptionHandler(value = ExamIdException.class)
 	public String examIdException(ExamIdException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Exam Id dosen't Exist");
+		model.addAttribute(errorMessage, "Exam Id dosen't Exist");
 		return errorpopup;
 	}
 
 	// method to handle MarkException
 	@ExceptionHandler(value = MarkException.class)
 	public String markException(MarkException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Invalid Marks ,Marks should be between 0 to 100");
+		model.addAttribute(errorMessage, "Invalid Marks ,Marks should be between 0 to 100");
 		return errorpopup;
 	}
 
 	// method to handle ExistSemesterIdException
 	@ExceptionHandler(value = ExistSemesterIdException.class)
 	public String existSemesterIdException(ExistSemesterIdException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Semester Already Exist");
+		model.addAttribute(errorMessage, "Semester Already Exist");
 		return errorpopup;
 	}
 
 	// method to handle SubjectIdException
 	@ExceptionHandler(value = SubjectIdException.class)
 	public String subjectIdException(SubjectIdException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Subject Id dosen't Exist");
+		model.addAttribute(errorMessage, "Subject Id dosen't Exist");
 		return errorpopup;
 	}
 
 	// method to handle UserIdException
 	@ExceptionHandler(value = UserIdException.class)
 	public String userIdException(UserIdException exception, Model model) {
-		model.addAttribute(ErrorMessage, "User dosen't Exist");
+		model.addAttribute(errorMessage, "User dosen't Exist");
 		return errorpopup;
 	}
 
 	// method to handle HigherAuthorityException
 	@ExceptionHandler(value = HigherAuthorityException.class)
 	public String higherAuthorityException(HigherAuthorityException exception, Model model) {
-		model.addAttribute(ErrorMessage, "opps sorry! only HigherAuthority can do this Process");
+		model.addAttribute(errorMessage, "opps sorry! only HigherAuthority can do this Process");
 		return errorpopup;
 	}
 
 	// method to handle DepartmentException
 	@ExceptionHandler(value = DepartmentException.class)
 	public String departmentException(DepartmentException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Department dosen't Exist");
+		model.addAttribute(errorMessage, "Department dosen't Exist");
 		return errorpopup;
 	}
 
 	// method to handle ExistSubjectNameException
 	@ExceptionHandler(value = ExistSubjectNameException.class)
 	public String existSubjectNameException(ExistSubjectNameException exception, Model model) {
-		model.addAttribute(ErrorMessage, "Subject Already Exist");
+		model.addAttribute(errorMessage, "Subject Already Exist");
 		return errorpopup;
 	}
 }

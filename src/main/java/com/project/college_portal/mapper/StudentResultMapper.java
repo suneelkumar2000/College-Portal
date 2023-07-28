@@ -5,12 +5,12 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.StudentResult;
+import com.project.college_portal.model.StudentResultPojo;
 
-public class StudentResultMapper implements RowMapper<StudentResult>{
-	public StudentResult mapRow(ResultSet rs, int rowNum) throws SQLException {
+public class StudentResultMapper implements RowMapper<StudentResultPojo>{
+	public StudentResultPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
-		StudentResult studentResult=new StudentResult();
+		StudentResultPojo studentResultPojo=new StudentResultPojo();
 		
 		int examId = rs.getInt("exam_id");
 		String subjectId = rs.getString("subject_id");
@@ -18,12 +18,12 @@ public class StudentResultMapper implements RowMapper<StudentResult>{
 		int semesterId = rs.getInt("semester_id");
 		int marks = rs.getInt("marks");
 
-		studentResult.setExamId(examId);
-		studentResult.setSubjectId(subjectId);
-		studentResult.setSubjectName(name);
-		studentResult.setSemesterId(semesterId);
-		studentResult.setMarks(marks);
-		return studentResult ;
+		studentResultPojo.setExamId(examId);
+		studentResultPojo.setSubjectId(subjectId);
+		studentResultPojo.setSubjectName(name);
+		studentResultPojo.setSemesterId(semesterId);
+		studentResultPojo.setMarks(marks);
+		return studentResultPojo ;
 		
 	}
 }

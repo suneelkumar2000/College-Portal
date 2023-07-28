@@ -35,12 +35,12 @@ import com.project.college_portal.mapper.SubjectMapper;
 import com.project.college_portal.mapper.SubjectNameMapper;
 import com.project.college_portal.mapper.UserDepartmentMapper;
 import com.project.college_portal.mapper.UserMapper;
-import com.project.college_portal.model.Attendance;
-import com.project.college_portal.model.Department;
-import com.project.college_portal.model.Exam;
-import com.project.college_portal.model.Result;
-import com.project.college_portal.model.Semester;
-import com.project.college_portal.model.Subject;
+import com.project.college_portal.model.AttendancePojo;
+import com.project.college_portal.model.DepartmentPojo;
+import com.project.college_portal.model.ExamPojo;
+import com.project.college_portal.model.ResultPojo;
+import com.project.college_portal.model.SemesterPojo;
+import com.project.college_portal.model.SubjectPojo;
 import com.project.college_portal.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,16 +68,14 @@ public class StaffDao implements StaffInterface {
 		throw new HigherAuthorityException("HigherAuthority Exception");
 	}
 
-	public List<User> findStudentById(int UserId, Model model) {
+	public List<User> findStudentById(int userId, Model model) {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and id=?)";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper(), UserId);
-		return userList;
+		return  jdbcTemplate.query(select, new UserMapper(), userId);
 	}
 
-	public User findStudentDepartmentById(int UserId) {
+	public User findStudentDepartmentById(int userId) {
 		String select = "select department from user where (roll='student' and id=?)";
-		User userDepartment = jdbcTemplate.queryForObject(select, new UserDepartmentMapper(), UserId);
-		return userDepartment;
+		return  jdbcTemplate.queryForObject(select, new UserDepartmentMapper(), userId);
 	}
 
 	public List<User> studentList(Model model) throws JsonProcessingException {
@@ -132,8 +130,7 @@ public class StaffDao implements StaffInterface {
 
 	public List<User> notApprovedStudentList() {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and status='not approved' and is_active =true)";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		return userList;
+		return  jdbcTemplate.query(select, new UserMapper());
 	}
 
 	public int activateOrDeactivateStudent(User users) {
@@ -166,13 +163,12 @@ public class StaffDao implements StaffInterface {
 
 	public List<User> inactiveStudentList() {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and is_active =false)";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		return userList;
+		return  jdbcTemplate.query(select, new UserMapper());
 	}
 
 	// --------- Department methods ------------
 
-	public int addDepartment(int staffId, Department department)
+	public int addDepartment(int staffId, DepartmentPojo departmentPojo)
 			throws ExistDepartmentNameException, HigherAuthorityException {
 		String selectStaff = "Select id,roll,status,is_active from user";
 		List<User> user = jdbcTemplate.query(selectStaff, new ApprovingMapper());
@@ -181,12 +177,12 @@ public class StaffDao implements StaffInterface {
 				.collect(Collectors.toList());
 		for (User userModel : user1) {
 			if (userModel != null) {
-				String name = department.getDepartment();
+				String name = departmentPojo.getDepartment();
 				String select = selectdepartment;
-				List<Department> department1 = (jdbcTemplate.query(select, new DepartmentMapper())).stream()
+				List<DepartmentPojo> department1 = (jdbcTemplate.query(select, new DepartmentMapper())).stream()
 						.filter(dep -> ((dep.getDepartment()).toLowerCase()).equals((name).toLowerCase()))
 						.collect(Collectors.toList());
-				for (Department departmentModel1 : department1) {
+				for (DepartmentPojo departmentModel1 : department1) {
 					if (departmentModel1 != null) {
 						throw new ExistDepartmentNameException("Exist Department Exception");
 					}
@@ -203,27 +199,27 @@ public class StaffDao implements StaffInterface {
 		throw new HigherAuthorityException("HigherAuthority Exception");
 	}
 
-	public int activateOrDeactivateDepartment(Department Department) {
+	public int activateOrDeactivateDepartment(DepartmentPojo departmentPojo) {
 		String select = selectdepartment;
-		List<Department> department = jdbcTemplate.query(select, new DepartmentMapper());
-		List<Department> department1 = department.stream()
-				.filter(dep -> dep.getDepartment().equals(Department.getDepartment()))
+		List<DepartmentPojo> department = jdbcTemplate.query(select, new DepartmentMapper());
+		List<DepartmentPojo> department1 = department.stream()
+				.filter(dep -> dep.getDepartment().equals(departmentPojo.getDepartment()))
 				.filter(isActive -> isActive.isIsActive() == (true)).collect(Collectors.toList());
-		List<Department> department2 = department.stream()
-				.filter(dep -> dep.getDepartment().equals(Department.getDepartment()))
+		List<DepartmentPojo> department2 = department.stream()
+				.filter(dep -> dep.getDepartment().equals(departmentPojo.getDepartment()))
 				.filter(isActive -> isActive.isIsActive() == (false)).collect(Collectors.toList());
-		for (Department departmentModel1 : department1) {
+		for (DepartmentPojo departmentModel1 : department1) {
 			if (departmentModel1 != null) {
 				String deactivate = "update classroom set is_active =false where department=?";
-				Object[] params = { Department.getDepartment() };
+				Object[] params = { departmentPojo.getDepartment() };
 				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
-		for (Department departmentModel2 : department2) {
+		for (DepartmentPojo departmentModel2 : department2) {
 			if (departmentModel2 != null) {
 				String activate = "update classroom set is_active =true where department=?";
-				Object[] params = { Department.getDepartment() };
+				Object[] params = { departmentPojo.getDepartment() };
 				jdbcTemplate.update(activate, params);
 				return 2;
 			}
@@ -231,18 +227,18 @@ public class StaffDao implements StaffInterface {
 		return 0;
 	}
 
-	public List<Department> departmentList(Model model) throws JsonProcessingException {
+	public List<DepartmentPojo> departmentList(Model model) throws JsonProcessingException {
 		String select = "select id,department,is_active from classroom where (is_active =true and department !='not selected')";
-		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
+		List<DepartmentPojo> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		ObjectMapper object = new ObjectMapper();
 		String department = object.writeValueAsString(departmentList);
 		model.addAttribute("listOfDepartment", department);
 		return departmentList;
 	}
 
-	public List<Department> inactiveDepartmentList(Model model) throws JsonProcessingException {
+	public List<DepartmentPojo> inactiveDepartmentList(Model model) throws JsonProcessingException {
 		String select = "select id,department,is_active from classroom where (is_active =false and department !='not selected')";
-		List<Department> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
+		List<DepartmentPojo> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		ObjectMapper object = new ObjectMapper();
 		String department = object.writeValueAsString(departmentList);
 		model.addAttribute("listOfDepartment", department);
@@ -260,11 +256,11 @@ public class StaffDao implements StaffInterface {
 			if (userModel1 != null) {
 
 				String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
-				List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-				List<Attendance> attendanceList1 = attendanceList.stream()
+				List<AttendancePojo> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+				List<AttendancePojo> attendanceList1 = attendanceList.stream()
 						.filter(userid -> userid.getUserId() == (userId))
 						.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-				for (Attendance attendanceModel1 : attendanceList1) {
+				for (AttendancePojo attendanceModel1 : attendanceList1) {
 					if (attendanceModel1 != null) {
 						int daysAttended = attendanceModel1.getDaysAttended() + 1;
 						int daysLeave = attendanceModel1.getDaysLeave();
@@ -304,11 +300,11 @@ public class StaffDao implements StaffInterface {
 			if (userModel1 != null) {
 
 				String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
-				List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-				List<Attendance> attendanceList1 = attendanceList.stream()
+				List<AttendancePojo> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+				List<AttendancePojo> attendanceList1 = attendanceList.stream()
 						.filter(userid -> userid.getUserId() == (userId))
 						.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-				for (Attendance attendanceModel1 : attendanceList1) {
+				for (AttendancePojo attendanceModel1 : attendanceList1) {
 					if (attendanceModel1 != null) {
 						int daysAttended = attendanceModel1.getDaysAttended();
 						int daysLeave = attendanceModel1.getDaysLeave() + 1;
@@ -339,27 +335,27 @@ public class StaffDao implements StaffInterface {
 		throw new UserIdException("User Id dosen't exist");
 	}
 
-	public int activateOrDeactivateAttendance(Attendance attendance) {
+	public int activateOrDeactivateAttendance(AttendancePojo attendancePojo) {
 		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
-		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-		List<Attendance> attendanceList1 = attendanceList.stream()
-				.filter(userid -> userid.getUserId() == (attendance.getUserId()))
+		List<AttendancePojo> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+		List<AttendancePojo> attendanceList1 = attendanceList.stream()
+				.filter(userid -> userid.getUserId() == (attendancePojo.getUserId()))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		List<Attendance> attendanceList2 = attendanceList.stream()
-				.filter(userid -> userid.getUserId() == (attendance.getUserId()))
+		List<AttendancePojo> attendanceList2 = attendanceList.stream()
+				.filter(userid -> userid.getUserId() == (attendancePojo.getUserId()))
 				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
-		for (Attendance attendanceModel1 : attendanceList1) {
+		for (AttendancePojo attendanceModel1 : attendanceList1) {
 			if (attendanceModel1 != null) {
 				String deactivate = "update attendance set is_active =false where user_id=?";
-				Object[] params = { attendance.getUserId() };
+				Object[] params = { attendancePojo.getUserId() };
 				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
-		for (Attendance attendanceModel2 : attendanceList2) {
+		for (AttendancePojo attendanceModel2 : attendanceList2) {
 			if (attendanceModel2 != null) {
 				String activate = "update attendance set is_active =true where user_id=?";
-				Object[] params = { attendance.getUserId() };
+				Object[] params = { attendancePojo.getUserId() };
 				jdbcTemplate.update(activate, params);
 				return 1;
 			}
@@ -367,33 +363,31 @@ public class StaffDao implements StaffInterface {
 		return 0;
 	}
 
-	public List<Attendance> attendanceList() {
+	public List<AttendancePojo> attendanceList() {
 		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =true)";
-		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-		return attendanceList;
+		return  jdbcTemplate.query(select, new AttendanceMapper());
 	}
 
-	public List<Attendance> inactiveAttendanceList() {
+	public List<AttendancePojo> inactiveAttendanceList() {
 		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =false)";
-		List<Attendance> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
-		return attendanceList;
+		return jdbcTemplate.query(select, new AttendanceMapper());
 	}
 
 	// --------- Semester methods ------------
 
-	public int addSemester(Semester semester) throws ExistSemesterIdException {
-		int semesterId = semester.getId();
+	public int addSemester(SemesterPojo semesterPojo) throws ExistSemesterIdException {
+		int semesterId = semesterPojo.getId();
 		String select = "Select id,is_active from semester";
-		List<Semester> semester1 = (jdbcTemplate.query(select, new SemesterMapper())).stream()
+		List<SemesterPojo> semester1 = (jdbcTemplate.query(select, new SemesterMapper())).stream()
 				.filter(id -> ((id.getId()) == (semesterId))).collect(Collectors.toList());
-		for (Semester semesterModel1 : semester1) {
+		for (SemesterPojo semesterModel1 : semester1) {
 			if (semesterModel1 != null) {
 				throw new ExistSemesterIdException("Exist Semester Exception");
 			}
 		}
 
 		String add = "insert into semester(id) values(?)";
-		Object[] params = { semester.getId() };
+		Object[] params = { semesterPojo.getId() };
 		int noOfRows = jdbcTemplate.update(add, params);
 		if (noOfRows > 0) {
 			return 1;
@@ -401,25 +395,25 @@ public class StaffDao implements StaffInterface {
 			return 0;
 	}
 
-	public int activateOrDeactivateSemester(Semester Semester) {
+	public int activateOrDeactivateSemester(SemesterPojo semesterPojo) {
 		String select = "Select id,is_active from semester";
-		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
-		List<Semester> semester1 = semester.stream().filter(id -> id.getId() == (Semester.getId()))
+		List<SemesterPojo> semester = jdbcTemplate.query(select, new SemesterMapper());
+		List<SemesterPojo> semester1 = semester.stream().filter(id -> id.getId() == (semesterPojo.getId()))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		List<Semester> semester2 = semester.stream().filter(id -> id.getId() == (Semester.getId()))
+		List<SemesterPojo> semester2 = semester.stream().filter(id -> id.getId() == (semesterPojo.getId()))
 				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
-		for (Semester semesterModel1 : semester1) {
+		for (SemesterPojo semesterModel1 : semester1) {
 			if (semesterModel1 != null) {
 				String deactivate = "update semester set is_active =false where id=?";
-				Object[] params = { Semester.getId() };
+				Object[] params = { semesterPojo.getId() };
 				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
-		for (Semester semesterModel2 : semester2) {
+		for (SemesterPojo semesterModel2 : semester2) {
 			if (semesterModel2 != null) {
 				String activate = "update semester set is_active =true where id=?";
-				Object[] params = { Semester.getId() };
+				Object[] params = { semesterPojo.getId() };
 				jdbcTemplate.update(activate, params);
 				return 2;
 			}
@@ -429,9 +423,9 @@ public class StaffDao implements StaffInterface {
 
 	public int activeOrInactiveSemester() {
 		String select = "Select id,is_active from semester";
-		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
+		List<SemesterPojo> semester = jdbcTemplate.query(select, new SemesterMapper());
 
-		for (Semester semesterModel1 : semester) {
+		for (SemesterPojo semesterModel1 : semester) {
 			if (semesterModel1 != null) {
 				int SemesterId = semesterModel1.getId();
 				LocalDate currentDate = LocalDate.now();
@@ -464,27 +458,27 @@ public class StaffDao implements StaffInterface {
 
 	}
 
-	public List<Semester> semesterList(Model model) throws JsonProcessingException {
+	public List<SemesterPojo> semesterList(Model model) throws JsonProcessingException {
 		String select = "Select id,is_active from semester";
-		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
+		List<SemesterPojo> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		ObjectMapper object = new ObjectMapper();
 		String semester = object.writeValueAsString(semesterList);
 		model.addAttribute("listOfSemester", semester);
 		return semesterList;
 	}
 
-	public List<Semester> activeSemesterList(Model model) throws JsonProcessingException {
+	public List<SemesterPojo> activeSemesterList(Model model) throws JsonProcessingException {
 		String select = "Select id,is_active from semester where (is_active =true)";
-		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
+		List<SemesterPojo> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		ObjectMapper object = new ObjectMapper();
 		String semester = object.writeValueAsString(semesterList);
 		model.addAttribute("listOfSemester", semester);
 		return semesterList;
 	}
 
-	public List<Semester> inactiveSemesterList(Model model) throws JsonProcessingException {
+	public List<SemesterPojo> inactiveSemesterList(Model model) throws JsonProcessingException {
 		String select = "Select id,is_active from semester where (is_active =false)";
-		List<Semester> semesterList = jdbcTemplate.query(select, new SemesterMapper());
+		List<SemesterPojo> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		ObjectMapper object = new ObjectMapper();
 		String semester = object.writeValueAsString(semesterList);
 		model.addAttribute("listOfSemester", semester);
@@ -493,41 +487,41 @@ public class StaffDao implements StaffInterface {
 
 	// --------- Subject methods ------------
 
-	public int addSubject(Subject subject) throws SemesterIdException, DepartmentException, ExistSubjectNameException {
-		int semesterId = subject.getSemesterId();
+	public int addSubject(SubjectPojo subjectPojo) throws SemesterIdException, DepartmentException, ExistSubjectNameException {
+		int semesterId = subjectPojo.getSemesterId();
 		String select = "Select id,is_active from semester";
-		List<Semester> semester = jdbcTemplate.query(select, new SemesterMapper());
-		List<Semester> semester1 = semester.stream().filter(id -> id.getId() == (semesterId))
+		List<SemesterPojo> semesterPojo = jdbcTemplate.query(select, new SemesterMapper());
+		List<SemesterPojo> semester1 = semesterPojo.stream().filter(id -> id.getId() == (semesterId))
 				.collect(Collectors.toList());
-		for (Semester semesterModel1 : semester1) {
+		for (SemesterPojo semesterModel1 : semester1) {
 			if (semesterModel1 != null) {
 
-				String department = subject.getDepartment();
+				String department = subjectPojo.getDepartment();
 				String select1 = selectdepartment;
-				List<Department> depart = jdbcTemplate.query(select1, new DepartmentMapper());
-				List<Department> department1 = depart.stream().filter(dep -> dep.getDepartment().equals(department))
+				List<DepartmentPojo> depart = jdbcTemplate.query(select1, new DepartmentMapper());
+				List<DepartmentPojo> department1 = depart.stream().filter(dep -> dep.getDepartment().equals(department))
 						.collect(Collectors.toList());
-				for (Department departmentModel1 : department1) {
+				for (DepartmentPojo departmentModel1 : department1) {
 					if (departmentModel1 != null) {
 
-						String subjectName = subject.getName();
+						String subjectName = subjectPojo.getName();
 						String select2 = "Select id,name,semester_id,department,is_active from subjects";
-						List<Subject> sub = jdbcTemplate.query(select2, new SubjectMapper());
-						List<Subject> subjectName1 = sub.stream()
+						List<SubjectPojo> sub = jdbcTemplate.query(select2, new SubjectMapper());
+						List<SubjectPojo> subjectName1 = sub.stream()
 								.filter(name -> name.getName().equals(subjectName))
 								.filter(dep -> dep.getDepartment().equals(department))
 								.filter(sem -> sem.getSemesterId() == (semesterId)).collect(Collectors.toList());
-						for (Subject subjectModel1 : subjectName1) {
+						for (SubjectPojo subjectModel1 : subjectName1) {
 							if (subjectModel1 != null) {
 								throw new ExistSubjectNameException("Subject Alredy exist");
 							}
 						}
 
 						String add = "insert into subjects(name,semester_id,department) values(?,?,?)";
-						Object[] params = { subject.getName(), semesterId, department };
+						Object[] params = { subjectPojo.getName(), semesterId, department };
 						jdbcTemplate.update(add, params);
 						String update = "update subjects set id=(concat(SUBSTR(department, 1, 2),SUBSTR(name, 1, 2),semester_id)) where (name=? and semester_id=? and department=?)";
-						Object[] param = { subject.getName(), semesterId, department };
+						Object[] param = { subjectPojo.getName(), semesterId, department };
 						int noOfRows = jdbcTemplate.update(update, param);
 						if (noOfRows > 0) {
 							return 1;
@@ -542,25 +536,25 @@ public class StaffDao implements StaffInterface {
 		throw new SemesterIdException("Semester Id dosen't exist");
 	}
 
-	public int activateOrDeactivateSubject(Subject Subject) {
+	public int activateOrDeactivateSubject(SubjectPojo subjectPojo) {
 		String select = "Select id,name,semester_id,department,is_active from subjects";
-		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
-		List<Subject> subject1 = subject.stream().filter(id -> id.getId() == (Subject.getId()))
+		List<SubjectPojo> subject = jdbcTemplate.query(select, new SubjectMapper());
+		List<SubjectPojo> subject1 = subject.stream().filter(id -> id.getId() == (subjectPojo.getId()))
 				.filter(isActive -> isActive.IsActive() == (true)).collect(Collectors.toList());
-		List<Subject> subject2 = subject.stream().filter(id -> id.getId() == (Subject.getId()))
+		List<SubjectPojo> subject2 = subject.stream().filter(id -> id.getId() == (subjectPojo.getId()))
 				.filter(isActive -> isActive.IsActive() == (false)).collect(Collectors.toList());
-		for (Subject subjectModel1 : subject1) {
+		for (SubjectPojo subjectModel1 : subject1) {
 			if (subjectModel1 != null) {
 				String deactivate = "update subjects set is_active =false where id=?";
-				Object[] params = { Subject.getId() };
+				Object[] params = { subjectPojo.getId() };
 				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
-		for (Subject subjectModel2 : subject2) {
+		for (SubjectPojo subjectModel2 : subject2) {
 			if (subjectModel2 != null) {
 				String activate = "update subjects set is_active =true where id=?";
-				Object[] params = { Subject.getId() };
+				Object[] params = { subjectPojo.getId() };
 				jdbcTemplate.update(activate, params);
 				return 2;
 			}
@@ -568,61 +562,57 @@ public class StaffDao implements StaffInterface {
 		return 0;
 	}
 
-	public Subject findByID(int id) {
+	public SubjectPojo findByID(int id) {
 		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and id =?)";
-		Subject subjectNameList = jdbcTemplate.queryForObject(find, new SubjectMapper(), id);
-		return subjectNameList;
+		return  jdbcTemplate.queryForObject(find, new SubjectMapper(), id);
 	}
 
-	public List<Subject> findSubjectID(String department, int semester, String name) {
+	public List<SubjectPojo> findSubjectID(String department, int semester, String name) {
 		String find = "select id from subjects where (is_active =true and department =? and semester_id=? and name=?)";
-		List<Subject> subjectNameList = jdbcTemplate.query(find, new SubjectIdMapper(), department, semester, name);
-		return subjectNameList;
+		return  jdbcTemplate.query(find, new SubjectIdMapper(), department, semester, name);
 	}
 
-	public List<Subject> findSubjectNameByDepartmentSemester(String department, int semester) {
+	public List<SubjectPojo> findSubjectNameByDepartmentSemester(String department, int semester) {
 		String find = "select name from subjects where (is_active =true and department =? and semester_id=?)";
-		List<Subject> subjectNameList = jdbcTemplate.query(find, new SubjectNameMapper(), department, semester);
-		return subjectNameList;
+		return  jdbcTemplate.query(find, new SubjectNameMapper(), department, semester);
 	}
 
-	public List<Subject> findSubjectIdByName(String name) {
+	public List<SubjectPojo> findSubjectIdByName(String name) {
 		String find = "select id from subjects where (is_active =true and name =?)";
-		List<Subject> subjectIdList = jdbcTemplate.query(find, new SubjectIdMapper(), name);
-		return subjectIdList;
+		return jdbcTemplate.query(find, new SubjectIdMapper(), name);
 	}
 
-	public List<Subject> findSubjectListBySemester(int semesterId, Model model) throws JsonProcessingException {
+	public List<SubjectPojo> findSubjectListBySemester(int semesterId, Model model) throws JsonProcessingException {
 		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and semester_id =?)";
-		List<Subject> subjectList = jdbcTemplate.query(find, new SubjectMapper(), semesterId);
+		List<SubjectPojo> subjectList = jdbcTemplate.query(find, new SubjectMapper(), semesterId);
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
 		model.addAttribute("listOfSubjectbySemesterId", subject);
 		return subjectList;
 	}
 
-	public List<Subject> findSubjectList(int semesterId, String department, Model model)
+	public List<SubjectPojo> findSubjectList(int semesterId, String department, Model model)
 			throws JsonProcessingException {
 		String find = "select id,name,semester_id,department,is_active from subjects where (is_active =true and semester_id =? and department=?)";
-		List<Subject> subjectList = jdbcTemplate.query(find, new SubjectMapper(), semesterId, department);
+		List<SubjectPojo> subjectList = jdbcTemplate.query(find, new SubjectMapper(), semesterId, department);
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
 		model.addAttribute("listOfSubjectbySemesterId", subject);
 		return subjectList;
 	}
 
-	public List<Subject> subjectList(Model model) throws JsonProcessingException {
+	public List<SubjectPojo> subjectList(Model model) throws JsonProcessingException {
 		String select = "select id,name,semester_id,department,is_active from subjects where (is_active =true)";
-		List<Subject> subjectList = jdbcTemplate.query(select, new SubjectMapper());
+		List<SubjectPojo> subjectList = jdbcTemplate.query(select, new SubjectMapper());
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
 		model.addAttribute("listOfSubject", subject);
 		return subjectList;
 	}
 
-	public List<Subject> inactivesubjectList(Model model) throws JsonProcessingException {
+	public List<SubjectPojo> inactivesubjectList(Model model) throws JsonProcessingException {
 		String select = "select id,name,semester_id,department,is_active from subjects where (is_active =false)";
-		List<Subject> subjectList = jdbcTemplate.query(select, new SubjectMapper());
+		List<SubjectPojo> subjectList = jdbcTemplate.query(select, new SubjectMapper());
 		ObjectMapper object = new ObjectMapper();
 		String subject1 = object.writeValueAsString(subjectList);
 		model.addAttribute("listOfSubject", subject1);
@@ -631,26 +621,26 @@ public class StaffDao implements StaffInterface {
 
 	// --------- Exam methods ------------
 
-	public int addExam(Exam exam) throws SubjectIdException, ExistExamException {
-		String subjectId = exam.getSubjectId();
+	public int addExam(ExamPojo examPojo) throws SubjectIdException, ExistExamException {
+		String subjectId = examPojo.getSubjectId();
 		String select = "Select id,name,semester_id,department,is_active from subjects";
-		List<Subject> subject = jdbcTemplate.query(select, new SubjectMapper());
-		List<Subject> subject1 = subject.stream().filter(id -> id.getId().equals(subjectId))
+		List<SubjectPojo> subjectPojo = jdbcTemplate.query(select, new SubjectMapper());
+		List<SubjectPojo> subject1 = subjectPojo.stream().filter(id -> id.getId().equals(subjectId))
 				.filter(isActive -> isActive.IsActive() == (true)).collect(Collectors.toList());
-		for (Subject subjectModel1 : subject1) {
+		for (SubjectPojo subjectModel1 : subject1) {
 			if (subjectModel1 != null) {
 				String select1 = "Select id,subject_id,name,date_,type,is_active from exam";
-				List<Exam> exam1 = jdbcTemplate.query(select1, new ExamMapper());
-				List<Exam> exam2 = exam1.stream().filter(subjectid -> (subjectid.getSubjectId()).equals(subjectId))
-						.filter(name -> name.getName().equals(exam.getName()))
-						.filter(type -> type.getType().equals(exam.getType())).collect(Collectors.toList());
-				for (Exam examModel1 : exam2) {
+				List<ExamPojo> exam1 = jdbcTemplate.query(select1, new ExamMapper());
+				List<ExamPojo> exam2 = exam1.stream().filter(subjectid -> (subjectid.getSubjectId()).equals(subjectId))
+						.filter(name -> name.getName().equals(examPojo.getName()))
+						.filter(type -> type.getType().equals(examPojo.getType())).collect(Collectors.toList());
+				for (ExamPojo examModel1 : exam2) {
 					if (examModel1 != null) {
 						throw new ExistExamException("Exist Exam Exception");
 					}
 				}
 				String add = "insert into exam(subject_id,name,date_,type) values(?,?,?,?)";
-				Object[] params = { subjectId, exam.getName(), exam.getDate(), exam.getType() };
+				Object[] params = { subjectId, examPojo.getName(), examPojo.getDate(), examPojo.getType() };
 				int noOfRows = jdbcTemplate.update(add, params);
 				if (noOfRows > 0) {
 					return 1;
@@ -662,25 +652,25 @@ public class StaffDao implements StaffInterface {
 		throw new SubjectIdException("Subject Id dosen't exist");
 	}
 
-	public int activateOrDeactivateExam(Exam Exam) {
+	public int activateOrDeactivateExam(ExamPojo examPojo) {
 		String select = "Select id,subject_id,name,date_,type,is_active from exam";
-		List<Exam> exam = jdbcTemplate.query(select, new ExamMapper());
-		List<Exam> exam1 = exam.stream().filter(id -> id.getId() == (Exam.getId()))
+		List<ExamPojo> exam = jdbcTemplate.query(select, new ExamMapper());
+		List<ExamPojo> exam1 = exam.stream().filter(id -> id.getId() == (examPojo.getId()))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		List<Exam> exam2 = exam.stream().filter(id -> id.getId() == (Exam.getId()))
+		List<ExamPojo> exam2 = exam.stream().filter(id -> id.getId() == (examPojo.getId()))
 				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
-		for (Exam examModel1 : exam1) {
+		for (ExamPojo examModel1 : exam1) {
 			if (examModel1 != null) {
 				String deactivate = "update exam set is_active =false where id=?";
-				Object[] params = { Exam.getId() };
+				Object[] params = { examPojo.getId() };
 				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
-		for (Exam examModel2 : exam2) {
+		for (ExamPojo examModel2 : exam2) {
 			if (examModel2 != null) {
 				String activate = "update exam set is_active =true where id=?";
-				Object[] params = { Exam.getId() };
+				Object[] params = { examPojo.getId() };
 				jdbcTemplate.update(activate, params);
 				return 2;
 			}
@@ -688,54 +678,51 @@ public class StaffDao implements StaffInterface {
 		return 0;
 	}
 
-	public List<Exam> examList(Model model) throws JsonProcessingException {
+	public List<ExamPojo> examList(Model model) throws JsonProcessingException {
 		String select = "select id,subject_id,name,date_,type,is_active from exam where (is_active =true)";
-		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
+		List<ExamPojo> examList = jdbcTemplate.query(select, new ExamMapper());
 		ObjectMapper object = new ObjectMapper();
 		String exam = object.writeValueAsString(examList);
 		model.addAttribute("listOfExam", exam);
 		return examList;
 	}
 
-	public List<Exam> inactiveExamList(Model model) throws JsonProcessingException {
+	public List<ExamPojo> inactiveExamList(Model model) throws JsonProcessingException {
 		String select = "select id,subject_id,name,date_,type,is_active from exam where (is_active =false)";
-		List<Exam> examList = jdbcTemplate.query(select, new ExamMapper());
+		List<ExamPojo> examList = jdbcTemplate.query(select, new ExamMapper());
 		ObjectMapper object = new ObjectMapper();
 		String exam = object.writeValueAsString(examList);
 		model.addAttribute("listOfExam", exam);
 		return examList;
 	}
 
-	public List<Exam> findExamNameBySubjectID(String subjectID) {
+	public List<ExamPojo> findExamNameBySubjectID(String subjectID) {
 		String find = "select name from exam where (subject_id=?)";
-		List<Exam> examNameList = jdbcTemplate.query(find, new ExamnameMapper(), subjectID);
-		return examNameList;
+		return jdbcTemplate.query(find, new ExamnameMapper(), subjectID);
 	}
 
-	public List<Exam> findExamTypeBySubjectID(String subjectID) {
+	public List<ExamPojo> findExamTypeBySubjectID(String subjectID) {
 		String find = "select type from exam where (subject_id=?)";
-		List<Exam> examNameList = jdbcTemplate.query(find, new ExamTypeMapper(), subjectID);
-		return examNameList;
+		return  jdbcTemplate.query(find, new ExamTypeMapper(), subjectID);
 	}
 
-	public List<Exam> findExam(String name, String type, String subjectID) {
+	public List<ExamPojo> findExam(String name, String type, String subjectID) {
 		String find = "select id from exam where (name=? and type=? and subject_id=?)";
-		List<Exam> examNameList = jdbcTemplate.query(find, new ExamIdMapper(), name, type, subjectID);
-		return examNameList;
+		return  jdbcTemplate.query(find, new ExamIdMapper(), name, type, subjectID);
 	}
 
 	// --------- Result methods ------------
 
-	public int addOrUpdateResult(Result Result) throws MarkException, UserIdException, ExamIdException {
-		int examid = Result.getExamId();
+	public int addOrUpdateResult(ResultPojo resultPojo) throws MarkException, UserIdException, ExamIdException {
+		int examid = resultPojo.getExamId();
 		String select = "Select id,subject_id,name,date_,type,is_active from exam";
-		List<Exam> exam = jdbcTemplate.query(select, new ExamMapper());
-		List<Exam> exam1 = exam.stream().filter(id -> id.getId() == (examid))
+		List<ExamPojo> examPojo = jdbcTemplate.query(select, new ExamMapper());
+		List<ExamPojo> exam1 = examPojo.stream().filter(id -> id.getId() == (examid))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		for (Exam examModel1 : exam1) {
+		for (ExamPojo examModel1 : exam1) {
 			if (examModel1 != null) {
 
-				int userId = Result.getUserId();
+				int userId = resultPojo.getUserId();
 				String select1 = "Select id,roll,status,is_active from user";
 				List<User> user = jdbcTemplate.query(select1, new ApprovingMapper());
 				List<User> user1 = user.stream().filter(id -> id.getUserId() == userId)
@@ -744,24 +731,24 @@ public class StaffDao implements StaffInterface {
 				for (User userModel1 : user1) {
 					if (userModel1 != null) {
 
-						int marks = Result.getMarks();
+						int marks = resultPojo.getMarks();
 						if (marks >= 0 && marks <= 100) {
 							String select2 = "Select exam_id,user_id,marks,is_active from result";
-							List<Result> result = jdbcTemplate.query(select2, new ResultMapper());
-							List<Result> result1 = result.stream()
-									.filter(examId -> examId.getExamId() == (Result.getExamId()))
-									.filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+							List<ResultPojo> result = jdbcTemplate.query(select2, new ResultMapper());
+							List<ResultPojo> result1 = result.stream()
+									.filter(examId -> examId.getExamId() == (resultPojo.getExamId()))
+									.filter(UserId -> UserId.getUserId() == (resultPojo.getUserId()))
 									.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-							for (Result resultModel1 : result1) {
+							for (ResultPojo resultModel1 : result1) {
 								if (resultModel1 != null) {
 									String update = "update result set marks =? where (exam_id=? and user_id=?)";
-									Object[] params = { marks, Result.getExamId(), userId };
+									Object[] params = { marks, resultPojo.getExamId(), userId };
 									jdbcTemplate.update(update, params);
 									return 1;
 								}
 							}
 							String add = "insert into result(exam_id,user_id,marks) values(?,?,?)";
-							Object[] params = { Result.getExamId(), Result.getUserId(), marks };
+							Object[] params = { resultPojo.getExamId(), resultPojo.getUserId(), marks };
 							jdbcTemplate.update(add, params);
 							return 2;
 						} else {
@@ -775,27 +762,27 @@ public class StaffDao implements StaffInterface {
 		throw new ExamIdException("Exam Id dosen't exist");
 	}
 
-	public int activateOrDeactivateOneResult(Result Result) {
+	public int activateOrDeactivateOneResult(ResultPojo resultPojo) {
 		String select = "Select exam_id,user_id,marks,is_active from result";
-		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
-		List<Result> result1 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
-				.filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+		List<ResultPojo> result = jdbcTemplate.query(select, new ResultMapper());
+		List<ResultPojo> result1 = result.stream().filter(examId -> examId.getExamId() == (resultPojo.getExamId()))
+				.filter(UserId -> UserId.getUserId() == (resultPojo.getUserId()))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		List<Result> result2 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
-				.filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+		List<ResultPojo> result2 = result.stream().filter(examId -> examId.getExamId() == (resultPojo.getExamId()))
+				.filter(UserId -> UserId.getUserId() == (resultPojo.getUserId()))
 				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
-		for (Result resultModel1 : result1) {
+		for (ResultPojo resultModel1 : result1) {
 			if (resultModel1 != null) {
 				String deactivate = "update result set is_active =false where (exam_id=? and user_id=?)";
-				Object[] params = { Result.getExamId(), Result.getUserId() };
+				Object[] params = { resultPojo.getExamId(), resultPojo.getUserId() };
 				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
-		for (Result resultModel2 : result2) {
+		for (ResultPojo resultModel2 : result2) {
 			if (resultModel2 != null) {
 				String activate = "update result set is_active =true where (exam_id=? and user_id=?)";
-				Object[] params = { Result.getExamId(), Result.getUserId() };
+				Object[] params = { resultPojo.getExamId(), resultPojo.getUserId() };
 				jdbcTemplate.update(activate, params);
 				return 2;
 			}
@@ -803,25 +790,25 @@ public class StaffDao implements StaffInterface {
 		return 0;
 	}
 
-	public int activateOrDeactivateWholeExamResult(Result Result) {
+	public int activateOrDeactivateWholeExamResult(ResultPojo resultPojo) {
 		String select = "Select exam_id,user_id,marks,is_active from result";
-		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
-		List<Result> result1 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
+		List<ResultPojo> result = jdbcTemplate.query(select, new ResultMapper());
+		List<ResultPojo> result1 = result.stream().filter(examId -> examId.getExamId() == (resultPojo.getExamId()))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		List<Result> result2 = result.stream().filter(examId -> examId.getExamId() == (Result.getExamId()))
+		List<ResultPojo> result2 = result.stream().filter(examId -> examId.getExamId() == (resultPojo.getExamId()))
 				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
-		for (Result resultModel1 : result1) {
+		for (ResultPojo resultModel1 : result1) {
 			if (resultModel1 != null) {
 				String deactivate = "update result set is_active =false where exam_id=?";
-				Object[] params = { Result.getExamId() };
+				Object[] params = { resultPojo.getExamId() };
 				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
-		for (Result resultModel2 : result2) {
+		for (ResultPojo resultModel2 : result2) {
 			if (resultModel2 != null) {
 				String activate = "update result set is_active =true where exam_id=?";
-				Object[] params = { Result.getExamId() };
+				Object[] params = { resultPojo.getExamId() };
 				jdbcTemplate.update(activate, params);
 				return 2;
 			}
@@ -829,25 +816,25 @@ public class StaffDao implements StaffInterface {
 		return 0;
 	}
 
-	public int activateOrDeactivateWholeUserResult(Result Result) {
+	public int activateOrDeactivateWholeUserResult(ResultPojo resultPojo) {
 		String select = "Select exam_id,user_id,marks,is_active from result";
-		List<Result> result = jdbcTemplate.query(select, new ResultMapper());
-		List<Result> result1 = result.stream().filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+		List<ResultPojo> result = jdbcTemplate.query(select, new ResultMapper());
+		List<ResultPojo> result1 = result.stream().filter(UserId -> UserId.getUserId() == (resultPojo.getUserId()))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
-		List<Result> result2 = result.stream().filter(UserId -> UserId.getUserId() == (Result.getUserId()))
+		List<ResultPojo> result2 = result.stream().filter(UserId -> UserId.getUserId() == (resultPojo.getUserId()))
 				.filter(isActive -> isActive.isActive() == (false)).collect(Collectors.toList());
-		for (Result resultModel1 : result1) {
+		for (ResultPojo resultModel1 : result1) {
 			if (resultModel1 != null) {
 				String deactivate = "update result set is_active =false where user_id=?";
-				Object[] params = { Result.getUserId() };
+				Object[] params = { resultPojo.getUserId() };
 				jdbcTemplate.update(deactivate, params);
 				return 1;
 			}
 		}
-		for (Result resultModel2 : result2) {
+		for (ResultPojo resultModel2 : result2) {
 			if (resultModel2 != null) {
 				String activate = "update result set is_active =true where user_id=?";
-				Object[] params = { Result.getUserId() };
+				Object[] params = { resultPojo.getUserId() };
 				jdbcTemplate.update(activate, params);
 				return 2;
 			}
@@ -855,18 +842,18 @@ public class StaffDao implements StaffInterface {
 		return 0;
 	}
 
-	public List<Result> resultList(Model model) throws JsonProcessingException {
+	public List<ResultPojo> resultList(Model model) throws JsonProcessingException {
 		String select = "select exam_id,user_id,marks,is_active from result where (is_active =true)";
-		List<Result> resultList = jdbcTemplate.query(select, new ResultMapper());
+		List<ResultPojo> resultList = jdbcTemplate.query(select, new ResultMapper());
 		ObjectMapper object = new ObjectMapper();
 		String result = object.writeValueAsString(resultList);
 		model.addAttribute("listOfResult", result);
 		return resultList;
 	}
 
-	public List<Result> inactiveResultList(Model model) throws JsonProcessingException {
+	public List<ResultPojo> inactiveResultList(Model model) throws JsonProcessingException {
 		String select = "select exam_id,user_id,marks,is_active from result where (is_active =false)";
-		List<Result> resultList = jdbcTemplate.query(select, new ResultMapper());
+		List<ResultPojo> resultList = jdbcTemplate.query(select, new ResultMapper());
 		ObjectMapper object = new ObjectMapper();
 		String result = object.writeValueAsString(resultList);
 		model.addAttribute("listOfResult", result);
@@ -881,13 +868,13 @@ public class StaffDao implements StaffInterface {
 				map.addAttribute("userName", userModel.getFirstName());
 				String department = userModel.getDepartment();
 				int semester = userModel.getSemester();
-				List<Subject> subject = findSubjectNameByDepartmentSemester(department, semester);
-				for (Subject subjectModel : subject) {
+				List<SubjectPojo> subjectPojo = findSubjectNameByDepartmentSemester(department, semester);
+				for (SubjectPojo subjectModel : subjectPojo) {
 					if (subjectModel != null) {
 						String name = subjectModel.getName();
-						map.addAttribute("subjectName", subject);
-						List<Subject> id = findSubjectIdByName(name);
-						for (Subject subjectModel2 : id) {
+						map.addAttribute("subjectName", subjectPojo);
+						List<SubjectPojo> id = findSubjectIdByName(name);
+						for (SubjectPojo subjectModel2 : id) {
 							if (subjectModel2 != null) {
 								String subjectID = subjectModel2.getId();
 								map.addAttribute("Exam", findExamNameBySubjectID(subjectID));
