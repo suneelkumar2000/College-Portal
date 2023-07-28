@@ -62,6 +62,7 @@ public class StaffController {
 	String redirectExamlist="redirect:/examlist";
 	String redirectResultlist="redirect:/resultlist";
 	String redirectInactiveResultlist="redirect:/inactiveResultlist";
+	String redirectlistofusers="redirect:/listofusers";
 
 	// method to get student list
 	@GetMapping(path = "/listofusers")
@@ -73,22 +74,24 @@ public class StaffController {
 
 	// method to approve student
 	@GetMapping(path = "/approve")
-	public void approve(@RequestParam("userID") int userID, HttpSession session)
+	public String approve(@RequestParam("userID") int userID, HttpSession session)
 			throws UserIdException, HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
 		User user = new User();
 		user.setUserId(userID);
 		staffService.approve(staffId, user);
+		return redirectlistofusers;
 	}
 	
 	// method to reject student
 		@GetMapping(path = "/reject")
-		public void reject(@RequestParam("userID") int userID, HttpSession session)
+		public String reject(@RequestParam("userID") int userID, HttpSession session)
 				throws UserIdException, HigherAuthorityException {
 			int staffId = (int) session.getAttribute(sessionUserId);
 			User user = new User();
 			user.setUserId(userID);
 			staffService.reject(staffId, user);
+			return redirectlistofusers;
 		}
 
 	// --------- Department methods ------------

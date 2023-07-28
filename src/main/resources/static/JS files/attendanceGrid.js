@@ -42,7 +42,6 @@ function attendanceGrid() {
 		return '<input type="checkbox" value="' + a + '" name="checkName" id="checkBox"' + (value ? 'checked="checked"' : '') + '/>';
 	}
 
-	//let check= document.getElementById("checkBox");
 	let check = document.querySelectorAll('input[type="checkbox"]:checked');
 	console.log(check);
 
@@ -191,8 +190,6 @@ function attendanceGrid() {
 		grid = new Slick.Grid("#attendanceGrid", dataView, columns, options);
 		grid.setSelectionModel(new Slick.RowSelectionModel());
 
-	//	let pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
-	//	let columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
 		// header row start
 		dataView.onRowCountChanged.subscribe(function(e, args) {
@@ -239,7 +236,6 @@ function attendanceGrid() {
 		});
 */
 		grid.onKeyDown.subscribe(function(e) {
-			// select all rows on ctrl-a
 			if (e.which !== 65 || !e.ctrlKey) {
 				return false;
 			}
@@ -303,36 +299,7 @@ function attendanceGrid() {
 		});
 
 
-		let h_runfilters = null;
-		/*
-				// wire up the slider to apply the filter to the model
-				$("#pcSlider,#pcSlider2").slider({
-					"range": "min",
-					"slide": function(event, ui) {
-						Slick.GlobalEditorLock.cancelCurrentEdit();
 		
-						if (percentCompleteThreshold != ui.value) {
-							window.clearTimeout(h_runfilters);
-							h_runfilters = window.setTimeout(updateFilter, 10);
-							percentCompleteThreshold = ui.value;
-						}
-					}
-				});
-		
-		
-				// wire up the search textbox to apply the filter to the model
-				$("#txtSearch,#txtSearch2").keyup(function(e) {
-					Slick.GlobalEditorLock.cancelCurrentEdit();
-		
-					// clear on Esc
-					if (e.which == 27) {
-						this.value = "";
-					}
-		
-					searchString = this.value;
-					updateFilter();
-				});
-		*/
 		function updateFilter() {
 			dataView.setFilterArgs({
 				percentCompleteThreshold: percentCompleteThreshold,
@@ -359,12 +326,7 @@ function attendanceGrid() {
 		grid.init();
 		dataView.beginUpdate();
 		dataView.setItems(data);
-		/*
-		dataView.setFilterArgs({
-			percentCompleteThreshold: percentCompleteThreshold,
-			searchString: searchString
-		});
-		*/
+		
 		dataView.setFilter(filter);
 		dataView.endUpdate();
 
@@ -372,7 +334,6 @@ function attendanceGrid() {
 		// or being on a different page) to stay selected, pass 'false' to the second arg
 		dataView.syncGridSelection(grid, true);
 
-		//$("#gridContainer").resizable();
 	})
 
 }

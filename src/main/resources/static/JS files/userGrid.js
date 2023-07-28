@@ -51,26 +51,17 @@ function userGrid() {
 	function buttonFormatter(row, cell, value, columnDef, dataContext) {
 		let a = dataContext.userId;
 		let status = dataContext.status;
-		if (status.equals("approved")) {
-			return '<form action="/approve" metod="get"><button type="submit" class="tablebutton1" name="userID"  value="' + a + '" >Deactivate</button></form>';
-		} else if (status.equals("not approved")) {
-			return '<form action="/reject" metod="get"><button type="submit" class="tablebutton2" name="userID"  value="' + a + '" >Activate</button></form>';
+		if (status === ("approved")) {
+			return '<form action="/reject" metod="get"><button type="submit" class="tablebutton2" name="userID"  value="' + a + '" >Reject</button></form>';
 		} else {
-			return '<span>Rejected</span>';
+			return '<form action="/approve" metod="get"><button type="submit" class="tablebutton1" name="userID"  value="' + a + '" >Approve</button></form> ';
 		}
 	}
 
 	let columns = [{
-		id: "select",
-		name: "Select",
-		field: "select",
-		width: 100,
-		formatter: checkboxFormatter
-	}, {
 		id: "userId",
 		name: "UserId",
 		field: "userId",
-		type: 'numberColumn',
 		width: 100,
 		sortable: true
 	}, {

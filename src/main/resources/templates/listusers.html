@@ -172,6 +172,17 @@
 		.but:hover {
 			background: rgba(16, 150, 47);
 		}
+		.tablebutton2 {
+			align-items: center;
+			color: #ffffff;
+			background-color: #F81818;
+		}
+
+		.tablebutton1 {
+			align-items: center;
+			color: #ffffff;
+			background-color: limegreen;
+		}
 	</style>
 </head>
 
@@ -243,122 +254,11 @@
 
 
 		<!-- donation table end -->
-		<form th:action="@{/approve}" method="get" th:onclick="return checkForm()">
-
-			<div class="button">
-				<button type="button" class="approve-button" id="approve-btn">Approve</button>
-				<button type="button" class="reject-button" id="reject-btn">Reject</button>
-			</div>
-			<!-- confirmation popup start -->
-			<div class="modal">
-				<div class="modalContent">
-					<span class="close">×</span>
-					<p>Are you sure you want to Approve</p>
-					<button class="confirm" type="submit">Approve</button>
-					<button class="cancel" type="button" th:onclick="hideModal()">Cancel</button>
-				</div>
-			</div>
-			<!-- confirmation popup end -->
-			<!-- reject popup start -->
-			<div class="modalReject">
-				<div class="modalContent">
-					<span class="close" id="reject-close">×</span>
-					<p>Are you sure you want to Reject</p>
-					<button class="confirm" type="submit" id="reject-button" th:formaction="@{/}">Reject</button>
-					<button class="cancel" id="reject-cancel" type="button" th:onclick="hideModal()">Cancel</button>
-				</div>
-			</div>
-			<!-- reject popup end -->
-		</form>
 	</div>
 	
 	<div id="contactUs">
 		<div th:replace="footer.html::footer"></div>
 	</div>
-
-	<script>
-		//confirmation popup start
-		var approveBtn = '';
-		var rejectBtn = '';
-		var modal = document.querySelector(".modal");
-		var modalReject = document.querySelector(".modalReject");
-		var approveButton = document.querySelector(".approve-button");
-		var rejectButton = document.querySelector(".reject-button");
-		var cancel = document.querySelector(".cancel");
-		var span = document.querySelector(".close");
-		var rejectCancel = document.getElementById("reject-cancel")
-		var rejectSpan = document.getElementById("reject-close")
-
-		function hideModal() {
-			modal.style.display = "none";
-			modalReject.style.display = "none";
-		}
-		window.onclick = function (event) {
-			if (event.target == cancel || event.target == span ||
-				event.target == rejectCancel || event.target == rejectSpan) {
-				hideModal();
-			}
-		};
-		//confirmation popup start
-
-		document.getElementById('approve-btn').onclick = function () {
-			var markedCheckbox = document.getElementsByName('checkName');
-			var inputField = document.getElementById('userCode');
-			var value = [];
-			for (var checkbox of markedCheckbox) {
-				if (checkbox.checked) {
-
-					console.log(value);
-					value.push(checkbox.value);
-					// document.body.append(checkbox.value + ',');  
-				}
-			}
-			inputField.value = value;
-		}
-		document.getElementById('reject-btn').onclick = function () {
-			var markedCheckbox = document.getElementsByName('checkName');
-			var inputField = document.getElementById('userCode');
-			var value = [];
-			for (var checkbox of markedCheckbox) {
-				if (checkbox.checked) {
-
-					console.log(value);
-					value.push(checkbox.value);
-					// document.body.append(checkbox.value + ',');  
-				}
-			}
-			inputField.value = value;
-		}
-
-		approveButton.addEventListener("click", () => {
-			approveBtn = 'clicked';
-			rejectBtn = '';
-		});
-		rejectButton.addEventListener("click", () => {
-			rejectBtn = 'clicked';
-			approveBtn = '';
-		});
-
-		function checkForm() {
-			var inputField = document.getElementById('userCode').value;
-			if (inputField == "") {
-				alert('Please select the donation')
-				return false;
-			}
-
-			if (approveBtn == 'clicked') {
-
-				modal.style.display = "block";
-
-			}
-			if (rejectBtn == 'clicked') {
-
-				modalReject.style.display = "block";
-
-			}
-			return true;
-		}
-	</script>
 
 	<script>
 		function openNav() {

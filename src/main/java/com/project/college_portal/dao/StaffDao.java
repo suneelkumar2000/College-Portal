@@ -138,7 +138,7 @@ public class StaffDao implements StaffInterface {
 						.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
 				for (User userModel2 : user3) {
 					if (userModel2 != null) {
-						String approve = "update user set status='reject'  where (roll='student' and id=?)";
+						String approve = "update user set status='not approved'  where (roll='student' and id=?)";
 						Object[] params = { approveUser.getUserId() };
 						jdbcTemplate.update(approve, params);
 						return 1;
