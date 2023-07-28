@@ -6,11 +6,11 @@
  * Add the slick.gridmenu.(js|css) files and register it with the grid.
  *
  * To specify a menu in a column header, extend the column definition like so:
- * var gridMenuControl = new Slick.Controls.GridMenu(columns, grid, options);
+ * let gridMenuControl = new Slick.Controls.GridMenu(columns, grid, options);
  *
  * Available grid options, by defining a gridMenu object:
  *
- *  var options = {
+ *  let options = {
  *    enableCellNavigation: true,
  *    gridMenu: {
  *      customTitle: "Custom Menus",                // default to empty string
@@ -127,21 +127,21 @@
   });
 
   function SlickGridMenu(columns, grid, options) {
-    var _grid = grid;
-    var _gridOptions;
-    var _gridUid = (grid && grid.getUID) ? grid.getUID() : '';
-    var _isMenuOpen = false;
-    var _options = options;
-    var _self = this;
-    var $customTitleElm;
-    var $columnTitleElm;
-    var $customMenu;
-    var $header;
-    var $list;
-    var $button;
-    var $menu;
-    var columnCheckboxes;
-    var _defaults = {
+    let _grid = grid;
+    let _gridOptions;
+    let _gridUid = (grid && grid.getUID) ? grid.getUID() : '';
+    let _isMenuOpen = false;
+    let _options = options;
+    let _self = this;
+    let $customTitleElm;
+    let $columnTitleElm;
+    let $customMenu;
+    let $header;
+    let $list;
+    let $button;
+    let $menu;
+    let columnCheckboxes;
+    let _defaults = {
       showButton: true,
       hideForceFitButton: false,
       hideSyncResizeButton: false,
@@ -161,8 +161,8 @@
     // we do this change because the Grid Menu is on the left container for a regular grid, it is however on the right container for a frozen grid
     grid.onSetOptions.subscribe(function (e, args) {
       if (args && args.optionsBefore && args.optionsAfter) {
-        var switchedFromRegularToFrozen = args.optionsBefore.frozenColumn >= 0 && args.optionsAfter.frozenColumn === -1;
-        var switchedFromFrozenToRegular = args.optionsBefore.frozenColumn === -1 && args.optionsAfter.frozenColumn >= 0;
+        let switchedFromRegularToFrozen = args.optionsBefore.frozenColumn >= 0 && args.optionsAfter.frozenColumn === -1;
+        let switchedFromFrozenToRegular = args.optionsBefore.frozenColumn === -1 && args.optionsAfter.frozenColumn >= 0;
         if (switchedFromRegularToFrozen || switchedFromFrozenToRegular) {
           recreateGridMenu();
         }
@@ -182,7 +182,7 @@
     }
 
     function createGridMenu() {
-      var gridMenuWidth = (_options.gridMenu && _options.gridMenu.menuWidth) || _defaults.menuWidth;
+      let gridMenuWidth = (_options.gridMenu && _options.gridMenu.menuWidth) || _defaults.menuWidth;
       if (_gridOptions && _gridOptions.hasOwnProperty('frozenColumn') && _gridOptions.frozenColumn >= 0) {
         $header = $('.' + _gridUid + ' .slick-header-right');
       } else {
@@ -191,18 +191,18 @@
       $header.attr('style', 'width: calc(100% - ' + gridMenuWidth + 'px)');
 
       // if header row is enabled, we need to resize it's width also
-      var enableResizeHeaderRow = (_options.gridMenu && _options.gridMenu.resizeOnShowHeaderRow != undefined) ? _options.gridMenu.resizeOnShowHeaderRow : _defaults.resizeOnShowHeaderRow;
+      let enableResizeHeaderRow = (_options.gridMenu && _options.gridMenu.resizeOnShowHeaderRow != undefined) ? _options.gridMenu.resizeOnShowHeaderRow : _defaults.resizeOnShowHeaderRow;
       if (enableResizeHeaderRow && _options.showHeaderRow) {
         $('.' + _gridUid + '.slick-headerrow').attr('style', 'width: calc(100% - ' + gridMenuWidth + 'px)');
       }
 
-      var showButton = (_options.gridMenu && _options.gridMenu.showButton !== undefined) ? _options.gridMenu.showButton : _defaults.showButton;
+      let showButton = (_options.gridMenu && _options.gridMenu.showButton !== undefined) ? _options.gridMenu.showButton : _defaults.showButton;
       if (showButton) {
         $button = $('<button class="slick-gridmenu-button"/>');
         if (_options.gridMenu && _options.gridMenu.iconCssClass) {
           $button.addClass(_options.gridMenu.iconCssClass);
         } else {
-          var iconImage = (_options.gridMenu && _options.gridMenu.iconImage) ? _options.gridMenu.iconImage : "../images/drag-handle.png";
+          let iconImage = (_options.gridMenu && _options.gridMenu.iconImage) ? _options.gridMenu.iconImage : "../images/drag-handle.png";
           $('<img src="' + iconImage + '"/>').appendTo($button);
         }
         $button.insertBefore($header);
@@ -279,9 +279,9 @@
         $customTitleElm.appendTo($customMenu);
       }
 
-      for (var i = 0, ln = options.gridMenu.customItems.length; i < ln; i++) {
-        var item = options.gridMenu.customItems[i];
-        var callbackArgs = {
+      for (let i = 0, ln = options.gridMenu.customItems.length; i < ln; i++) {
+        let item = options.gridMenu.customItems[i];
+        let callbackArgs = {
           "grid": _grid,
           "menu": $menu,
           "columns": columns,
@@ -289,8 +289,8 @@
         };
 
         // run each override functions to know if the item is visible and usable
-        var isItemVisible = runOverrideFunctionWhenExists(item.itemVisibilityOverride, callbackArgs);
-        var isItemUsable = runOverrideFunctionWhenExists(item.itemUsabilityOverride, callbackArgs);
+        let isItemVisible = runOverrideFunctionWhenExists(item.itemVisibilityOverride, callbackArgs);
+        let isItemUsable = runOverrideFunctionWhenExists(item.itemUsabilityOverride, callbackArgs);
 
         // if the result is not visible then there's no need to go further
         if (!isItemVisible) {
@@ -303,7 +303,7 @@
           item.disabled = isItemUsable ? false : true;
         }
 
-        var $li = $("<div class='slick-gridmenu-item'></div>")
+        let $li = $("<div class='slick-gridmenu-item'></div>")
           .data("command", item.command !== undefined ? item.command : "")
           .data("item", item)
           .on("click", handleMenuItemClick)
@@ -329,7 +329,7 @@
           $li.attr("title", item.tooltip);
         }
 
-        var $icon = $("<div class='slick-gridmenu-icon'></div>")
+        let $icon = $("<div class='slick-gridmenu-icon'></div>")
           .appendTo($li);
 
         if (item.iconCssClass) {
@@ -340,7 +340,7 @@
           $icon.css("background-image", "url(" + item.iconImage + ")");
         }
 
-        var $text = $("<span class='slick-gridmenu-content'></span>")
+        let $text = $("<span class='slick-gridmenu-content'></span>")
           .text(item.title)
           .appendTo($li);
 
@@ -375,7 +375,7 @@
     }
 
     function showGridMenu(e) {
-      var targetEvent = e.touches ? e.touches[0] : e;
+      let targetEvent = e.touches ? e.touches[0] : e;
       e.preventDefault();
 
       // empty both the picker list & the command list
@@ -386,7 +386,7 @@
       updateColumnOrder();
       columnCheckboxes = [];
 
-      var callbackArgs = {
+      let callbackArgs = {
         "grid": _grid,
         "menu": $menu,
         "allColumns": columns,
@@ -406,8 +406,8 @@
         }
       }
 
-      var $li, $input, columnId, columnLabel, excludeCssClass;
-      for (var i = 0; i < columns.length; i++) {
+      let $li, $input, columnId, columnLabel, excludeCssClass;
+      for (let i = 0; i < columns.length; i++) {
         columnId = columns[i].id;
         excludeCssClass = columns[i].excludeFromGridMenu ? "hidden" : "";
         $li = $('<li class="' + excludeCssClass + '" />').appendTo($list);
@@ -436,7 +436,7 @@
       }
 
       if (!(_options.gridMenu && _options.gridMenu.hideForceFitButton)) {
-        var forceFitTitle = (_options.gridMenu && _options.gridMenu.forceFitTitle) || _defaults.forceFitTitle;
+        let forceFitTitle = (_options.gridMenu && _options.gridMenu.forceFitTitle) || _defaults.forceFitTitle;
         $li = $("<li />").appendTo($list);
         $input = $("<input type='checkbox' id='" + _gridUid + "-gridmenu-colpicker-forcefit' />").data("option", "autoresize").appendTo($li);
         $("<label for='" + _gridUid + "-gridmenu-colpicker-forcefit' />").text(forceFitTitle).appendTo($li);
@@ -447,7 +447,7 @@
       }
 
       if (!(_options.gridMenu && _options.gridMenu.hideSyncResizeButton)) {
-        var syncResizeTitle = (_options.gridMenu && _options.gridMenu.syncResizeTitle) || _defaults.syncResizeTitle;
+        let syncResizeTitle = (_options.gridMenu && _options.gridMenu.syncResizeTitle) || _defaults.syncResizeTitle;
         $li = $("<li />").appendTo($list);
         $input = $("<input type='checkbox' id='" + _gridUid + "-gridmenu-colpicker-syncresize' />").data("option", "syncresize").appendTo($li);
         $("<label for='" + _gridUid + "-gridmenu-colpicker-syncresize' />").text(syncResizeTitle).appendTo($li);
@@ -457,18 +457,18 @@
         }
       }
 
-      var menuIconOffset = $(e.target).prop('nodeName') == "button" ? $(e.target).offset() : $(e.target).parent("button").offset(); // get button offset position
+      let menuIconOffset = $(e.target).prop('nodeName') == "button" ? $(e.target).offset() : $(e.target).parent("button").offset(); // get button offset position
       if (!menuIconOffset) {
         menuIconOffset = $(e.target).offset(); // external grid menu might fall in this last case
       }
-      var menuWidth = $menu.width();
-      var useClickToRepositionMenu = (_options.gridMenu && _options.gridMenu.useClickToRepositionMenu !== undefined) ? _options.gridMenu.useClickToRepositionMenu : _defaults.useClickToRepositionMenu;
-      var gridMenuIconWidth = (_options.gridMenu && _options.gridMenu.menuWidth) || _defaults.menuWidth;
-      var contentMinWidth = (_options.gridMenu && _options.gridMenu.contentMinWidth) ? _options.gridMenu.contentMinWidth : _defaults.contentMinWidth;
-      var currentMenuWidth = (contentMinWidth > menuWidth) ? contentMinWidth : (menuWidth + gridMenuIconWidth);
-      var nextPositionTop = (useClickToRepositionMenu && targetEvent.pageY > 0) ? targetEvent.pageY : menuIconOffset.top + 10;
-      var nextPositionLeft = (useClickToRepositionMenu && targetEvent.pageX > 0) ? targetEvent.pageX : menuIconOffset.left + 10;
-      var menuMarginBottom = (_options.gridMenu && _options.gridMenu.marginBottom !== undefined) ? _options.gridMenu.marginBottom : _defaults.marginBottom;
+      let menuWidth = $menu.width();
+      let useClickToRepositionMenu = (_options.gridMenu && _options.gridMenu.useClickToRepositionMenu !== undefined) ? _options.gridMenu.useClickToRepositionMenu : _defaults.useClickToRepositionMenu;
+      let gridMenuIconWidth = (_options.gridMenu && _options.gridMenu.menuWidth) || _defaults.menuWidth;
+      let contentMinWidth = (_options.gridMenu && _options.gridMenu.contentMinWidth) ? _options.gridMenu.contentMinWidth : _defaults.contentMinWidth;
+      let currentMenuWidth = (contentMinWidth > menuWidth) ? contentMinWidth : (menuWidth + gridMenuIconWidth);
+      let nextPositionTop = (useClickToRepositionMenu && targetEvent.pageY > 0) ? targetEvent.pageY : menuIconOffset.top + 10;
+      let nextPositionLeft = (useClickToRepositionMenu && targetEvent.pageX > 0) ? targetEvent.pageX : menuIconOffset.left + 10;
+      let menuMarginBottom = (_options.gridMenu && _options.gridMenu.marginBottom !== undefined) ? _options.gridMenu.marginBottom : _defaults.marginBottom;
 
       $menu
         .css("top", nextPositionTop + 10)
@@ -504,15 +504,15 @@
     }
 
     function handleMenuItemClick(e) {
-      var command = $(this).data("command");
-      var item = $(this).data("item");
+      let command = $(this).data("command");
+      let item = $(this).data("item");
 
       if (item.disabled || item.divider || item === "divider") {
         return;
       }
 
       if (command != null && command != '') {
-        var callbackArgs = {
+        let callbackArgs = {
           "grid": _grid,
           "command": command,
           "item": item,
@@ -528,7 +528,7 @@
       }
 
       // does the user want to leave open the Grid Menu after executing a command?
-      var leaveOpen = (_options.gridMenu && _options.gridMenu.leaveOpen) ? true : false;
+      let leaveOpen = (_options.gridMenu && _options.gridMenu.leaveOpen) ? true : false;
       if (!leaveOpen && !e.isDefaultPrevented()) {
         hideMenu(e);
       }
@@ -543,7 +543,7 @@
         $menu.hide();
         _isMenuOpen = false;
 
-        var callbackArgs = {
+        let callbackArgs = {
           "grid": _grid,
           "menu": $menu,
           "allColumns": columns,
@@ -572,9 +572,9 @@
       // We create a new `columns` structure by leaving currently-hidden
       // columns in their original ordinal position and interleaving the results
       // of the current column sort.
-      var current = _grid.getColumns().slice(0);
-      var ordered = new Array(columns.length);
-      for (var i = 0; i < ordered.length; i++) {
+      let current = _grid.getColumns().slice(0);
+      let ordered = new Array(columns.length);
+      for (let i = 0; i < ordered.length; i++) {
         if (_grid.getColumnIndex(columns[i].id) === undefined) {
           // If the column doesn't return a value from getColumnIndex,
           // it is hidden. Leave it in this position.
@@ -591,8 +591,8 @@
       if ($(e.target).data("option") == "autoresize") {
         // when calling setOptions, it will resize with ALL Columns (even the hidden ones)
         // we can avoid this problem by keeping a reference to the visibleColumns before setOptions and then setColumns after
-        var previousVisibleColumns = getVisibleColumns();
-        var isChecked = e.target.checked;
+        let previousVisibleColumns = getVisibleColumns();
+        let isChecked = e.target.checked;
         _grid.setOptions({ forceFitColumns: isChecked });
         _grid.setColumns(previousVisibleColumns);
         return;
@@ -608,9 +608,9 @@
       }
 
       if ($(e.target).is(":checkbox")) {
-        var isChecked = e.target.checked;
-        var columnId = $(e.target).data("column-id") || "";
-        var visibleColumns = [];
+        let isChecked = e.target.checked;
+        let columnId = $(e.target).data("column-id") || "";
+        let visibleColumns = [];
         $.each(columnCheckboxes, function (i) {
           if ($(this).is(":checked")) {
             visibleColumns.push(columns[i]);
@@ -622,7 +622,7 @@
           return;
         }
 
-        var callbackArgs = {
+        let callbackArgs = {
           "columnId": columnId,
           "showing": isChecked,
           "grid": _grid,

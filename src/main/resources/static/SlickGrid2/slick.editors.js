@@ -21,9 +21,9 @@
 	});
 
 	function TextEditor(args) {
-		var $input;
-		var defaultValue;
-		var scope = this;
+		let $input;
+		let defaultValue;
+		let scope = this;
 		console.log(args.column.field + ' - args.container')
 		this.init = function() {
 			if (args.column.field == 'managerCode' || args.column.field == 'staffCode' || args.column.field == 'managerAccount' 
@@ -103,7 +103,7 @@
 
 		this.validate = function() {
 			if (args.column.validator) {
-				var validationResults = args.column.validator($input.val());
+				let validationResults = args.column.validator($input.val());
 				if (!validationResults.valid) {
 					return validationResults;
 				}
@@ -119,9 +119,9 @@
 	}
 
 	function IntegerEditor(args) {
-		var $input;
-		var defaultValue;
-		var scope = this;
+		let $input;
+		let defaultValue;
+		let scope = this;
 
 		this.init = function() {
 			$input = $("<INPUT type=text class='editor-text' />");
@@ -181,10 +181,10 @@
 	}
 
 	function DateEditor(args) {
-		var $input;
-		var defaultValue;
-		var scope = this;
-		var calendarOpen = false;
+		let $input;
+		let defaultValue;
+		let scope = this;
+		let calendarOpen = false;
 
 		this.init = function() {
 			$input = $("<INPUT type=text class='editor-text' />");
@@ -266,9 +266,9 @@
 	}
 
 	function YesNoSelectEditor(args) {
-		var $select;
-		var defaultValue;
-		var scope = this;
+		let $select;
+		let defaultValue;
+		let scope = this;
 
 		this.init = function() {
 			$select = $("<SELECT tabIndex='0' class='editor-yesno'><OPTION value='yes'>Yes</OPTION><OPTION value='no'>No</OPTION></SELECT>");
@@ -312,9 +312,9 @@
 	}
 
 	function CheckboxEditor(args) {
-		var $select;
-		var defaultValue;
-		var scope = this;
+		let $select;
+		let defaultValue;
+		let scope = this;
 
 		this.init = function() {
 			$select = $("<INPUT type=checkbox value='true' class='editor-checkbox' hideFocus>");
@@ -362,9 +362,9 @@
 	}
 
 	function PercentCompleteEditor(args) {
-		var $input, $picker;
-		var defaultValue;
-		var scope = this;
+		let $input, $picker;
+		let defaultValue;
+		let scope = this;
 
 		this.init = function() {
 			$input = $("<INPUT type=text class='editor-percentcomplete' />");
@@ -444,12 +444,12 @@
 	 * KeyDown events are also handled to provide handling for Tab, Shift-Tab, Esc and Ctrl-Enter.
 	 */
 	function LongTextEditor(args) {
-		var $input, $wrapper;
-		var defaultValue;
-		var scope = this;
+		let $input, $wrapper;
+		let defaultValue;
+		let scope = this;
 
 		this.init = function() {
-			var $container = $("body");
+			let $container = $("body");
 
 			$wrapper = $("<DIV style='z-index:10000;position:absolute;background:white;padding:5px;border:3px solid gray; -moz-border-radius:10px; border-radius:10px;'/>")
 				.appendTo($container);

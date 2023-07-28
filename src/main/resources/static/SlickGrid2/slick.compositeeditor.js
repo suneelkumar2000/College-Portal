@@ -33,7 +33,7 @@
    *  destroy                 -   A function to be called when the editor is destroyed.
    */
   function CompositeEditor(columns, containers, options) {
-    var defaultOptions = {
+    let defaultOptions = {
       validationFailedMsg: "Some of the fields have failed validation",
       show: null,
       hide: null,
@@ -41,19 +41,19 @@
       destroy: null
     };
 
-    var noop = function () {
+    let noop = function () {
     };
 
-    var firstInvalidEditor;
+    let firstInvalidEditor;
 
     options = $.extend({}, defaultOptions, options);
 
 
     function getContainerBox(i) {
-      var c = containers[i];
-      var offset = $(c).offset();
-      var w = $(c).width();
-      var h = $(c).height();
+      let c = containers[i];
+      let offset = $(c).offset();
+      let w = $(c).width();
+      let h = $(c).height();
 
       return {
         top: offset.top,
@@ -68,12 +68,12 @@
 
 
     function editor(args) {
-      var editors = [];
+      let editors = [];
 
 
       function init() {
-        var newArgs = {};
-        var idx = columns.length;
+        let newArgs = {};
+        let idx = columns.length;
         while (idx--) {
           if (columns[idx].editor) {
             newArgs = $.extend({}, args);
@@ -90,7 +90,7 @@
 
 
       this.destroy = function () {
-        var idx = editors.length;
+        let idx = editors.length;
         while (idx--) {
           editors[idx].destroy();
         }
@@ -106,7 +106,7 @@
 
 
       this.isValueChanged = function () {
-        var idx = editors.length;
+        let idx = editors.length;
         while (idx--) {
           if (editors[idx].isValueChanged()) {
             return true;
@@ -117,8 +117,8 @@
 
 
       this.serializeValue = function () {
-        var serializedValue = [];
-        var idx = editors.length;
+        let serializedValue = [];
+        let idx = editors.length;
         while (idx--) {
           serializedValue[idx] = editors[idx].serializeValue();
         }
@@ -127,7 +127,7 @@
 
 
       this.applyValue = function (item, state) {
-        var idx = editors.length;
+        let idx = editors.length;
         while (idx--) {
           editors[idx].applyValue(item, state[idx]);
         }
@@ -135,7 +135,7 @@
 
 
       this.loadValue = function (item) {
-        var idx = editors.length;
+        let idx = editors.length;
         while (idx--) {
           editors[idx].loadValue(item);
         }
@@ -143,12 +143,12 @@
 
 
       this.validate = function () {
-        var validationResults;
-        var errors = [];
+        let validationResults;
+        let errors = [];
 
         firstInvalidEditor = null;
 
-        var idx = editors.length;
+        let idx = editors.length;
         while (idx--) {
           validationResults = editors[idx].validate();
           if (!validationResults.valid) {
@@ -178,7 +178,7 @@
 
 
       this.hide = function () {
-        var idx = editors.length;
+        let idx = editors.length;
         while (idx--) {
           editors[idx].hide && editors[idx].hide();
         }
@@ -187,7 +187,7 @@
 
 
       this.show = function () {
-        var idx = editors.length;
+        let idx = editors.length;
         while (idx--) {
           editors[idx].show && editors[idx].show();
         }

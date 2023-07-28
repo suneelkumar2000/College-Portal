@@ -4,7 +4,6 @@ function resultGrid() {
 	let grid;
 	let data1 = document.getElementById("users").value;
 	let data = JSON.parse(data1);
-	console.log(data);
 
 	/* set unique it to array */
 
@@ -21,39 +20,14 @@ function resultGrid() {
 	});
 
 	// Use the updated items array list with unique ids
-	console.log(data);
-	//console.log(dataList);
 	/* unique id end */
-	
-	/*date formator start */
-	function dateFormatter(row, cell, value, columnDef, dataContext) {
-		const date = new Date(value);
-		let getDay = date.toLocaleString("default", { day: "2-digit" });
-		let getMonth = date.toLocaleString("default", { month: "2-digit" });
-		let getYear = date.toLocaleString("default", { year: "numeric" }); // Set the desired date format
-		const formattedDate = getDay + "-" + getMonth + "-" + getYear;// Format the date as a string
-		return formattedDate; // Return the formatted date string
-	}
-	/*date formator end */
-	
-	/* check box funtion start */
-	function checkboxFormatter(row, cell, value, columnDef, dataContext) {
-		let a = dataContext.donationCode;
-		return '<input type="checkbox" value="' + a + '" name="checkName" id="checkBox"' + (value ? 'checked="checked"' : '') + '/>';
-	}
 
-	//let check= document.getElementById("checkBox");
-	let check = document.querySelectorAll('input[type="checkbox"]:checked');
-	console.log(check);
-
-	/* check box funtion end */
-	
 	function buttonFormatter(row, cell, value, columnDef, dataContext) {
-	let a = dataContext.userId ;
-    return '<form action="/resultPopup" metod="get"><button type="submit"  class="tablebutton1" name="userId"  value="'+a+'">Add Marks</button></form>';
-    }
-	
-	let columns = [ {
+		let a = dataContext.userId;
+		return '<form action="/resultPopup" metod="get"><button type="submit"  class="tablebutton1" name="userId"  value="' + a + '">Add Marks</button></form>';
+	}
+
+	let columns = [{
 		id: "userId",
 		name: "User Id",
 		field: "userId",
@@ -70,7 +44,7 @@ function resultGrid() {
 		name: "Last Name",
 		field: "lastName",
 		sortable: true
-	},{
+	}, {
 		id: "department",
 		name: "Department",
 		field: "department",
@@ -81,12 +55,12 @@ function resultGrid() {
 		field: "semester",
 		width: 100,
 		sortable: true
-	},{
-		id : "addMarks",
-		name : "Add Marks",
-		field : "addMarks",
-		formatter:buttonFormatter,
-		width:200
+	}, {
+		id: "addMarks",
+		name: "Add Marks",
+		field: "addMarks",
+		formatter: buttonFormatter,
+		width: 200
 	}];
 
 	let options = {
@@ -108,38 +82,10 @@ function resultGrid() {
 	let percentCompleteThreshold = 0;
 	let searchString = "";
 
-	function requiredFieldValidator(value) {
-		if (value === null || value === undefined || !value.length) {
-			return { valid: false, msg: "This is a required field" };
-		}
-		else {
-			return { valid: true, msg: null };
-		}
-	}
-
-	function myFilter(item, args) {
-		if (item["percentComplete"] < args.percentCompleteThreshold) {
-			return false;
-		}
-
-		if (args.searchString !== "" && item["title"].indexOf(args.searchString) === -1) {
-			return false;
-		}
-
-		return true;
-	}
-
-	function percentCompleteSort(a, b) {
-		return a["percentComplete"] - b["percentComplete"];
-	}
-
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
-		return (x === y ? 0 : (x > y ? 1 : -1));
-	}
-
-	function toggleFilterRow() {
-		grid.setTopPanelVisibility(!grid.getOptions().showTopPanel);
+		if (x === y) { return 0; }
+		return (x > y ? 1 : -1);
 	}
 
 
@@ -175,13 +121,10 @@ function resultGrid() {
 		/* filter end */
 
 
-		//		dataView = new Slick.Data.DataView({ inlineFilters: true });
 		dataView = new Slick.Data.DataView();
 		grid = new Slick.Grid("#resultGrid", dataView, columns, options);
 		grid.setSelectionModel(new Slick.RowSelectionModel());
 
-	//	let pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
-	//	let columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
 		// header row start
 		dataView.onRowCountChanged.subscribe(function(e, args) {
@@ -220,13 +163,13 @@ function resultGrid() {
 		grid.onCellChange.subscribe(function(e, args) {
 			dataView.updateItem(args.item.id, args.item);
 		});
-/*
-		grid.onAddNewRow.subscribe(function(e, args) {
-			let item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
-			$.extend(item, args.item);
-			dataView.addItem(item);
-		});
-*/
+		/*
+				grid.onAddNewRow.subscribe(function(e, args) {
+					let item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
+					$.extend(item, args.item);
+					dataView.addItem(item);
+				});
+		*/
 		grid.onKeyDown.subscribe(function(e) {
 			// select all rows on ctrl-a
 			if (e.which !== 65 || !e.ctrlKey) {
@@ -291,45 +234,6 @@ function resultGrid() {
 			}
 		});
 
-
-		let h_runfilters = null;
-		/*
-				// wire up the slider to apply the filter to the model
-				$("#pcSlider,#pcSlider2").slider({
-					"range": "min",
-					"slide": function(event, ui) {
-						Slick.GlobalEditorLock.cancelCurrentEdit();
-		
-						if (percentCompleteThreshold != ui.value) {
-							window.clearTimeout(h_runfilters);
-							h_runfilters = window.setTimeout(updateFilter, 10);
-							percentCompleteThreshold = ui.value;
-						}
-					}
-				});
-		
-		
-				// wire up the search textbox to apply the filter to the model
-				$("#txtSearch,#txtSearch2").keyup(function(e) {
-					Slick.GlobalEditorLock.cancelCurrentEdit();
-		
-					// clear on Esc
-					if (e.which == 27) {
-						this.value = "";
-					}
-		
-					searchString = this.value;
-					updateFilter();
-				});
-		*/
-		function updateFilter() {
-			dataView.setFilterArgs({
-				percentCompleteThreshold: percentCompleteThreshold,
-				searchString: searchString
-			});
-			dataView.refresh();
-		}
-
 		$("#btnSelectRows").click(function() {
 			if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
 				return;
@@ -348,12 +252,7 @@ function resultGrid() {
 		grid.init();
 		dataView.beginUpdate();
 		dataView.setItems(data);
-		/*
-		dataView.setFilterArgs({
-			percentCompleteThreshold: percentCompleteThreshold,
-			searchString: searchString
-		});
-		*/
+
 		dataView.setFilter(filter);
 		dataView.endUpdate();
 
@@ -361,7 +260,6 @@ function resultGrid() {
 		// or being on a different page) to stay selected, pass 'false' to the second arg
 		dataView.syncGridSelection(grid, true);
 
-		//$("#gridContainer").resizable();
 	})
 
 }

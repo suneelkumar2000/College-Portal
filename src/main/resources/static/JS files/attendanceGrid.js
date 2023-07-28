@@ -22,30 +22,7 @@ function attendanceGrid() {
 
 	// Use the updated items array list with unique ids
 	console.log(data);
-	//console.log(dataList);
 	/* unique id end */
-	
-	/*date formator start */
-	function dateFormatter(row, cell, value, columnDef, dataContext) {
-		const date = new Date(value);
-		let getDay = date.toLocaleString("default", { day: "2-digit" });
-		let getMonth = date.toLocaleString("default", { month: "2-digit" });
-		let getYear = date.toLocaleString("default", { year: "numeric" }); // Set the desired date format
-		const formattedDate = getDay + "-" + getMonth + "-" + getYear;// Format the date as a string
-		return formattedDate; // Return the formatted date string
-	}
-	/*date formator end */
-	
-	/* check box funtion start */
-	function checkboxFormatter(row, cell, value, columnDef, dataContext) {
-		let a = dataContext.donationCode;
-		return '<input type="checkbox" value="' + a + '" name="checkName" id="checkBox"' + (value ? 'checked="checked"' : '') + '/>';
-	}
-
-	let check = document.querySelectorAll('input[type="checkbox"]:checked');
-	console.log(check);
-
-	/* check box funtion end */
 	
 	function buttonFormatter2(row, cell, value, columnDef, dataContext) {
 	let a = dataContext.userId ;
@@ -118,38 +95,10 @@ function attendanceGrid() {
 	let percentCompleteThreshold = 0;
 	let searchString = "";
 
-	function requiredFieldValidator(value) {
-		if (value === null || value === undefined || !value.length) {
-			return { valid: false, msg: "This is a required field" };
-		}
-		else {
-			return { valid: true, msg: null };
-		}
-	}
-
-	function myFilter(item, args) {
-		if (item["percentComplete"] < args.percentCompleteThreshold) {
-			return false;
-		}
-
-		if (args.searchString !== "" && item["title"].indexOf(args.searchString) === -1) {
-			return false;
-		}
-
-		return true;
-	}
-
-	function percentCompleteSort(a, b) {
-		return a["percentComplete"] - b["percentComplete"];
-	}
-
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
-		return (x === y ? 0 : (x > y ? 1 : -1));
-	}
-
-	function toggleFilterRow() {
-		grid.setTopPanelVisibility(!grid.getOptions().showTopPanel);
+		if (x === y) { return 0; }
+		return (x > y ? 1 : -1);
 	}
 
 
@@ -185,7 +134,6 @@ function attendanceGrid() {
 		/* filter end */
 
 
-		//		dataView = new Slick.Data.DataView({ inlineFilters: true });
 		dataView = new Slick.Data.DataView();
 		grid = new Slick.Grid("#attendanceGrid", dataView, columns, options);
 		grid.setSelectionModel(new Slick.RowSelectionModel());
@@ -228,13 +176,7 @@ function attendanceGrid() {
 		grid.onCellChange.subscribe(function(e, args) {
 			dataView.updateItem(args.item.id, args.item);
 		});
-/*
-		grid.onAddNewRow.subscribe(function(e, args) {
-			let item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
-			$.extend(item, args.item);
-			dataView.addItem(item);
-		});
-*/
+
 		grid.onKeyDown.subscribe(function(e) {
 			if (e.which !== 65 || !e.ctrlKey) {
 				return false;
