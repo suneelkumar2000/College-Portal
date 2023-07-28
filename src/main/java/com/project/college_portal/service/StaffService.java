@@ -33,18 +33,23 @@ public class StaffService {
 
 	// method to find Subject List By Semester
 	public List<SubjectPojo> findSubjectListBySemester(int semesterId, Model model) throws JsonProcessingException {
-		return  staffDao.findSubjectListBySemester(semesterId, model);
-		
+		return staffDao.findSubjectListBySemester(semesterId, model);
+
 	}
 
 	// method to get student list
 	public List<User> studentList(Model model) throws JsonProcessingException {
-		return  staffDao.studentList(model);
+		return staffDao.studentList(model);
 	}
 
 	// method to approve student
 	public int approve(int staffId, User user) throws UserIdException, HigherAuthorityException {
 		return staffDao.approve(staffId, user);
+	}
+
+	// method to reject student
+	public int reject(int staffId, User user) throws UserIdException, HigherAuthorityException {
+		return staffDao.reject(staffId, user);
 	}
 
 	// method to get department list
@@ -139,7 +144,8 @@ public class StaffService {
 	}
 
 	// method to add subject
-	public int addSubject(SubjectPojo subjectPojo) throws SemesterIdException, DepartmentException, ExistSubjectNameException {
+	public int addSubject(SubjectPojo subjectPojo)
+			throws SemesterIdException, DepartmentException, ExistSubjectNameException {
 		return staffDao.addSubject(subjectPojo);
 	}
 

@@ -80,6 +80,16 @@ public class StaffController {
 		user.setUserId(userID);
 		staffService.approve(staffId, user);
 	}
+	
+	// method to reject student
+		@GetMapping(path = "/reject")
+		public void reject(@RequestParam("userID") int userID, HttpSession session)
+				throws UserIdException, HigherAuthorityException {
+			int staffId = (int) session.getAttribute(sessionUserId);
+			User user = new User();
+			user.setUserId(userID);
+			staffService.reject(staffId, user);
+		}
 
 	// --------- Department methods ------------
 

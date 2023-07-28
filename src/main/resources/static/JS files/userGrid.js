@@ -24,7 +24,7 @@ function userGrid() {
 	console.log(data);
 	//console.log(dataList);
 	/* unique id end */
-	
+
 	/*date formator start */
 	function dateFormatter(row, cell, value, columnDef, dataContext) {
 		const date = new Date(value);
@@ -35,7 +35,7 @@ function userGrid() {
 		return formattedDate; // Return the formatted date string
 	}
 	/*date formator end */
-	
+
 	/* check box funtion start */
 	function checkboxFormatter(row, cell, value, columnDef, dataContext) {
 		let a = dataContext.donationCode;
@@ -47,12 +47,24 @@ function userGrid() {
 	console.log(check);
 
 	/* check box funtion end */
-	
+
+	function buttonFormatter(row, cell, value, columnDef, dataContext) {
+		let a = dataContext.userId;
+		let status = dataContext.status;
+		if (status.equals("approved")) {
+			return '<form action="/approve" metod="get"><button type="submit" class="tablebutton1" name="userID"  value="' + a + '" >Deactivate</button></form>';
+		} else if (status.equals("not approved")) {
+			return '<form action="/reject" metod="get"><button type="submit" class="tablebutton2" name="userID"  value="' + a + '" >Activate</button></form>';
+		} else {
+			return '<span>Rejected</span>';
+		}
+	}
+
 	let columns = [{
 		id: "select",
 		name: "Select",
 		field: "select",
-		width:100,
+		width: 100,
 		formatter: checkboxFormatter
 	}, {
 		id: "userId",
@@ -77,7 +89,7 @@ function userGrid() {
 		field: "gender",
 		width: 100,
 		sortable: true
-	},{
+	}, {
 		id: "parentName",
 		name: "parent Name",
 		field: "parentName",
@@ -104,6 +116,12 @@ function userGrid() {
 		field: "status",
 		width: 100,
 		sortable: true
+	}, {
+		id: "actions",
+		name: "Actions",
+		field: "actions",
+		formatter: buttonFormatter,
+		width: 200
 	}];
 
 	let options = {
@@ -197,8 +215,8 @@ function userGrid() {
 		grid = new Slick.Grid("#myGrid", dataView, columns, options);
 		grid.setSelectionModel(new Slick.RowSelectionModel());
 
-	//	let pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
-	//	let columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
+		//	let pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
+		//	let columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
 		// header row start
 		dataView.onRowCountChanged.subscribe(function(e, args) {
@@ -237,13 +255,13 @@ function userGrid() {
 		grid.onCellChange.subscribe(function(e, args) {
 			dataView.updateItem(args.item.id, args.item);
 		});
-/*
-		grid.onAddNewRow.subscribe(function(e, args) {
-			let item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
-			$.extend(item, args.item);
-			dataView.addItem(item);
-		});
-*/
+		/*
+				grid.onAddNewRow.subscribe(function(e, args) {
+					let item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
+					$.extend(item, args.item);
+					dataView.addItem(item);
+				});
+		*/
 		grid.onKeyDown.subscribe(function(e) {
 			// select all rows on ctrl-a
 			if (e.which !== 65 || !e.ctrlKey) {

@@ -31,6 +31,7 @@ public interface StaffInterface {
 	public List<User> findStudentById(int userId,Model model) ;
 	public List<User> studentList(Model model) throws JsonProcessingException;
 	public int approve(int staffId,User approveUser) throws UserIdException, HigherAuthorityException;
+	public int reject(int staffId, User approveUser) throws UserIdException, HigherAuthorityException;
 	public List<User> approvedStudentList(Model model) throws JsonProcessingException;
 	public List<User> notApprovedStudentList();
 	public int activateOrDeactivateStudent(User user);

@@ -24,7 +24,6 @@ function departmentGrid() {
 		return '<input type="checkbox" value="' + a + '" name="checkName" id="checkBox"' + (value ? 'checked="checked"' : '') + '/>';
 	}
 
-	//let check= document.getElementById("checkBox");
 	let check = document.querySelectorAll('input[type="checkbox"]:checked');
 	console.log(check);
 
@@ -53,7 +52,6 @@ function departmentGrid() {
 		id: "id",
 		name: "Id",
 		field: "id",
-		type: 'numberColumn',
 		width: 100,
 		sortable: true
 	}, {

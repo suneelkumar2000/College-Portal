@@ -116,7 +116,35 @@ public class StaffDao implements StaffInterface {
 						return 1;
 					}
 				}
-				throw new UserIdException("User Id dosen't exist");
+				throw new UserIdException("User Id dosen't exist to approve");
+			}
+		}
+		throw new HigherAuthorityException("HigherAuthority Exception");
+
+	}
+	
+	public int reject(int staffId, User approveUser) throws UserIdException, HigherAuthorityException {
+		String selectStaff = selectIdRollStatus;
+		List<User> user = jdbcTemplate.query(selectStaff, new ApprovingMapper());
+		List<User> user1 = user.stream().filter(id -> id.getUserId() == (staffId))
+				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals("approved"))
+				.collect(Collectors.toList());
+		for (User userModel : user1) {
+			if (userModel != null) {
+
+				String select = selectIdRollStatus;
+				List<User> user2 = jdbcTemplate.query(select, new ApprovingMapper());
+				List<User> user3 = user2.stream().filter(id -> id.getUserId() == (approveUser.getUserId()))
+						.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
+				for (User userModel2 : user3) {
+					if (userModel2 != null) {
+						String approve = "update user set status='reject'  where (roll='student' and id=?)";
+						Object[] params = { approveUser.getUserId() };
+						jdbcTemplate.update(approve, params);
+						return 1;
+					}
+				}
+				throw new UserIdException("User Id dosen't exist to reject");
 			}
 		}
 		throw new HigherAuthorityException("HigherAuthority Exception");
