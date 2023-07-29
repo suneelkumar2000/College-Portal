@@ -14,6 +14,7 @@ public class MailScheduler {
 	// 1000 * 60 * 2 = 2 mins
 	@Scheduled(fixedDelayString = "12000")
 	public void notifyMail() {
+		org.slf4j.Logger logger = null;
 		LocalDateTime todayDateTime = LocalDateTime.now();
 		logger.info("notifymail :" ,todayDateTime);
 	}
