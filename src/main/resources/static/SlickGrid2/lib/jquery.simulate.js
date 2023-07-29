@@ -36,7 +36,7 @@
 			return evt;
 		},
 		createEvent: function(type, options) {
-			if (/^mouse(over|out|down|up|move)|(dbl)?click$/.test(type)) {
+			if (/^(mouse(over|out|down|up|move)|(dbl)?click)$/.test(type)) {
 				return this.mouseEvent(type, options);
 			} else if (/^key(up|down|press)$/.test(type)) {
 				return this.keyboardEvent(type, options);

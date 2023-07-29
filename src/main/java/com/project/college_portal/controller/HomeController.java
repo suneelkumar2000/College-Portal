@@ -19,7 +19,6 @@ import com.project.college_portal.exception.ExistSemesterIdException;
 import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
-import com.project.college_portal.dao.UserDao;
 import com.project.college_portal.exception.AttendanceUserIdException;
 import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
@@ -45,7 +44,7 @@ public class HomeController {
 	String modelAttendanceDetails="attendanceDetails";
 
 	Logger logger = LoggerFactory.getLogger(HomeController.class);
-	UserDao userDao = new UserDao();
+	//UserDao userDao = new UserDao();
 	UserService userService = new UserService();
 	StaffService staffService = new StaffService();
 	@Value("${email}")
@@ -100,7 +99,8 @@ public class HomeController {
 	@GetMapping(path = "/attendance")
 	public String attendance(Model model, HttpSession session) throws JsonProcessingException, AttendanceUserIdException {
 		int userId = (int) session.getAttribute(sessionUserId);
-		model.addAttribute(modelAttendanceDetails,userDao.findStudentAttendance(userId , model));
+		int semester = (int) session.getAttribute(sessionSemester);
+		model.addAttribute(modelAttendanceDetails,userService.findStudentAttendance(userId ,semester , model));
 		return "attendance";
 	}
 

@@ -33,7 +33,7 @@ import com.project.college_portal.model.ExamPojo;
 import com.project.college_portal.model.ResultPojo;
 import com.project.college_portal.model.SemesterPojo;
 import com.project.college_portal.model.SubjectPojo;
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.UserPojo;
 import com.project.college_portal.service.StaffService;
 
 @Controller
@@ -67,8 +67,8 @@ public class StaffController {
 	// method to get student list
 	@GetMapping(path = "/listofusers")
 	public String getAllUser(Model model) throws JsonProcessingException {
-		List<User> users = staffService.studentList(model);
-		model.addAttribute("USER_LIST", users);
+		List<UserPojo> userPojos = staffService.studentList(model);
+		model.addAttribute("USER_LIST", userPojos);
 		return "listusers";
 	}
 
@@ -77,9 +77,9 @@ public class StaffController {
 	public String approve(@RequestParam("userID") int userID, HttpSession session)
 			throws UserIdException, HigherAuthorityException {
 		int staffId = (int) session.getAttribute(sessionUserId);
-		User user = new User();
-		user.setUserId(userID);
-		staffService.approve(staffId, user);
+		UserPojo userPojo = new UserPojo();
+		userPojo.setUserId(userID);
+		staffService.approve(staffId, userPojo);
 		return redirectlistofusers;
 	}
 	
@@ -88,9 +88,9 @@ public class StaffController {
 		public String reject(@RequestParam("userID") int userID, HttpSession session)
 				throws UserIdException, HigherAuthorityException {
 			int staffId = (int) session.getAttribute(sessionUserId);
-			User user = new User();
-			user.setUserId(userID);
-			staffService.reject(staffId, user);
+			UserPojo userPojo = new UserPojo();
+			userPojo.setUserId(userID);
+			staffService.reject(staffId, userPojo);
 			return redirectlistofusers;
 		}
 
@@ -158,9 +158,9 @@ public class StaffController {
 
 	// method to add present
 	@GetMapping(path = "/addUpdatePresentbyone")
-	public String addOrUpdatePresentByOne(@RequestParam("userId") int userId, Model model)
+	public String addOrUpdatePresentByOne(@RequestParam("userId") int userId,@RequestParam("semester") int semester, Model model)
 			throws UserIdException, JsonProcessingException {
-		int value = staffService.addOrUpdatePresentByOne(userId);
+		int value = staffService.addOrUpdatePresentByOne(userId,semester);
 		if (value == 1) {
 			return redirectAttendanceAdmin;
 		} else
@@ -169,10 +169,10 @@ public class StaffController {
 
 	// method to add absent
 	@GetMapping(path = "/addUpdateAbsentbyone")
-	public String addOrUpdateAbsentByOne(@RequestParam("userId") int userId, Model model)
+	public String addOrUpdateAbsentByOne(@RequestParam("userId") int userId,@RequestParam("semester") int semester, Model model)
 			throws UserIdException, JsonProcessingException {
 
-		int value = staffService.addOrUpdateAbsentByOne(userId);
+		int value = staffService.addOrUpdateAbsentByOne(userId,semester);
 		if (value == 1) {
 			return redirectAttendanceAdmin;
 		} else
@@ -368,8 +368,8 @@ public class StaffController {
 		resultPojo.setUserId(userId);
 		resultPojo.setMarks(marks);
 
-		List<User> user = staffDao.findStudentById(userId, model);
-		for (User userModel : user) {
+		List<UserPojo> userPojo = staffDao.findStudentById(userId, model);
+		for (UserPojo userModel : userPojo) {
 			if (userModel != null) {
 				String department = userModel.getDepartment();
 				int semester = userModel.getSemester();

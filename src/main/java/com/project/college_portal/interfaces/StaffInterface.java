@@ -23,27 +23,27 @@ import com.project.college_portal.model.ExamPojo;
 import com.project.college_portal.model.ResultPojo;
 import com.project.college_portal.model.SemesterPojo;
 import com.project.college_portal.model.SubjectPojo;
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.UserPojo;
 
 public interface StaffInterface {
 	public int checkHigherAuthority(int staffId) throws HigherAuthorityException;
-	public User findStudentDepartmentById(int userId);
-	public List<User> findStudentById(int userId,Model model) ;
-	public List<User> studentList(Model model) throws JsonProcessingException;
-	public int approve(int staffId,User approveUser) throws UserIdException, HigherAuthorityException;
-	public int reject(int staffId, User approveUser) throws UserIdException, HigherAuthorityException;
-	public List<User> approvedStudentList(Model model) throws JsonProcessingException;
-	public List<User> notApprovedStudentList();
-	public int activateOrDeactivateStudent(User user);
-	public List<User> inactiveStudentList();
+	public UserPojo findStudentDepartmentById(int userId);
+	public List<UserPojo> findStudentById(int userId,Model model) ;
+	public List<UserPojo> studentList(Model model) throws JsonProcessingException;
+	public int approve(int staffId,UserPojo approveUser) throws UserIdException, HigherAuthorityException;
+	public int reject(int staffId, UserPojo approveUser) throws UserIdException, HigherAuthorityException;
+	public List<UserPojo> approvedStudentList(Model model) throws JsonProcessingException;
+	public List<UserPojo> notApprovedStudentList();
+	public int activateOrDeactivateStudent(UserPojo userPojo);
+	public List<UserPojo> inactiveStudentList();
 	
 	public int addDepartment(int staffId,DepartmentPojo departmentPojo) throws ExistDepartmentNameException, HigherAuthorityException;
 	public int activateOrDeactivateDepartment(DepartmentPojo departmentPojo);
 	public List<DepartmentPojo> departmentList(Model model) throws JsonProcessingException;
 	public List<DepartmentPojo> inactiveDepartmentList(Model model) throws JsonProcessingException;
 	
-	public int addOrUpdatePresentByOne(int userId) throws UserIdException;
-	public int addOrUpdateAbsentByOne(int userId) throws UserIdException;
+	public int addOrUpdatePresentByOne(int userId,int semester) throws UserIdException;
+	public int addOrUpdateAbsentByOne(int userId,int semester) throws UserIdException;
 	public int activateOrDeactivateAttendance(AttendancePojo attendancePojo);
 	public List<AttendancePojo> attendanceList();
 	public List<AttendancePojo> inactiveAttendanceList();

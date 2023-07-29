@@ -6,13 +6,13 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.UserPojo;
 
-public class UserMapper implements RowMapper<User> {
+public class UserMapper implements RowMapper<UserPojo> {
 
 	@Override
-	public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-		User user = new User();
+	public UserPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		UserPojo userPojo = new UserPojo();
 		int userId = rs.getInt("id");
 		String email = rs.getString("email");
 		String firstName = rs.getString("first_name");
@@ -30,23 +30,23 @@ public class UserMapper implements RowMapper<User> {
 		String image = rs.getString("image");
 		boolean isActive = rs.getBoolean("is_active");
 		
-		user.setUserId(userId);
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setEmail(email);
-		user.setPassword(password);
-		user.setPhone(phone);
-		user.setDOB(DOB);
-		user.setGender(gender);
-		user.setRoll(roll);
-		user.setStatus(status);
-		user.setDepartment(department);
-		user.setParentName(parentName);
-		user.setJoiningYear(joiningYear);
-		user.setSemester(semester);
-		user.setImage(image);
-		user.setActive(isActive);
+		userPojo.setUserId(userId);
+		userPojo.setFirstName(firstName);
+		userPojo.setLastName(lastName);
+		userPojo.setEmail(email);
+		userPojo.setPassword(password);
+		userPojo.setPhone(phone);
+		userPojo.setDOB(DOB);
+		userPojo.setGender(gender);
+		userPojo.setRoll(roll);
+		userPojo.setStatus(status);
+		userPojo.setDepartment(department);
+		userPojo.setParentName(parentName);
+		userPojo.setJoiningYear(joiningYear);
+		userPojo.setSemester(semester);
+		userPojo.setImage(image);
+		userPojo.setActive(isActive);
 		
-		return user;
+		return userPojo;
 	}
 }

@@ -17,7 +17,6 @@ import com.project.college_portal.exception.AttendanceUserIdException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ForgotPasswordException;
 import com.project.college_portal.exception.InvalidMailIdException;
-import com.project.college_portal.exception.UserIdException;
 import com.project.college_portal.interfaces.UserInterface;
 import com.project.college_portal.mapper.ApprovingMapper;
 import com.project.college_portal.mapper.AttendanceMapper;
@@ -28,7 +27,7 @@ import com.project.college_portal.mapper.StudentResultMapper;
 import com.project.college_portal.model.AttendancePojo;
 import com.project.college_portal.model.SemesterPojo;
 import com.project.college_portal.model.StudentResultPojo;
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.UserPojo;
 import com.project.college_portal.validation.Validation;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,13 +43,13 @@ public class UserDao implements UserInterface {
 	// --------- user method ---------
 
 	// user registration method
-	public int save(User saveUser) throws ExistMailIdException {
+	public int save(UserPojo saveUser) throws ExistMailIdException {
 		String password = saveUser.getPassword();
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String encodedPassword = encoder.encode(password);
 
 		Validation val = new Validation();
-		List<User> listUsers = listUsers();
+		List<UserPojo> listUsers = listUsers();
 
 		String userList = listUsers.toString();
 		String email = saveUser.getEmail();
@@ -84,22 +83,22 @@ public class UserDao implements UserInterface {
 	}
 
 	// method for user login
-	public int login(User loginUser) throws InvalidMailIdException {
+	public int login(UserPojo loginUser) throws InvalidMailIdException {
 		String email = loginUser.getEmail();
 
 		String password = loginUser.getPassword();
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 		String login = "Select Email,Password,roll from user";
-		List<User> userLogin = jdbcTemplate.query(login, new LoginMapper());
+		List<UserPojo> userLogin = jdbcTemplate.query(login, new LoginMapper());
 
-		List<User> user1 = userLogin.stream().filter(email1 -> email1.getEmail().equals(email))
+		List<UserPojo> user1 = userLogin.stream().filter(email1 -> email1.getEmail().equals(email))
 				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
 
-		List<User> user2 = userLogin.stream().filter(email2 -> email2.getEmail().equals(email))
+		List<UserPojo> user2 = userLogin.stream().filter(email2 -> email2.getEmail().equals(email))
 				.filter(roll2 -> roll2.getRoll().equals("staff")).collect(Collectors.toList());
 
-		for (User userModel1 : user1) {
+		for (UserPojo userModel1 : user1) {
 			if (userModel1 != null) {
 				String dbpass = userModel1.getPassword();
 				boolean match = encoder.matches(password, dbpass);
@@ -108,7 +107,7 @@ public class UserDao implements UserInterface {
 			}
 
 		}
-		for (User userModel2 : user2) {
+		for (UserPojo userModel2 : user2) {
 			if (userModel2 != null) {
 				String dbpass = userModel2.getPassword();
 				boolean match = encoder.matches(password, dbpass);
@@ -121,32 +120,32 @@ public class UserDao implements UserInterface {
 	}
 
 	// method to show user list
-	public List<User> listUsers() {
+	public List<UserPojo> listUsers() {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user";
 		return jdbcTemplate.query(select, new UserMapper());
 	}
 
 	// forgotPassword method
-	public int forgotPassword(User user) throws ForgotPasswordException {
-		String email = user.getEmail();
-		long phone = user.getPhone();
-		String password = user.getPassword();
+	public int forgotPassword(UserPojo userPojo) throws ForgotPasswordException {
+		String email = userPojo.getEmail();
+		long phone = userPojo.getPhone();
+		String password = userPojo.getPassword();
 
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String encodePassword = encoder.encode(password);
 
 		String select = "Select Email,Password,phone_number,roll from user";
-		List<User> userLogin = jdbcTemplate.query(select, new ForgotPasswordMapper());
+		List<UserPojo> userLogin = jdbcTemplate.query(select, new ForgotPasswordMapper());
 
-		List<User> user1 = userLogin.stream().filter(email1 -> email1.getEmail().equals(email))
+		List<UserPojo> user1 = userLogin.stream().filter(email1 -> email1.getEmail().equals(email))
 				.filter(phone1 -> phone1.getPhone().equals(phone)).filter(roll1 -> roll1.getRoll().equals("student"))
 				.collect(Collectors.toList());
 
-		List<User> user2 = userLogin.stream().filter(email2 -> email2.getEmail().equals(email))
+		List<UserPojo> user2 = userLogin.stream().filter(email2 -> email2.getEmail().equals(email))
 				.filter(phone2 -> phone2.getPhone().equals(phone)).filter(roll2 -> roll2.getRoll().equals("staff"))
 				.collect(Collectors.toList());
 
-		for (User userModel1 : user1) {
+		for (UserPojo userModel1 : user1) {
 			if (userModel1 != null) {
 				String changePassword = updatePasswordQuery;
 				Object[] params = { encodePassword, email };
@@ -154,7 +153,7 @@ public class UserDao implements UserInterface {
 				return 1;
 			}
 		}
-		for (User userModel2 : user2) {
+		for (UserPojo userModel2 : user2) {
 			if (userModel2 != null) {
 				String changePassword = updatePasswordQuery;
 				Object[] params = { encodePassword, email };
@@ -169,10 +168,10 @@ public class UserDao implements UserInterface {
 	// method to find user ID by email
 	public int findIdByEmail(String email) {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where email=?";
-		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
-		for (User user : userDetails) {
-			if (user != null) {
-				return user.getUserId();
+		List<UserPojo> userDetails = jdbcTemplate.query(select, new UserMapper(), email);
+		for (UserPojo userPojo : userDetails) {
+			if (userPojo != null) {
+				return userPojo.getUserId();
 			}
 		}
 		return 0;
@@ -181,8 +180,8 @@ public class UserDao implements UserInterface {
 	// method to set User Session By Id
 	public int setUserSessionById(int userId, HttpSession session) {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (id=?)";
-		List<User> userDetails = jdbcTemplate.query(select, new UserMapper(), userId);
-		for (User userModel : userDetails) {
+		List<UserPojo> userDetails = jdbcTemplate.query(select, new UserMapper(), userId);
+		for (UserPojo userModel : userDetails) {
 			if (userModel != null) {
 				session.setAttribute("firstName", userModel.getFirstName());
 				session.setAttribute("lastName", userModel.getLastName());
@@ -205,25 +204,25 @@ public class UserDao implements UserInterface {
 	// --------- student method ---------
 
 	// method to find student details by Email
-	public List<User> findByEmail(String email) {
+	public List<UserPojo> findByEmail(String email) {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and email=?)";
 		return jdbcTemplate.query(select, new UserMapper(), email);
 	}
 
 	// method to update student details
-	public int studentsave(User User) {
+	public int studentsave(UserPojo userPojo) {
 		String select = "Select id,roll,status,is_active from user";
-		List<User> user = jdbcTemplate.query(select, new ApprovingMapper());
-		List<User> user1 = user.stream().filter(id -> id.getUserId() == (User.getUserId()))
+		List<UserPojo> user = jdbcTemplate.query(select, new ApprovingMapper());
+		List<UserPojo> user1 = user.stream().filter(id -> id.getUserId() == (userPojo.getUserId()))
 				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
-		for (User userModel : user1) {
+		for (UserPojo userModel : user1) {
 			LocalDate currentDate = LocalDate.now();
 			int year = currentDate.getYear();
-			if (User.getJoiningYear() <= year) {
+			if (userPojo.getJoiningYear() <= year) {
 				if (userModel != null) {
 					String update = "update user set dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
-					Object[] params = { User.getDOB(), User.getPhone(), User.getDepartment(), User.getParentName(),
-							User.getJoiningYear(), User.getUserId() };
+					Object[] params = { userPojo.getDOB(), userPojo.getPhone(), userPojo.getDepartment(), userPojo.getParentName(),
+							userPojo.getJoiningYear(), userPojo.getUserId() };
 					jdbcTemplate.update(update, params);
 					return 1;
 				}
@@ -235,8 +234,8 @@ public class UserDao implements UserInterface {
 	// method to update Student semester
 	public void updateStudentSemester(Model model) throws JsonProcessingException {
 		String select = "Select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where roll='student'";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper());
-		for (User userModel : userList) {
+		List<UserPojo> userList = jdbcTemplate.query(select, new UserMapper());
+		for (UserPojo userModel : userList) {
 			if (userModel != null) {
 				int joiningYear = userModel.getJoiningYear();
 				LocalDate currentDate = LocalDate.now();
@@ -326,8 +325,8 @@ public class UserDao implements UserInterface {
 	// method to find Student semester
 	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException {
 		String select = "Select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where id=?";
-		List<User> userList = jdbcTemplate.query(select, new UserMapper(), userid);
-		for (User userModel : userList) {
+		List<UserPojo> userList = jdbcTemplate.query(select, new UserMapper(), userid);
+		for (UserPojo userModel : userList) {
 			if (userModel != null) {
 				int semester = userModel.getSemester();
 				if (semester > 0) {
@@ -354,15 +353,16 @@ public class UserDao implements UserInterface {
 	}
 
 	// method to find Student attendance
-	public List<AttendancePojo> findStudentAttendance(int userId, Model model) throws JsonProcessingException, AttendanceUserIdException {
-		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
+	public List<AttendancePojo> findStudentAttendance(int userId,int semester, Model model) throws JsonProcessingException, AttendanceUserIdException {
+		String select = "Select user_id,semester,total_days,days_attended,days_leave,attendance,is_active from attendance";
 		List<AttendancePojo> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
 		List<AttendancePojo> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
+				.filter(semesterid -> semesterid.getSemester() == (semester))
 				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
 		for (AttendancePojo attendanceModel1 : attendanceList1) {
 			if (attendanceModel1 != null) {
-				String select1 = "select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =true && user_id=?)";
-				return jdbcTemplate.query(select1, new AttendanceMapper(), userId);
+				String select1 = "select user_id,semester,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =true and user_id=? and semester=?)";
+				return jdbcTemplate.query(select1, new AttendanceMapper(), userId, semester);
 			}
 		}throw new AttendanceUserIdException("User Id dosen't exist");
 	}

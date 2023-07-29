@@ -25,13 +25,15 @@ function attendanceGrid() {
 	/* unique id end */
 	
 	function buttonFormatter2(row, cell, value, columnDef, dataContext) {
+	let semester = dataContext.semester;
 	let a = dataContext.userId ;
-    return '<form action="/addUpdatePresentbyone" metod="get"><button type="submit"  class="tablebutton2" name="userId"  value="'+a+'">Present</button></form>';
+    return '<form action="/addUpdatePresentbyone" metod="get"><input type="number" name="semester" value="'+semester+'" style="display:none;"><input type="number" name="userId"  value="'+a+'" style="display:none;"><button type="submit"  class="tablebutton2" >Present</button></form>';
     }
     
     function buttonFormatter(row, cell, value, columnDef, dataContext) {
+    let semester = dataContext.semester;
 	let a = dataContext.userId ;
-    return '<form action="/addUpdateAbsentbyone" metod="get"><button type="submit"  class="tablebutton1" name="userId"  value="'+a+'">Absent</button></form>';
+    return '<form action="/addUpdateAbsentbyone" metod="get"><input type="number" name="semester" value="'+semester+'" style="display:none;"><input type="number" name="userId"  value="'+a+'" style="display:none;"><button type="submit"  class="tablebutton1" name="userId"  value="'+a+'">Absent</button></form>';
     }
 	
 	let columns = [ {

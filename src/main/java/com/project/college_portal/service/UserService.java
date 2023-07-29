@@ -1,15 +1,19 @@
 package com.project.college_portal.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.college_portal.dao.UserDao;
+import com.project.college_portal.exception.AttendanceUserIdException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ForgotPasswordException;
 import com.project.college_portal.exception.InvalidMailIdException;
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.AttendancePojo;
+import com.project.college_portal.model.UserPojo;
 
 public class UserService {
 	UserDao userDao = new UserDao();
@@ -17,14 +21,14 @@ public class UserService {
 	String sessionUserId="userId";
 
 	// method to save register details
-	public int saveUser(User user) throws ExistMailIdException {
-		return userDao.save(user);
+	public int saveUser(UserPojo userPojo) throws ExistMailIdException {
+		return userDao.save(userPojo);
 	}
 
 	// method to get Login success
-	public int loginUser(User user, HttpSession session) throws InvalidMailIdException {
-		int value = userDao.login(user);
-		String email = user.getEmail();
+	public int loginUser(UserPojo userPojo, HttpSession session) throws InvalidMailIdException {
+		int value = userDao.login(userPojo);
+		String email = userPojo.getEmail();
 
 		session.setAttribute(sessionUserId, userDao.findIdByEmail(email));
 		int UserId = (int) session.getAttribute(sessionUserId);
@@ -34,9 +38,9 @@ public class UserService {
 	}
 
 	// method for forgot Password
-	public int forgotPassword(User user, HttpSession session) throws ForgotPasswordException {
-		int value = userDao.forgotPassword(user);
-		String email = user.getEmail();
+	public int forgotPassword(UserPojo userPojo, HttpSession session) throws ForgotPasswordException {
+		int value = userDao.forgotPassword(userPojo);
+		String email = userPojo.getEmail();
 
 		session.setAttribute(sessionUserId, userDao.findIdByEmail(email));
 		int UserId = (int) session.getAttribute(sessionUserId);
@@ -46,8 +50,8 @@ public class UserService {
 	}
 
 	// method to update student Registration details
-	public int studentsave(User user) {
-		return userDao.studentsave(user);
+	public int studentsave(UserPojo userPojo) {
+		return userDao.studentsave(userPojo);
 	}
 
 	// method to find Student Semester By Id
@@ -64,4 +68,6 @@ public class UserService {
 	public void updateStudentSemester(Model model) throws JsonProcessingException {
 		userDao.updateStudentSemester(model);
 	}
+	public List<AttendancePojo> findStudentAttendance(int userId,int semester, Model model) throws JsonProcessingException, AttendanceUserIdException{
+		return userDao.findStudentAttendance(userId, semester, model);}
 }

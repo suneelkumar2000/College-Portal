@@ -26,7 +26,7 @@ import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SubjectIdException;
 import com.project.college_portal.exception.UserIdException;
 import com.project.college_portal.exception.AttendanceUserIdException;
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.UserPojo;
 import com.project.college_portal.service.StaffService;
 import com.project.college_portal.service.UserService;
 
@@ -50,16 +50,16 @@ public class UserController {
 			@RequestParam("email") String email, @RequestParam("password") String password,
 			@RequestParam("phone") Long phone, @RequestParam("gender") String gender, @RequestParam("roll") String roll,
 			@RequestParam("DOB") Date dob) throws ExistMailIdException {
-		User user = new User();
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setEmail(email);
-		user.setPassword(password);
-		user.setPhone(phone);
-		user.setDOB(dob);
-		user.setGender(gender);
-		user.setRoll(roll);
-		int value = userService.saveUser(user);
+		UserPojo userPojo = new UserPojo();
+		userPojo.setFirstName(firstName);
+		userPojo.setLastName(lastName);
+		userPojo.setEmail(email);
+		userPojo.setPassword(password);
+		userPojo.setPhone(phone);
+		userPojo.setDOB(dob);
+		userPojo.setGender(gender);
+		userPojo.setRoll(roll);
+		int value = userService.saveUser(userPojo);
 
 		if (value == 1) {
 			return index;
@@ -72,10 +72,10 @@ public class UserController {
 	@GetMapping(path = "/loginSubmit")
 	public String loginUser(@RequestParam("email") String email, @RequestParam("password") String password, Model model,
 			HttpSession session) throws InvalidMailIdException, JsonProcessingException {
-		User user = new User();
-		user.setEmail(email);
-		user.setPassword(password);
-		int value = userService.loginUser(user, session);
+		UserPojo userPojo = new UserPojo();
+		userPojo.setEmail(email);
+		userPojo.setPassword(password);
+		int value = userService.loginUser(userPojo, session);
 
 		if (value == 1) {
 			return "redirect:/studentHome";
@@ -89,11 +89,11 @@ public class UserController {
 	@GetMapping(path = "/forgotPassword")
 	public String forgotPassword(@RequestParam("email") String email, @RequestParam("password") String password,
 			@RequestParam("phone") Long phone, HttpSession session) throws ForgotPasswordException {
-		User user = new User();
-		user.setEmail(email);
-		user.setPhone(phone);
-		user.setPassword(password);
-		int value = userService.forgotPassword(user, session);
+		UserPojo userPojo = new UserPojo();
+		userPojo.setEmail(email);
+		userPojo.setPhone(phone);
+		userPojo.setPassword(password);
+		int value = userService.forgotPassword(userPojo, session);
 
 		if (value == 1) {
 			return "redirect:/studentHome";
@@ -111,15 +111,15 @@ public class UserController {
 			@RequestParam("department") String department, @RequestParam("year") int year,
 			@RequestParam("parentName") String parentName, HttpSession session) {
 		int userId = (int) session.getAttribute(sessionUserId);
-		User user = new User();
-		user.setUserId(userId);
-		user.setPhone(phone);
-		user.setDOB(dob);
-		user.setDepartment(department);
-		user.setParentName(parentName);
-		user.setJoiningYear(year);
+		UserPojo userPojo = new UserPojo();
+		userPojo.setUserId(userId);
+		userPojo.setPhone(phone);
+		userPojo.setDOB(dob);
+		userPojo.setDepartment(department);
+		userPojo.setParentName(parentName);
+		userPojo.setJoiningYear(year);
 
-		int value = userService.studentsave(user);
+		int value = userService.studentsave(userPojo);
 
 		if (value == 1) {
 			return "redirect:/studentHome";

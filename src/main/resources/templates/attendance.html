@@ -278,7 +278,9 @@
 		<span th:each="attendance:${attendanceDetails}">
 			<div class="flex-wrapper">
 				<div class="content">
-					<h2>Total Days :  <span th:text="${attendance.totalDays}"></span><span> Days</span></h2>
+					<h2>Current Semester : <span th:text="${attendance.semester}"></span></h2>
+					<br>
+					<h2>Total Days : <span th:text="${attendance.totalDays}"></span><span> Days</span></h2>
 					<h2>Total Days Attended : <span th:text="${attendance.daysAttended}"></span><span> Days</span></h2>
 					<h2>Total Days On Leave : <span th:text="${attendance.daysLeave}"></span><span> Days</span></h2>
 				</div>

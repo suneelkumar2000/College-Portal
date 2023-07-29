@@ -2,7 +2,7 @@ package com.project.college_portal.model;
 
 import java.sql.Date;
 
-public class User {
+public class UserPojo {
 	private int userId;
 	private String firstName;
 	private String lastName;
@@ -20,9 +20,9 @@ public class User {
 	private String image;
 	private boolean isActive;
 	
-	public User() {}
+	public UserPojo() {}
 
-	public User(int userId, String firstName, String lastName, String email, String password, Long phone, Date dOB,
+	public UserPojo(int userId, String firstName, String lastName, String email, String password, Long phone, Date dOB,
 			String gender, String roll, String status, String department, String parentName, int joiningYear,
 			int semester, String image, boolean isActive) {
 		super();

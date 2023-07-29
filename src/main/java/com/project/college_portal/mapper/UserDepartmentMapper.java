@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.UserPojo;
 
-public class UserDepartmentMapper implements RowMapper<User> {
-	public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-		User user = new User();
+public class UserDepartmentMapper implements RowMapper<UserPojo> {
+	public UserPojo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		UserPojo userPojo = new UserPojo();
 		String department = rs.getString("department");
-		user.setDepartment(department);
-		return user;
+		userPojo.setDepartment(department);
+		return userPojo;
 	}
 }

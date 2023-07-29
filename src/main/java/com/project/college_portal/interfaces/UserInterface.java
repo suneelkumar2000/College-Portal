@@ -7,22 +7,25 @@ import javax.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.college_portal.exception.AttendanceUserIdException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ForgotPasswordException;
 import com.project.college_portal.exception.InvalidMailIdException;
+import com.project.college_portal.model.AttendancePojo;
 import com.project.college_portal.model.StudentResultPojo;
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.UserPojo;
 
 public interface UserInterface {
-	public int save(User saveUser) throws ExistMailIdException;
-	public int login(User loginUser) throws InvalidMailIdException;
-	public List<User> listUsers();
-	public int forgotPassword(User user) throws ForgotPasswordException;
+	public int save(UserPojo saveUser) throws ExistMailIdException;
+	public int login(UserPojo loginUser) throws InvalidMailIdException;
+	public List<UserPojo> listUsers();
+	public int forgotPassword(UserPojo userPojo) throws ForgotPasswordException;
 	public int findIdByEmail(String email);
 	public int setUserSessionById(int userId, HttpSession session);
-	public List<User> findByEmail(String email);
-	public int studentsave(User user);
+	public List<UserPojo> findByEmail(String email);
+	public int studentsave(UserPojo userPojo);
 	public void updateStudentSemester(Model model) throws JsonProcessingException ;
 	public int findStudentSemesterById(int userid, Model model) throws JsonProcessingException;
 	public List<StudentResultPojo> findStudentResult(int userid, Model model) throws JsonProcessingException ;
+	public List<AttendancePojo> findStudentAttendance(int userId,int semester, Model model) throws JsonProcessingException, AttendanceUserIdException;
 }

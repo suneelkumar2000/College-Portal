@@ -25,7 +25,7 @@ import com.project.college_portal.model.ExamPojo;
 import com.project.college_portal.model.ResultPojo;
 import com.project.college_portal.model.SemesterPojo;
 import com.project.college_portal.model.SubjectPojo;
-import com.project.college_portal.model.User;
+import com.project.college_portal.model.UserPojo;
 
 public class StaffService {
 	UserDao userDao = new UserDao();
@@ -38,18 +38,18 @@ public class StaffService {
 	}
 
 	// method to get student list
-	public List<User> studentList(Model model) throws JsonProcessingException {
+	public List<UserPojo> studentList(Model model) throws JsonProcessingException {
 		return staffDao.studentList(model);
 	}
 
 	// method to approve student
-	public int approve(int staffId, User user) throws UserIdException, HigherAuthorityException {
-		return staffDao.approve(staffId, user);
+	public int approve(int staffId, UserPojo userPojo) throws UserIdException, HigherAuthorityException {
+		return staffDao.approve(staffId, userPojo);
 	}
 
 	// method to reject student
-	public int reject(int staffId, User user) throws UserIdException, HigherAuthorityException {
-		return staffDao.reject(staffId, user);
+	public int reject(int staffId, UserPojo userPojo) throws UserIdException, HigherAuthorityException {
+		return staffDao.reject(staffId, userPojo);
 	}
 
 	// method to get department list
@@ -74,7 +74,7 @@ public class StaffService {
 	}
 
 	// method to get approvedStudentList
-	public List<User> approvedStudentList(Model model) throws JsonProcessingException {
+	public List<UserPojo> approvedStudentList(Model model) throws JsonProcessingException {
 		return staffDao.approvedStudentList(model);
 	}
 
@@ -89,13 +89,13 @@ public class StaffService {
 	}
 
 	// method to add Or Update Present By One
-	public int addOrUpdatePresentByOne(int userId) throws UserIdException {
-		return staffDao.addOrUpdatePresentByOne(userId);
+	public int addOrUpdatePresentByOne(int userId,int semester) throws UserIdException {
+		return staffDao.addOrUpdatePresentByOne(userId,semester);
 	}
 
 	// method to add Or Update Absent By One
-	public int addOrUpdateAbsentByOne(int userId) throws UserIdException {
-		return staffDao.addOrUpdateAbsentByOne(userId);
+	public int addOrUpdateAbsentByOne(int userId,int semester) throws UserIdException {
+		return staffDao.addOrUpdateAbsentByOne(userId,semester);
 	}
 
 	// method to activate Or Deactivate Attendance
