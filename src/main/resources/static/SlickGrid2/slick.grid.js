@@ -1237,7 +1237,7 @@ if (typeof jQuery === "undefined") {
 		}
 	  }
   
-	  function setData(newData, scrollToTop) {
+	  function setData(data,newData, scrollToTop) {
 		data = newData;
 		invalidateAllRows();
 		updateRowCount();
