@@ -79,8 +79,6 @@ function resultGrid() {
 
 	let sortcol = "title";
 	let sortdir = 1;
-	let percentCompleteThreshold = 0;
-	let searchString = "";
 
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
@@ -163,13 +161,7 @@ function resultGrid() {
 		grid.onCellChange.subscribe(function(e, args) {
 			dataView.updateItem(args.item.id, args.item);
 		});
-		/*
-				grid.onAddNewRow.subscribe(function(e, args) {
-					let item = { "num": data.length, "id": "new_" + (Math.round(Math.random() * 10000)), "title": "New task", "duration": "1 day", "percentComplete": 0, "start": "01/01/2009", "finish": "01/01/2009", "effortDriven": false };
-					$.extend(item, args.item);
-					dataView.addItem(item);
-				});
-		*/
+		
 		grid.onKeyDown.subscribe(function(e) {
 			// select all rows on ctrl-a
 			if (e.which !== 65 || !e.ctrlKey) {

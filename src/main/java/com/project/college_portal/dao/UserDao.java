@@ -37,8 +37,8 @@ public class UserDao implements UserInterface {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
 	StaffDao staffDao = new StaffDao();
 
-	String student="student";
-	String staff="staff";
+	String student = "student";
+	String staff = "staff";
 	String updatePasswordQuery = "update user set Password =?  where Email=?";
 	String updateSemesterQuery = "update user set semester =? where id=?";
 
@@ -220,14 +220,14 @@ public class UserDao implements UserInterface {
 		for (UserPojo userModel : user1) {
 			LocalDate currentDate = LocalDate.now();
 			int year = currentDate.getYear();
-			if (userPojo.getJoiningYear() <= year) {
-				if (userModel != null) {
-					String update = "update user set dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
-					Object[] params = { userPojo.getDOB(), userPojo.getPhone(), userPojo.getDepartment(), userPojo.getParentName(),
-							userPojo.getJoiningYear(), userPojo.getUserId() };
-					jdbcTemplate.update(update, params);
-					return 1;
-				}
+			if ((userPojo.getJoiningYear() <= year) && (userModel != null)) {
+
+				String update = "update user set dob=?, phone_number=?,department=?,parent_name=?,year_of_joining=?  where (roll='student' and id=?)";
+				Object[] params = { userPojo.getDOB(), userPojo.getPhone(), userPojo.getDepartment(),
+						userPojo.getParentName(), userPojo.getJoiningYear(), userPojo.getUserId() };
+				jdbcTemplate.update(update, params);
+				return 1;
+
 			}
 		}
 		return 0;
@@ -355,7 +355,8 @@ public class UserDao implements UserInterface {
 	}
 
 	// method to find Student attendance
-	public List<AttendancePojo> findStudentAttendance(int userId,int semester, Model model) throws JsonProcessingException, AttendanceUserIdException {
+	public List<AttendancePojo> findStudentAttendance(int userId, int semester, Model model)
+			throws JsonProcessingException, AttendanceUserIdException {
 		String select = "Select user_id,semester,total_days,days_attended,days_leave,attendance,is_active from attendance";
 		List<AttendancePojo> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
 		List<AttendancePojo> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
@@ -366,6 +367,7 @@ public class UserDao implements UserInterface {
 				String select1 = "select user_id,semester,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =true and user_id=? and semester=?)";
 				return jdbcTemplate.query(select1, new AttendanceMapper(), userId, semester);
 			}
-		}throw new AttendanceUserIdException("User Id dosen't exist");
+		}
+		throw new AttendanceUserIdException("User Id dosen't exist");
 	}
 }

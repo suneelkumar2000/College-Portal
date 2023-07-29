@@ -194,7 +194,6 @@ function attendanceGrid() {
 		});
 
 		grid.onSort.subscribe(function(e, args) {
-			sortdir = args.sortAsc ? 1 : -1;
 			sortcol = args.sortCol.field;
 
 			if ($.browser.msie && $.browser.version <= 8) {
@@ -241,16 +240,6 @@ function attendanceGrid() {
 				grid.setOptions({ enableAddRow: enableAddRow });
 			}
 		});
-
-
-		
-		function updateFilter() {
-			dataView.setFilterArgs({
-				percentCompleteThreshold: percentCompleteThreshold,
-				searchString: searchString
-			});
-			dataView.refresh();
-		}
 
 		$("#btnSelectRows").click(function() {
 			if (!Slick.GlobalEditorLock.commitCurrentEdit()) {

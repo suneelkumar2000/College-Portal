@@ -11,12 +11,12 @@ public class MailScheduler {
 	// 1000 * 60 * 2 = 2 mins
 	@Scheduled(fixedDelayString = "12000")
 	public void notifyMail() {
-		LocalDateTime LocalDate= LocalDateTime.now();
+		LocalDateTime localDate = LocalDateTime.now();
 	}
 
 	@Scheduled(cron = "0 */1 * * * *")
 	public void notifyMailCron() {
-		LocalDateTime LocalDate= LocalDateTime.now();
+		LocalDateTime localDate = LocalDateTime.now();
 	}
 
 }

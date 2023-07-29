@@ -32,9 +32,9 @@ function examGrid() {
 		let a = dataContext.id;
 		let status = dataContext.isActive;
 		if (status) {
-			return '<form action="/activateDeactivateDepartment" metod="get"><button type="submit" class="tablebutton1" name="examId"  value="' + a + '" >Deactivate</button></form>';
+			return '<form action="/activateDeactivateExam" metod="get"><button type="submit" class="tablebutton1" name="examId"  value="' + a + '" >Deactivate</button></form>';
 		} else {
-			return '<form action="/activateDeactivateDepartment" metod="get"><button type="submit" class="tablebutton2" name="examId"  value="' + a + '" >Activate</button></form>';
+			return '<form action="/activateDeactivateExam" metod="get"><button type="submit" class="tablebutton2" name="examId"  value="' + a + '" >Activate</button></form>';
 		}
 	}
 	
@@ -96,8 +96,6 @@ function examGrid() {
 
 	let sortcol = "title";
 	let sortdir = 1;
-	let percentCompleteThreshold = 0;
-	let searchString = "";
 
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
@@ -197,7 +195,6 @@ function examGrid() {
 		});
 
 		grid.onSort.subscribe(function(e, args) {
-			sortdir = args.sortAsc ? 1 : -1;
 			sortcol = args.sortCol.field;
 
 			if ($.browser.msie && $.browser.version <= 8) {
@@ -244,14 +241,6 @@ function examGrid() {
 				grid.setOptions({ enableAddRow: enableAddRow });
 			}
 		});
-
-		function updateFilter() {
-			dataView.setFilterArgs({
-				percentCompleteThreshold: percentCompleteThreshold,
-				searchString: searchString
-			});
-			dataView.refresh();
-		}
 
 		$("#btnSelectRows").click(function() {
 			if (!Slick.GlobalEditorLock.commitCurrentEdit()) {

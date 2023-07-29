@@ -171,7 +171,6 @@ public class StaffDao implements StaffInterface {
 		ObjectMapper object = new ObjectMapper();
 		String user = object.writeValueAsString(userList1);
 		model.addAttribute("listOfApprovedStudents", user);
-
 		return userList1;
 	}
 

@@ -66,8 +66,6 @@ function departmentGrid() {
 
 	let sortcol = "title";
 	let sortdir = 1;
-	let percentCompleteThreshold = 0;
-	let searchString = "";
 
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
@@ -166,7 +164,6 @@ function departmentGrid() {
 		});
 
 		grid.onSort.subscribe(function(e, args) {
-			sortdir = args.sortAsc ? 1 : -1;
 			sortcol = args.sortCol.field;
 
 			if ($.browser.msie && $.browser.version <= 8) {
