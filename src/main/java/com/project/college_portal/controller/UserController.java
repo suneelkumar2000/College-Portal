@@ -36,6 +36,7 @@ public class UserController {
 	String errorMessage = "ErrorMessage";
 	String sessionUserId = "userId";
 	String errorpopup = "errorpopup";
+	String redirectStudentHome = "redirect:/studentHome";
 	String index = "index";
 
 	UserDao userDao = new UserDao();
@@ -78,7 +79,7 @@ public class UserController {
 		int value = userService.loginUser(userPojo, session);
 
 		if (value == 1) {
-			return "redirect:/studentHome";
+			return redirectStudentHome;
 		} else if (value == 2) {
 			return "redirect:/adminHome";
 		} else
@@ -96,7 +97,7 @@ public class UserController {
 		int value = userService.forgotPassword(userPojo, session);
 
 		if (value == 1) {
-			return "redirect:/studentHome";
+			return redirectStudentHome;
 		} else if (value == 2) {
 			return "adminHome";
 		} else
@@ -122,7 +123,7 @@ public class UserController {
 		int value = userService.studentsave(userPojo);
 
 		if (value == 1) {
-			return "redirect:/studentHome";
+			return redirectStudentHome;
 		}
 		return "redirect:/studentRegistration";
 	}

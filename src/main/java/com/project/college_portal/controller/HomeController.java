@@ -44,7 +44,6 @@ public class HomeController {
 	String modelAttendanceDetails="attendanceDetails";
 
 	Logger logger = LoggerFactory.getLogger(HomeController.class);
-	//UserDao userDao = new UserDao();
 	UserService userService = new UserService();
 	StaffService staffService = new StaffService();
 	@Value("${email}")

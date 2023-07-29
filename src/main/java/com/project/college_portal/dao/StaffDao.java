@@ -59,6 +59,13 @@ public class StaffDao implements StaffInterface {
 	String selectSemester = "Select id,is_active from semester";
 	String selectExam = "Select id,subject_id,name,date_,type,is_active from exam";
 	String selectResult = "Select exam_id,user_id,marks,is_active from result";
+	String approved = "approved";
+	String listOfDepartment="listOfDepartment";
+	String listOfSemester="listOfSemester";
+	String listOfResult="listOfResult";
+	String listOfExam="listOfExam";
+	String listOfSubject="listOfSubject";
+	String listOfSubjectbySemesterId="listOfSubjectbySemesterId";
 
 	// --------- Students methods ------------
 
@@ -66,7 +73,7 @@ public class StaffDao implements StaffInterface {
 		String selectStaff = selectIdRollStatus;
 		List<UserPojo> userPojo = jdbcTemplate.query(selectStaff, new ApprovingMapper());
 		List<UserPojo> user1 = userPojo.stream().filter(id -> id.getUserId() == (staffId))
-				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals("approved"))
+				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals(approved))
 				.collect(Collectors.toList());
 		for (UserPojo userModel : user1) {
 			if (userModel != null) {
@@ -99,7 +106,7 @@ public class StaffDao implements StaffInterface {
 		String selectStaff = selectIdRollStatus;
 		List<UserPojo> userPojo = jdbcTemplate.query(selectStaff, new ApprovingMapper());
 		List<UserPojo> user1 = userPojo.stream().filter(id -> id.getUserId() == (staffId))
-				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals("approved"))
+				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals(approved))
 				.collect(Collectors.toList());
 		for (UserPojo userModel : user1) {
 			if (userModel != null) {
@@ -127,7 +134,7 @@ public class StaffDao implements StaffInterface {
 		String selectStaff = selectIdRollStatus;
 		List<UserPojo> userPojo = jdbcTemplate.query(selectStaff, new ApprovingMapper());
 		List<UserPojo> user1 = userPojo.stream().filter(id -> id.getUserId() == (staffId))
-				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals("approved"))
+				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals(approved))
 				.collect(Collectors.toList());
 		for (UserPojo userModel : user1) {
 			if (userModel != null) {
@@ -209,7 +216,7 @@ public class StaffDao implements StaffInterface {
 		String selectStaff = selectIdRollStatus;
 		List<UserPojo> userPojo = jdbcTemplate.query(selectStaff, new ApprovingMapper());
 		List<UserPojo> user1 = userPojo.stream().filter(id -> id.getUserId() == (staffId))
-				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals("approved"))
+				.filter(roll -> roll.getRoll().equals("staff")).filter(status -> status.getStatus().equals(approved))
 				.collect(Collectors.toList());
 		for (UserPojo userModel : user1) {
 			if (userModel != null) {
@@ -268,7 +275,7 @@ public class StaffDao implements StaffInterface {
 		List<DepartmentPojo> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		ObjectMapper object = new ObjectMapper();
 		String department = object.writeValueAsString(departmentList);
-		model.addAttribute("listOfDepartment", department);
+		model.addAttribute(listOfDepartment, department);
 		return departmentList;
 	}
 
@@ -277,7 +284,7 @@ public class StaffDao implements StaffInterface {
 		List<DepartmentPojo> departmentList = jdbcTemplate.query(select, new DepartmentMapper());
 		ObjectMapper object = new ObjectMapper();
 		String department = object.writeValueAsString(departmentList);
-		model.addAttribute("listOfDepartment", department);
+		model.addAttribute(listOfDepartment, department);
 		return departmentList;
 	}
 
@@ -501,7 +508,7 @@ public class StaffDao implements StaffInterface {
 		List<SemesterPojo> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		ObjectMapper object = new ObjectMapper();
 		String semester = object.writeValueAsString(semesterList);
-		model.addAttribute("listOfSemester", semester);
+		model.addAttribute(listOfSemester, semester);
 		return semesterList;
 	}
 
@@ -510,7 +517,7 @@ public class StaffDao implements StaffInterface {
 		List<SemesterPojo> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		ObjectMapper object = new ObjectMapper();
 		String semester = object.writeValueAsString(semesterList);
-		model.addAttribute("listOfSemester", semester);
+		model.addAttribute(listOfSemester, semester);
 		return semesterList;
 	}
 
@@ -519,7 +526,7 @@ public class StaffDao implements StaffInterface {
 		List<SemesterPojo> semesterList = jdbcTemplate.query(select, new SemesterMapper());
 		ObjectMapper object = new ObjectMapper();
 		String semester = object.writeValueAsString(semesterList);
-		model.addAttribute("listOfSemester", semester);
+		model.addAttribute(listOfSemester, semester);
 		return semesterList;
 	}
 
@@ -625,7 +632,7 @@ public class StaffDao implements StaffInterface {
 		List<SubjectPojo> subjectList = jdbcTemplate.query(find, new SubjectMapper(), semesterId);
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
-		model.addAttribute("listOfSubjectbySemesterId", subject);
+		model.addAttribute(listOfSubjectbySemesterId, subject);
 		return subjectList;
 	}
 
@@ -635,7 +642,7 @@ public class StaffDao implements StaffInterface {
 		List<SubjectPojo> subjectList = jdbcTemplate.query(find, new SubjectMapper(), semesterId, department);
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
-		model.addAttribute("listOfSubjectbySemesterId", subject);
+		model.addAttribute(listOfSubjectbySemesterId, subject);
 		return subjectList;
 	}
 
@@ -644,7 +651,7 @@ public class StaffDao implements StaffInterface {
 		List<SubjectPojo> subjectList = jdbcTemplate.query(select, new SubjectMapper());
 		ObjectMapper object = new ObjectMapper();
 		String subject = object.writeValueAsString(subjectList);
-		model.addAttribute("listOfSubject", subject);
+		model.addAttribute(listOfSubject, subject);
 		return subjectList;
 	}
 
@@ -653,7 +660,7 @@ public class StaffDao implements StaffInterface {
 		List<SubjectPojo> subjectList = jdbcTemplate.query(select, new SubjectMapper());
 		ObjectMapper object = new ObjectMapper();
 		String subject1 = object.writeValueAsString(subjectList);
-		model.addAttribute("listOfSubject", subject1);
+		model.addAttribute(listOfSubject, subject1);
 		return subjectList;
 	}
 
@@ -721,7 +728,7 @@ public class StaffDao implements StaffInterface {
 		List<ExamPojo> examList = jdbcTemplate.query(select, new ExamMapper());
 		ObjectMapper object = new ObjectMapper();
 		String exam = object.writeValueAsString(examList);
-		model.addAttribute("listOfExam", exam);
+		model.addAttribute(listOfExam, exam);
 		return examList;
 	}
 
@@ -730,7 +737,7 @@ public class StaffDao implements StaffInterface {
 		List<ExamPojo> examList = jdbcTemplate.query(select, new ExamMapper());
 		ObjectMapper object = new ObjectMapper();
 		String exam = object.writeValueAsString(examList);
-		model.addAttribute("listOfExam", exam);
+		model.addAttribute(listOfExam, exam);
 		return examList;
 	}
 
@@ -885,7 +892,7 @@ public class StaffDao implements StaffInterface {
 		List<ResultPojo> resultList = jdbcTemplate.query(select, new ResultMapper());
 		ObjectMapper object = new ObjectMapper();
 		String result = object.writeValueAsString(resultList);
-		model.addAttribute("listOfResult", result);
+		model.addAttribute(listOfResult, result);
 		return resultList;
 	}
 
@@ -894,7 +901,7 @@ public class StaffDao implements StaffInterface {
 		List<ResultPojo> resultList = jdbcTemplate.query(select, new ResultMapper());
 		ObjectMapper object = new ObjectMapper();
 		String result = object.writeValueAsString(resultList);
-		model.addAttribute("listOfResult", result);
+		model.addAttribute(listOfResult, result);
 		return resultList;
 	}
 

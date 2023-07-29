@@ -49,7 +49,7 @@ public interface StaffInterface {
 	public List<AttendancePojo> inactiveAttendanceList();
 	
 	public int addSemester(SemesterPojo semesterPojo) throws ExistSemesterIdException;
-	public int activateOrDeactivateSemester(SemesterPojo SemesterPojo);
+	public int activateOrDeactivateSemester(SemesterPojo semesterPojo);
 	public int activeOrInactiveSemester();
 	public List<SemesterPojo> semesterList(Model model) throws JsonProcessingException;
 	public List<SemesterPojo> activeSemesterList(Model model) throws JsonProcessingException;
