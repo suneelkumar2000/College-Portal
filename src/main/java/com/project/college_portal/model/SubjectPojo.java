@@ -51,7 +51,7 @@ public class SubjectPojo {
 		this.department = department;
 	}
 
-	public boolean IsActive() {
+	public boolean isActive() {
 		return isActive;
 	}
 

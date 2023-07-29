@@ -9,7 +9,7 @@ public class UserPojo {
 	private String email;
 	private String password;
 	private Long phone;
-	private Date DOB;
+	private Date dob;
 	private String gender;
 	private String roll;
 	private String status;
@@ -32,7 +32,7 @@ public class UserPojo {
 		this.email = email;
 		this.password = password;
 		this.phone = phone;
-		DOB = dOB;
+		this.dob = dOB;
 		this.gender = gender;
 		this.roll = roll;
 		this.status = status;
@@ -93,11 +93,11 @@ public class UserPojo {
 	}
 
 	public Date getDOB() {
-		return DOB;
+		return dob;
 	}
 
 	public void setDOB(Date dOB) {
-		DOB = dOB;
+		dob = dOB;
 	}
 
 	public String getGender() {
@@ -175,7 +175,7 @@ public class UserPojo {
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", phone=" + phone + ", DOB=" + DOB + ", gender=" + gender + ", roll="
+				+ ", password=" + password + ", phone=" + phone + ", DOB=" + dob + ", gender=" + gender + ", roll="
 				+ roll + ", status=" + status + ", department=" + department + ", parentName=" + parentName
 				+ ", joiningYear=" + joiningYear + ", semester=" + semester + ", image=" + image + ", isActive="
 				+ isActive + "]";

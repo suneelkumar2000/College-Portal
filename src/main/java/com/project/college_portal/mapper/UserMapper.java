@@ -19,7 +19,7 @@ public class UserMapper implements RowMapper<UserPojo> {
 		String lastName = rs.getString("last_name");
 		String password = rs.getString("password");
 		Long phone = rs.getLong("phone_number");
-		Date DOB = rs.getDate("dob");
+		Date dob = rs.getDate("dob");
 		String gender = rs.getString("gender");
 		String roll = rs.getString("roll");
 		String status = rs.getString("status");
@@ -36,7 +36,7 @@ public class UserMapper implements RowMapper<UserPojo> {
 		userPojo.setEmail(email);
 		userPojo.setPassword(password);
 		userPojo.setPhone(phone);
-		userPojo.setDOB(DOB);
+		userPojo.setDOB(dob);
 		userPojo.setGender(gender);
 		userPojo.setRoll(roll);
 		userPojo.setStatus(status);

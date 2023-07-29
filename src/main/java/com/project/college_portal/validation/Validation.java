@@ -26,7 +26,7 @@ public class Validation {
 
 	public boolean phoneNumberValidation(Long phoneNumber) {
 		String phone=String.valueOf(phoneNumber);
-		Pattern p = Pattern.compile("(0|91)?[6-9][0-9]{9}");
+		Pattern p = Pattern.compile("(0|91)?[6-9]\\d{9}");
 		Matcher m = p.matcher(phone);
 		boolean phone1 = m.matches();
 		if (phone1)

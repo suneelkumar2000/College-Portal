@@ -31,8 +31,8 @@ public class UserService {
 		String email = userPojo.getEmail();
 
 		session.setAttribute(sessionUserId, userDao.findIdByEmail(email));
-		int UserId = (int) session.getAttribute(sessionUserId);
-		userDao.setUserSessionById(UserId, session);
+		int userId = (int) session.getAttribute(sessionUserId);
+		userDao.setUserSessionById(userId, session);
 
 		return value;
 	}
@@ -43,8 +43,8 @@ public class UserService {
 		String email = userPojo.getEmail();
 
 		session.setAttribute(sessionUserId, userDao.findIdByEmail(email));
-		int UserId = (int) session.getAttribute(sessionUserId);
-		userDao.setUserSessionById(UserId, session);
+		int userId = (int) session.getAttribute(sessionUserId);
+		userDao.setUserSessionById(userId, session);
 
 		return value;
 	}
@@ -55,13 +55,13 @@ public class UserService {
 	}
 
 	// method to find Student Semester By Id
-	public int findStudentSemesterById(int UserId, Model model) throws JsonProcessingException {
-		return userDao.findStudentSemesterById(UserId, model);
+	public int findStudentSemesterById(int userId, Model model) throws JsonProcessingException {
+		return userDao.findStudentSemesterById(userId, model);
 	}
 
 	// method to set User Session By Id
-	public int setUserSessionById(int UserId, HttpSession session) throws JsonProcessingException {
-		return userDao.setUserSessionById(UserId, session);
+	public int setUserSessionById(int userId, HttpSession session) throws JsonProcessingException {
+		return userDao.setUserSessionById(userId, session);
 	}
 
 	// method to update student Semester details

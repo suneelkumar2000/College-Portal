@@ -37,6 +37,8 @@ public class UserDao implements UserInterface {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
 	StaffDao staffDao = new StaffDao();
 
+	String student="student";
+	String staff="staff";
 	String updatePasswordQuery = "update user set Password =?  where Email=?";
 	String updateSemesterQuery = "update user set semester =? where id=?";
 
@@ -66,7 +68,7 @@ public class UserDao implements UserInterface {
 			boolean phoneval = val.phoneNumberValidation(saveUser.getPhone());
 			boolean firstNameVal = val.nameValidation(saveUser.getFirstName());
 			boolean adminval = val.adminEmailValidation(email);
-			if (emailval == true && phoneval == true && firstNameVal == true) {
+			if (emailval && phoneval && firstNameVal) {
 				jdbcTemplate.update(sql, params);
 				if (adminval) {
 					String approve = "update user set status ='approved'  where email=?";
@@ -93,10 +95,10 @@ public class UserDao implements UserInterface {
 		List<UserPojo> userLogin = jdbcTemplate.query(login, new LoginMapper());
 
 		List<UserPojo> user1 = userLogin.stream().filter(email1 -> email1.getEmail().equals(email))
-				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
+				.filter(roll1 -> roll1.getRoll().equals(student)).collect(Collectors.toList());
 
 		List<UserPojo> user2 = userLogin.stream().filter(email2 -> email2.getEmail().equals(email))
-				.filter(roll2 -> roll2.getRoll().equals("staff")).collect(Collectors.toList());
+				.filter(roll2 -> roll2.getRoll().equals(staff)).collect(Collectors.toList());
 
 		for (UserPojo userModel1 : user1) {
 			if (userModel1 != null) {
@@ -138,11 +140,11 @@ public class UserDao implements UserInterface {
 		List<UserPojo> userLogin = jdbcTemplate.query(select, new ForgotPasswordMapper());
 
 		List<UserPojo> user1 = userLogin.stream().filter(email1 -> email1.getEmail().equals(email))
-				.filter(phone1 -> phone1.getPhone().equals(phone)).filter(roll1 -> roll1.getRoll().equals("student"))
+				.filter(phone1 -> phone1.getPhone().equals(phone)).filter(roll1 -> roll1.getRoll().equals(student))
 				.collect(Collectors.toList());
 
 		List<UserPojo> user2 = userLogin.stream().filter(email2 -> email2.getEmail().equals(email))
-				.filter(phone2 -> phone2.getPhone().equals(phone)).filter(roll2 -> roll2.getRoll().equals("staff"))
+				.filter(phone2 -> phone2.getPhone().equals(phone)).filter(roll2 -> roll2.getRoll().equals(staff))
 				.collect(Collectors.toList());
 
 		for (UserPojo userModel1 : user1) {
@@ -214,7 +216,7 @@ public class UserDao implements UserInterface {
 		String select = "Select id,roll,status,is_active from user";
 		List<UserPojo> user = jdbcTemplate.query(select, new ApprovingMapper());
 		List<UserPojo> user1 = user.stream().filter(id -> id.getUserId() == (userPojo.getUserId()))
-				.filter(roll1 -> roll1.getRoll().equals("student")).collect(Collectors.toList());
+				.filter(roll1 -> roll1.getRoll().equals(student)).collect(Collectors.toList());
 		for (UserPojo userModel : user1) {
 			LocalDate currentDate = LocalDate.now();
 			int year = currentDate.getYear();
