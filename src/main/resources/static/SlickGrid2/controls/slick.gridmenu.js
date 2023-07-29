@@ -129,7 +129,7 @@
   function SlickGridMenu(columns, grid, options) {
     let _grid = grid;
     let _gridOptions;
-    let _gridUid = (grid && grid.getUID) ? grid.getUID() : '';
+    let _gridUid = (grid?.getUID) ? grid.getUID() : '';
     let _isMenuOpen = false;
     let _options = options;
     let _self = this;
@@ -160,7 +160,7 @@
     // when a grid optionally changes from a regular grid to a frozen grid, we need to destroy & recreate the grid menu
     // we do this change because the Grid Menu is on the left container for a regular grid, it is however on the right container for a frozen grid
     grid.onSetOptions.subscribe(function (e, args) {
-      if (args && args.optionsBefore && args.optionsAfter) {
+      if (args?.optionsBefore && args.optionsAfter) {
         let switchedFromRegularToFrozen = args.optionsBefore.frozenColumn >= 0 && args.optionsAfter.frozenColumn === -1;
         let switchedFromFrozenToRegular = args.optionsBefore.frozenColumn === -1 && args.optionsAfter.frozenColumn >= 0;
         if (switchedFromRegularToFrozen || switchedFromFrozenToRegular) {
@@ -182,8 +182,8 @@
     }
 
     function createGridMenu() {
-      let gridMenuWidth = (_options.gridMenu && _options.gridMenu.menuWidth) || _defaults.menuWidth;
-      if (_gridOptions && _gridOptions.hasOwnProperty('frozenColumn') && _gridOptions.frozenColumn >= 0) {
+      let gridMenuWidth = (_options.gridMenu?.menuWidth) || _defaults.menuWidth;
+      if (_gridOptions?.hasOwnProperty('frozenColumn') && _gridOptions.frozenColumn >= 0) {
         $header = $('.' + _gridUid + ' .slick-header-right');
       } else {
         $header = $('.' + _gridUid + ' .slick-header-left');
@@ -191,18 +191,18 @@
       $header.attr('style', 'width: calc(100% - ' + gridMenuWidth + 'px)');
 
       // if header row is enabled, we need to resize it's width also
-      let enableResizeHeaderRow = (_options.gridMenu && _options.gridMenu.resizeOnShowHeaderRow != undefined) ? _options.gridMenu.resizeOnShowHeaderRow : _defaults.resizeOnShowHeaderRow;
+      let enableResizeHeaderRow = (_options.gridMenu?.resizeOnShowHeaderRow != undefined) ? _options.gridMenu.resizeOnShowHeaderRow : _defaults.resizeOnShowHeaderRow;
       if (enableResizeHeaderRow && _options.showHeaderRow) {
         $('.' + _gridUid + '.slick-headerrow').attr('style', 'width: calc(100% - ' + gridMenuWidth + 'px)');
       }
 
-      let showButton = (_options.gridMenu && _options.gridMenu.showButton !== undefined) ? _options.gridMenu.showButton : _defaults.showButton;
+      let showButton = (_options.gridMenu?.showButton !== undefined) ? _options.gridMenu.showButton : _defaults.showButton;
       if (showButton) {
         $button = $('<button class="slick-gridmenu-button"/>');
-        if (_options.gridMenu && _options.gridMenu.iconCssClass) {
+        if (_options.gridMenu?.iconCssClass) {
           $button.addClass(_options.gridMenu.iconCssClass);
         } else {
-          let iconImage = (_options.gridMenu && _options.gridMenu.iconImage) ? _options.gridMenu.iconImage : "../images/drag-handle.png";
+          let iconImage = (_options.gridMenu?.iconImage) ? _options.gridMenu.iconImage : "../images/drag-handle.png";
           $('<img src="' + iconImage + '"/>').appendTo($button);
         }
         $button.insertBefore($header);
@@ -274,7 +274,7 @@
       }
 
       // user could pass a title on top of the custom section
-      if (_options.gridMenu && _options.gridMenu.customTitle) {
+      if (_options.gridMenu?.customTitle) {
         $customTitleElm = $('<div class="title"/>').append(_options.gridMenu.customTitle);
         $customTitleElm.appendTo($customMenu);
       }
@@ -359,7 +359,7 @@
       _options = $.extend({}, _defaults, _options);
 
       // user could pass a title on top of the columns list
-      if (_options.gridMenu && _options.gridMenu.columnTitle) {
+      if (_options.gridMenu?.columnTitle) {
         $columnTitleElm = $('<div class="title"/>').append(_options.gridMenu.columnTitle);
         $columnTitleElm.appendTo($menu);
       }
@@ -394,7 +394,7 @@
       };
 
       // run the override function (when defined), if the result is false it won't go further
-      if (_options && _options.gridMenu && !runOverrideFunctionWhenExists(_options.gridMenu.menuUsabilityOverride, callbackArgs)) {
+      if (_options?.gridMenu && !runOverrideFunctionWhenExists(_options.gridMenu.menuUsabilityOverride, callbackArgs)) {
         return;
       }
 
@@ -420,7 +420,7 @@
         }
 
         // get the column label from the picker value extractor (user can optionally provide a custom extractor)
-        if (_options && _options.gridMenu && _options.gridMenu.headerColumnValueExtractor) {
+        if (_options?.gridMenu && _options.gridMenu.headerColumnValueExtractor) {
           columnLabel = _options.gridMenu.headerColumnValueExtractor(columns[i], _gridOptions);
         } else {
           columnLabel = _defaults.headerColumnValueExtractor(columns[i], _gridOptions);
@@ -435,7 +435,7 @@
         $("<hr/>").appendTo($list);
       }
 
-      if (!(_options.gridMenu && _options.gridMenu.hideForceFitButton)) {
+      if (!(_options.gridMenu?.hideForceFitButton)) {
         let forceFitTitle = (_options.gridMenu && _options.gridMenu.forceFitTitle) || _defaults.forceFitTitle;
         $li = $("<li />").appendTo($list);
         $input = $("<input type='checkbox' id='" + _gridUid + "-gridmenu-colpicker-forcefit' />").data("option", "autoresize").appendTo($li);
@@ -446,8 +446,8 @@
         }
       }
 
-      if (!(_options.gridMenu && _options.gridMenu.hideSyncResizeButton)) {
-        let syncResizeTitle = (_options.gridMenu && _options.gridMenu.syncResizeTitle) || _defaults.syncResizeTitle;
+      if (!(_options.gridMenu?.hideSyncResizeButton)) {
+        let syncResizeTitle = (_options.gridMenu?.syncResizeTitle) || _defaults.syncResizeTitle;
         $li = $("<li />").appendTo($list);
         $input = $("<input type='checkbox' id='" + _gridUid + "-gridmenu-colpicker-syncresize' />").data("option", "syncresize").appendTo($li);
         $("<label for='" + _gridUid + "-gridmenu-colpicker-syncresize' />").text(syncResizeTitle).appendTo($li);
@@ -462,13 +462,13 @@
         menuIconOffset = $(e.target).offset(); // external grid menu might fall in this last case
       }
       let menuWidth = $menu.width();
-      let useClickToRepositionMenu = (_options.gridMenu && _options.gridMenu.useClickToRepositionMenu !== undefined) ? _options.gridMenu.useClickToRepositionMenu : _defaults.useClickToRepositionMenu;
-      let gridMenuIconWidth = (_options.gridMenu && _options.gridMenu.menuWidth) || _defaults.menuWidth;
-      let contentMinWidth = (_options.gridMenu && _options.gridMenu.contentMinWidth) ? _options.gridMenu.contentMinWidth : _defaults.contentMinWidth;
+      let useClickToRepositionMenu = (_options.gridMenu?.useClickToRepositionMenu !== undefined) ? _options.gridMenu.useClickToRepositionMenu : _defaults.useClickToRepositionMenu;
+      let gridMenuIconWidth = (_options.gridMenu?.menuWidth) || _defaults.menuWidth;
+      let contentMinWidth = (_options.gridMenu?.contentMinWidth) ? _options.gridMenu.contentMinWidth : _defaults.contentMinWidth;
       let currentMenuWidth = (contentMinWidth > menuWidth) ? contentMinWidth : (menuWidth + gridMenuIconWidth);
       let nextPositionTop = (useClickToRepositionMenu && targetEvent.pageY > 0) ? targetEvent.pageY : menuIconOffset.top + 10;
       let nextPositionLeft = (useClickToRepositionMenu && targetEvent.pageX > 0) ? targetEvent.pageX : menuIconOffset.left + 10;
-      let menuMarginBottom = (_options.gridMenu && _options.gridMenu.marginBottom !== undefined) ? _options.gridMenu.marginBottom : _defaults.marginBottom;
+      let menuMarginBottom = (_options.gridMenu?.marginBottom !== undefined) ? _options.gridMenu.marginBottom : _defaults.marginBottom;
 
       $menu
         .css("top", nextPositionTop + 10)
@@ -479,7 +479,7 @@
       }
 
       // set "height" when defined OR ELSE use the "max-height" with available window size and optional margin bottom
-      if (_options.gridMenu && _options.gridMenu.height !== undefined) {
+      if (_options.gridMenu?.height !== undefined) {
         $menu.css("height", _options.gridMenu.height);
       } else {
         $menu.css("max-height", $(window).height() - targetEvent.clientY - menuMarginBottom);
