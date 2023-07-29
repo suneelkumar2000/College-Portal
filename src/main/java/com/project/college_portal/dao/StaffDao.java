@@ -575,9 +575,9 @@ public class StaffDao implements StaffInterface {
 	public int activateOrDeactivateSubject(SubjectPojo subjectPojo) {
 		String select = selectSubjects;
 		List<SubjectPojo> subject = jdbcTemplate.query(select, new SubjectMapper());
-		List<SubjectPojo> subject1 = subject.stream().filter(id -> id.getId() == (subjectPojo.getId()))
+		List<SubjectPojo> subject1 = subject.stream().filter(id -> id.getId().equals(subjectPojo.getId()))
 				.filter(isActive -> isActive.IsActive() == (true)).collect(Collectors.toList());
-		List<SubjectPojo> subject2 = subject.stream().filter(id -> id.getId() == (subjectPojo.getId()))
+		List<SubjectPojo> subject2 = subject.stream().filter(id -> id.getId().equals(subjectPojo.getId()))
 				.filter(isActive -> isActive.IsActive() == (false)).collect(Collectors.toList());
 		for (SubjectPojo subjectModel1 : subject1) {
 			if (subjectModel1 != null) {

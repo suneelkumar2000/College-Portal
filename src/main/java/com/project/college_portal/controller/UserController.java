@@ -25,13 +25,14 @@ import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.exception.MarkException;
 import com.project.college_portal.exception.SubjectIdException;
 import com.project.college_portal.exception.UserIdException;
+import com.project.college_portal.exception.AttendanceUserIdException;
 import com.project.college_portal.model.User;
 import com.project.college_portal.service.StaffService;
 import com.project.college_portal.service.UserService;
 
 @Controller
 public class UserController {
-	
+
 	String errorMessage = "ErrorMessage";
 	String sessionUserId = "userId";
 	String errorpopup = "errorpopup";
@@ -232,6 +233,13 @@ public class UserController {
 	@ExceptionHandler(value = ForgotPasswordException.class)
 	public String forgotPasswordException(ForgotPasswordException exception, Model model) {
 		model.addAttribute(errorMessage, "Sorry! Invalid Email Id or Phone Number");
+		return errorpopup;
+	}
+
+	// method to handle AttendanceUserIdException
+	@ExceptionHandler(value = AttendanceUserIdException.class)
+	public String attendanceUserIdException(AttendanceUserIdException exception, Model model) {
+		model.addAttribute(errorMessage, "Sorry! There Is No Attendance Details To Show");
 		return errorpopup;
 	}
 }

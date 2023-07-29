@@ -20,6 +20,7 @@ import com.project.college_portal.exception.ExistSubjectNameException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.InvalidMailIdException;
 import com.project.college_portal.dao.UserDao;
+import com.project.college_portal.exception.AttendanceUserIdException;
 import com.project.college_portal.exception.DepartmentException;
 import com.project.college_portal.exception.ExamIdException;
 import com.project.college_portal.exception.MarkException;
@@ -40,7 +41,8 @@ public class HomeController {
 	String errorpopup = "errorpopup";
 	String errorMessage = "ErrorMessage";
 	String modeldepartmentList = "departmentList";
-	String modelsubjectList ="subjectList";
+	String modelsubjectList = "subjectList";
+	String modelAttendanceDetails="attendanceDetails";
 
 	Logger logger = LoggerFactory.getLogger(HomeController.class);
 	UserDao userDao = new UserDao();
@@ -96,7 +98,9 @@ public class HomeController {
 
 	// method to get student attendance
 	@GetMapping(path = "/attendance")
-	public String attendance() {
+	public String attendance(Model model, HttpSession session) throws JsonProcessingException, AttendanceUserIdException {
+		int userId = (int) session.getAttribute(sessionUserId);
+		model.addAttribute(modelAttendanceDetails,userDao.findStudentAttendance(userId , model));
 		return "attendance";
 	}
 
@@ -252,6 +256,13 @@ public class HomeController {
 	@ExceptionHandler(value = ExistSubjectNameException.class)
 	public String existSubjectNameException(ExistSubjectNameException exception, Model model) {
 		model.addAttribute(errorMessage, "Subject Already Exist");
+		return errorpopup;
+	}
+
+	// method to handle AttendanceUserIdException
+	@ExceptionHandler(value = AttendanceUserIdException.class)
+	public String attendanceUserIdException(AttendanceUserIdException exception, Model model) {
+		model.addAttribute(errorMessage, "Sorry! There Is No Attendance Details To Show");
 		return errorpopup;
 	}
 }

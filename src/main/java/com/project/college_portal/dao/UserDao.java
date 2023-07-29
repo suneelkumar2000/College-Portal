@@ -13,15 +13,19 @@ import org.springframework.ui.Model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.college_portal.connection.ConnectionUtil;
+import com.project.college_portal.exception.AttendanceUserIdException;
 import com.project.college_portal.exception.ExistMailIdException;
 import com.project.college_portal.exception.ForgotPasswordException;
 import com.project.college_portal.exception.InvalidMailIdException;
+import com.project.college_portal.exception.UserIdException;
 import com.project.college_portal.interfaces.UserInterface;
 import com.project.college_portal.mapper.ApprovingMapper;
+import com.project.college_portal.mapper.AttendanceMapper;
 import com.project.college_portal.mapper.ForgotPasswordMapper;
 import com.project.college_portal.mapper.LoginMapper;
 import com.project.college_portal.mapper.UserMapper;
 import com.project.college_portal.mapper.StudentResultMapper;
+import com.project.college_portal.model.AttendancePojo;
 import com.project.college_portal.model.SemesterPojo;
 import com.project.college_portal.model.StudentResultPojo;
 import com.project.college_portal.model.User;
@@ -33,9 +37,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UserDao implements UserInterface {
 	JdbcTemplate jdbcTemplate = ConnectionUtil.getJdbcTemplate();
 	StaffDao staffDao = new StaffDao();
-	
-	String updatePasswordQuery="update user set Password =?  where Email=?";
-	String updateSemesterQuery="update user set semester =? where id=?";
+
+	String updatePasswordQuery = "update user set Password =?  where Email=?";
+	String updateSemesterQuery = "update user set semester =? where id=?";
 
 	// --------- user method ---------
 
@@ -52,7 +56,7 @@ public class UserDao implements UserInterface {
 		String email = saveUser.getEmail();
 		boolean emailContains = userList.contains(email);
 
-		if (emailContains == true) {
+		if (emailContains) {
 			throw new ExistMailIdException("Exist Email Exception");
 		} else {
 			String sql = "insert into user(first_name,last_name,dob,gender,phone_number,email,Password,roll) values(?,?,?,?,?,?,?,?)";
@@ -65,7 +69,7 @@ public class UserDao implements UserInterface {
 			boolean adminval = val.adminEmailValidation(email);
 			if (emailval == true && phoneval == true && firstNameVal == true) {
 				jdbcTemplate.update(sql, params);
-				if (adminval == true) {
+				if (adminval) {
 					String approve = "update user set status ='approved'  where email=?";
 					Object[] params1 = { email };
 					jdbcTemplate.update(approve, params1);
@@ -119,7 +123,7 @@ public class UserDao implements UserInterface {
 	// method to show user list
 	public List<User> listUsers() {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user";
-		return  jdbcTemplate.query(select, new UserMapper());
+		return jdbcTemplate.query(select, new UserMapper());
 	}
 
 	// forgotPassword method
@@ -203,7 +207,7 @@ public class UserDao implements UserInterface {
 	// method to find student details by Email
 	public List<User> findByEmail(String email) {
 		String select = "select id,first_name,last_name,dob,gender,phone_number,email,password,roll,department,parent_name,year_of_joining,semester,status,image,is_active from user where (roll='student' and email=?)";
-		return  jdbcTemplate.query(select, new UserMapper(), email);
+		return jdbcTemplate.query(select, new UserMapper(), email);
 	}
 
 	// method to update student details
@@ -337,15 +341,29 @@ public class UserDao implements UserInterface {
 		}
 		return -1;
 	}
-	
+
 	// method to find Student result
-		public List<StudentResultPojo> findStudentResult(int userid, Model model) throws JsonProcessingException {
-			String select = "select result.exam_id,exam.subject_id,subjects.name,subjects.semester_id,result.marks from result left join exam left join subjects on exam.subject_id = subjects.id on result.exam_id = exam.id  where (result.user_id=?) ; ";
-			List<StudentResultPojo> resultList = jdbcTemplate.query(select, new StudentResultMapper(), userid);
-			ObjectMapper object = new ObjectMapper();
-			String result = object.writeValueAsString(resultList);
-			model.addAttribute("listOfResult", result);
-			return resultList;
-			
-		}
+	public List<StudentResultPojo> findStudentResult(int userid, Model model) throws JsonProcessingException {
+		String select = "select result.exam_id,exam.subject_id,subjects.name,subjects.semester_id,result.marks from result left join exam left join subjects on exam.subject_id = subjects.id on result.exam_id = exam.id  where (result.user_id=?) ; ";
+		List<StudentResultPojo> resultList = jdbcTemplate.query(select, new StudentResultMapper(), userid);
+		ObjectMapper object = new ObjectMapper();
+		String result = object.writeValueAsString(resultList);
+		model.addAttribute("listOfResult", result);
+		return resultList;
+
+	}
+
+	// method to find Student attendance
+	public List<AttendancePojo> findStudentAttendance(int userId, Model model) throws JsonProcessingException, AttendanceUserIdException {
+		String select = "Select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance";
+		List<AttendancePojo> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
+		List<AttendancePojo> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))
+				.filter(isActive -> isActive.isActive() == (true)).collect(Collectors.toList());
+		for (AttendancePojo attendanceModel1 : attendanceList1) {
+			if (attendanceModel1 != null) {
+				String select1 = "select user_id,total_days,days_attended,days_leave,attendance,is_active from attendance where (is_active =true && user_id=?)";
+				return jdbcTemplate.query(select1, new AttendanceMapper(), userId);
+			}
+		}throw new AttendanceUserIdException("User Id dosen't exist");
+	}
 }

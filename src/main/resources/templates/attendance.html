@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Student Home</title>
+	<title>Student Attendance</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" type="text/css" th:href="@{/CSS file/footer.css}">
@@ -149,26 +149,102 @@
 			}
 		}
 
-		svg {
-			margin: auto;
-		}
-
-		svg text {
-			font-family: Roboto, sans-serif;
-		}
-
-		svg text.label {
-			font-size: 22px;
-		}
-
-		svg text.rate {
-			font-weight: bold;
-			font-size: 35px;
-		}
-
 		.center {
 			align-items: center;
 			text-align: center;
+		}
+
+		/*  circle */
+		.flex-wrapper {
+			display: flex;
+			flex-flow: row nowrap;
+
+		}
+
+		.content {
+			width: 33%;
+			justify-content: space-around;
+			background-color: #ffffff;
+			color: #000000;
+			padding-left: 10%;
+			padding-bottom: 5%;
+			padding-top: 5%;
+		}
+		
+		.content span {
+			color: blue;
+		}
+
+		.single-chart {
+			border-radius: 18%;
+			width: 20%;
+			justify-content: space-around;
+			padding-left: 10%;
+			padding-bottom: 5%;
+			padding-right: 10%;
+			background-color: #000000;
+			color: #ffffff;
+		}
+
+		.circular-chart {
+			display: block;
+			margin: 10px auto;
+			max-width: 80%;
+			max-height: 250px;
+		}
+
+		.circle-bg {
+			fill: none;
+			stroke: #eee;
+			stroke-width: 3.8;
+		}
+
+		.circle {
+			fill: none;
+			stroke-width: 2.8;
+			stroke-linecap: round;
+			animation: progress 1s ease-out forwards;
+		}
+
+		@keyframes progress {
+			0% {
+				stroke-dasharray: 0 100;
+			}
+		}
+
+		.circular-chart-95-100 .circle {
+			stroke: #16e00f;
+		}
+
+		.circular-chart-80-95 .circle {
+			stroke: #0edf77;
+		}
+
+		.circular-chart-60-80 .circle {
+			stroke: #ffe600;
+		}
+
+		.circular-chart-40-60 .circle {
+			stroke: #ff7b00;
+		}
+
+		.circular-chart-20-40 .circle {
+			stroke: rgb(216, 62, 15);
+		}
+
+		.circular-chart-0-20 .circle {
+			stroke: #e20b0b;
+		}
+
+		.circular-chart-0 .circle {
+			stroke: #920707;
+		}
+
+		.percentage {
+			fill: #666;
+			font-family: sans-serif;
+			font-size: 0.5em;
+			text-anchor: middle;
 		}
 	</style>
 </head>
@@ -190,15 +266,133 @@
 		<a th:href="@{/attendance}">Attendance</a>
 		<a th:href="@{/studentResult}">Result</a>
 	</div>
-	<div class="center">
-		<h1>WELCOME </h1>
-		<h1 th:text="${session.firstName}"></h1>
 
-	</div>
 	<div class="attendance" id="attendance">
-		
+		<div class="center">
+			<h1>WELCOME </h1>
+			<h1 th:text="${session.firstName}"></h1>
+
+		</div>
+
+
+		<span th:each="attendance:${attendanceDetails}">
+			<div class="flex-wrapper">
+				<div class="content">
+					<h2>Total Days :  <span th:text="${attendance.totalDays}"></span><span> Days</span></h2>
+					<h2>Total Days Attended : <span th:text="${attendance.daysAttended}"></span><span> Days</span></h2>
+					<h2>Total Days On Leave : <span th:text="${attendance.daysLeave}"></span><span> Days</span></h2>
+				</div>
+				<div class="single-chart">
+					<h4 th:if="${attendance.attendance == 0}"><h2 class="center">Worst Attendance Percentage</h2>
+
+						<svg viewBox="0 0 36 36" class="circular-chart-0">
+							<path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<path class="circle" stroke-dasharray="0, 100" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<text x="15" y="20.35" class="percentage" th:text="${attendance.attendance}"></text>
+							<text x="23" y="20.35" class="percentage">%</text>
+						</svg>
+
+					</h4>
+					<h4 th:if="${attendance.attendance lt 20 and attendance.attendance gt 0}">
+						<h2 class="center">Bad Attendance Percentage</h2>
+
+						<svg viewBox="0 0 36 36" class="circular-chart-0-20">
+							<path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<path class="circle" stroke-dasharray="10, 100" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<text x="15" y="20.35" class="percentage" th:text="${attendance.attendance}"></text>
+							<text x="23" y="20.35" class="percentage">%</text>
+						</svg>
+
+					</h4>
+					<h4 th:if="${attendance.attendance lt 40 and attendance.attendance gt 19}">
+						<h2 class="center">Poor Attendance Percentage</h2>
+
+						<svg viewBox="0 0 36 36" class="circular-chart-20-40">
+							<path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<path class="circle" stroke-dasharray="30, 100" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<text x="15" y="20.35" class="percentage" th:text="${attendance.attendance}"></text>
+							<text x="23" y="20.35" class="percentage">%</text>
+						</svg>
+
+					</h4>
+					<h4 th:if="${attendance.attendance lt 60 and attendance.attendance gt 39}">
+						<h2 class="center">Want To Improve Attendance Percentage</h2>
+
+						<svg viewBox="0 0 36 36" class="circular-chart-40-60">
+							<path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<path class="circle" stroke-dasharray="50, 100" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<text x="15" y="20.35" class="percentage" th:text="${attendance.attendance}"></text>
+							<text x="23" y="20.35" class="percentage">%</text>
+						</svg>
+
+					</h4>
+					<div th:if="${attendance.attendance lt 80 and attendance.attendance gt 59}">
+						<h2 class="center">Your Attendance Percentage Is OK</h2>
+
+						<svg viewBox="0 0 36 36" class="circular-chart-60-80">
+							<path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<path class="circle" stroke-dasharray="70, 100" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<text x="15" y="20.35" class="percentage" th:text="${attendance.attendance}"></text>
+							<text x="23" y="20.35" class="percentage">%</text>
+						</svg>
+
+					</div>
+					<h4 th:if="${attendance.attendance lt 95 and attendance.attendance gt 79}">
+						<h2 class="center">Good Attendance Percentage</h2>
+
+						<svg viewBox="0 0 36 36" class="circular-chart-80-95">
+							<path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<path class="circle" stroke-dasharray="85, 100" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<text x="15" y="20.35" class="percentage" th:text="${attendance.attendance}"></text>
+							<text x="23" y="20.35" class="percentage">%</text>
+						</svg>
+
+					</h4>
+					<h4 th:if="${attendance.attendance lt 101 and attendance.attendance gt 94}">
+						<h2 class="center">Great Attendance Percentage</h2>
+
+						<svg viewBox="0 0 36 36" class="circular-chart-95-100">
+							<path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<path class="circle" stroke-dasharray="98, 100" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+							<text x="14" y="20.35" class="percentage" th:text="${attendance.attendance}"></text>
+							<text x="24" y="20.35" class="percentage">%</text>
+						</svg>
+
+					</h4>
+				</div>
+			</div>
+		</span>
 	</div>
 
+	<br>
 	<div id="contactUs">
 		<div th:replace="footer.html::footer"></div>
 	</div>
@@ -216,7 +410,7 @@
 			document.getElementById("attendance").style.transition = "0.5s";
 		}
 	</script>
-	
+
 </body>
 
 </html>
