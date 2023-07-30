@@ -13,12 +13,16 @@ public class StudentResultMapper implements RowMapper<StudentResultPojo>{
 		StudentResultPojo studentResultPojo=new StudentResultPojo();
 		
 		int examId = rs.getInt("exam_id");
+		String examName = rs.getString("exam_name");
+		String examType = rs.getString("type");
 		String subjectId = rs.getString("subject_id");
 		String name = rs.getString("name");
 		int semesterId = rs.getInt("semester_id");
 		int marks = rs.getInt("marks");
 
 		studentResultPojo.setExamId(examId);
+		studentResultPojo.setExamName(examName);
+		studentResultPojo.setExamType(examType);
 		studentResultPojo.setSubjectId(subjectId);
 		studentResultPojo.setSubjectName(name);
 		studentResultPojo.setSemesterId(semesterId);

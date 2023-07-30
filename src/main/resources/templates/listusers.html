@@ -155,6 +155,14 @@
 				font-size: 18px;
 			}
 		}
+		
+		.container {
+			padding-left: 15px;
+			padding-top: 15px;
+			padding-bottom: 15px;
+			background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxGztZUWNhl-4kI9iPj99J8Kg8vrYjBhI1hQ&usqp=CAU");
+			background-size: cover;
+		}
 
 		.but {
 			background: green;
@@ -208,11 +216,13 @@
 		<a th:href="@{/subjectDetails}">Subject Details</a>
 		<a th:href="@{/examlist}">Exam Details</a>
 	</div>
+	
+	<div class="container" id="container">
+		<h1>Students List</h1>
+	</div>
 
 	<div class="student-table" id="student-info">
 		
-		<h1>Students List</h1>
-
 		<!-- support files start  -->
 
 		<!-- import supporting files  -->
@@ -265,6 +275,8 @@
 			document.getElementById("mySidenav").style.width = "250px";
 			document.getElementById("student-info").style.paddingLeft = "250px";
 			document.getElementById("student-info").style.transition = "0.5s";
+			document.getElementById("container").style.paddingLeft = "250px";
+			document.getElementById("container").style.transition = "0.5s";
 		}
 
 		/* Set the width of the side navigation to 0 */
@@ -272,6 +284,8 @@
 			document.getElementById("mySidenav").style.width = "0";
 			document.getElementById("student-info").style.paddingLeft = "0px";
 			document.getElementById("student-info").style.transition = "0.5s";
+			document.getElementById("container").style.paddingLeft = "15px";
+			document.getElementById("container").style.transition = "0.5s";
 		}
 	</script>
 </body>

@@ -167,13 +167,79 @@
 		.tablebutton1 {
 			align-items: center;
 			color: #ffffff;
-			background-color: #F81818;
+			background-color: #ff7b00;
+		}
+		
+		/* Button */
+
+		.addButton {
+			background-color: white;
+			color: black;
+			border: 2px solid #0b68e2;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
 		}
 
-		.tablebutton2 {
-			align-items: center;
-			color: #ffffff;
-			background-color: limegreen;
+		.addButton a {
+			color: black;
+		}
+
+		.addButton:hover {
+			background-color: #0b68e2;
+			color: white;
+		}
+
+		.addButton a:hover {
+			color: white;
+		}
+
+		.activeButton {
+			background-color: white;
+			color: black;
+			border: 2px solid #4CAF50;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+		}
+		.activeButton a {
+			color: black;
+		}
+
+		.activeButton:hover {
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		.activeButton a:hover {
+			color: white;
+		}
+
+		.inactiveButton {
+			background-color: white;
+			color: black;
+			border: 2px solid #e20b0b;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+		}
+		.inactiveButton a {
+			color: black;
+		}
+
+		.inactiveButton:hover {
+			background-color: #e20b0b;
+			color: white;
+		}
+
+		.inactiveButton a:hover {
+			color: white;
 		}
 	</style>
 </head>
@@ -205,9 +271,9 @@
 	</div>
 
 	<div class="container" id="container">
-		<button><a th:href="@{/insertSubjectForm}" class="btn btn-primary btn-sm mb-3"> Add Subject </a></button>
-		<button><a th:href="@{/subjectlist}" class="btn btn-primary btn-sm mb-3">Active Subjects</a></button>
-		<button><a th:href="@{/inactiveSubjectlist}" class="btn btn-primary btn-sm mb-3"> Inactive Subjects</a></button>
+		<button class="addButton"><a th:href="@{/insertSubjectForm}" class="btn btn-primary btn-sm mb-3"> Add Subject </a></button>
+		<button class="activeButton"><a th:href="@{/subjectlist}" class="btn btn-primary btn-sm mb-3">Active Subjects</a></button>
+		<button class="inactiveButton"><a th:href="@{/inactiveSubjectlist}" class="btn btn-primary btn-sm mb-3"> Inactive Subjects</a></button>
 		<h1>Subject List</h1>
 	</div>
 

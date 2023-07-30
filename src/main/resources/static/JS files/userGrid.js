@@ -107,9 +107,6 @@ function userGrid() {
 	let columnFilters = {};
 
 	let sortcol = "title";
-	let sortdir = 1;
-	let percentCompleteThreshold = 0;
-	let searchString = "";
 
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
@@ -207,7 +204,6 @@ function userGrid() {
 		});
 
 		grid.onSort.subscribe(function(e, args) {
-			sortdir = args.sortAsc ? 1 : -1;
 			sortcol = args.sortCol.field;
 
 			if ($.browser.msie && $.browser.version <= 8) {
@@ -254,15 +250,6 @@ function userGrid() {
 				grid.setOptions({ enableAddRow: enableAddRow });
 			}
 		});
-
-
-		function updateFilter() {
-			dataView.setFilterArgs({
-				percentCompleteThreshold: percentCompleteThreshold,
-				searchString: searchString
-			});
-			dataView.refresh();
-		}
 
 		$("#btnSelectRows").click(function() {
 			if (!Slick.GlobalEditorLock.commitCurrentEdit()) {

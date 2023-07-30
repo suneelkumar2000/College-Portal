@@ -156,6 +156,14 @@
 			}
 		}
 		
+		.container {
+			padding-left: 15px;
+			padding-top: 15px;
+			padding-bottom: 15px;
+			background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxGztZUWNhl-4kI9iPj99J8Kg8vrYjBhI1hQ&usqp=CAU");
+			background-size: cover;
+		}
+		
 		.tablebutton1{
 			align-items: center;
 			color: #ffffff;
@@ -194,6 +202,10 @@
 		<a th:href="@{/subjectDetails}">Subject Details</a>
 		<a th:href="@{/examlist}">Exam Details</a>
 	</div>
+	
+	<div class="container" id="container">
+		<h1>Add Students Marks</h1>
+	</div>
 
 	<div class="result-table">
 		<!-- support files start  -->
@@ -222,7 +234,6 @@
 
 		<!-- support files end  -->
 		<div id="result-info">
-			<h1>Add Students Marks</h1>
 			<div style="width:100%; box-sizing: border-box">
 				<div id="resultGrid" style="width: 100%; height: 420px;"></div>
 			</div>
@@ -245,6 +256,8 @@
 			document.getElementById("mySidenav").style.width = "250px";
 			document.getElementById("result-info").style.paddingLeft = "250px";
 			document.getElementById("result-info").style.transition = "0.5s";
+			document.getElementById("container").style.paddingLeft = "250px";
+			document.getElementById("container").style.transition = "0.5s";
 		}
 
 		/* Set the width of the side navigation to 0 */
@@ -252,6 +265,8 @@
 			document.getElementById("mySidenav").style.width = "0";
 			document.getElementById("result-info").style.paddingLeft = "0px";
 			document.getElementById("result-info").style.transition = "0.5s";
+			document.getElementById("container").style.paddingLeft = "15px";
+			document.getElementById("container").style.transition = "0.5s";
 		}
 	</script>
 </body>

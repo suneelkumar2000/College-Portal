@@ -93,9 +93,6 @@ function attendanceGrid() {
 	let columnFilters = {};
 
 	let sortcol = "title";
-	let sortdir = 1;
-	let percentCompleteThreshold = 0;
-	let searchString = "";
 
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];

@@ -5,8 +5,7 @@
 	<title>Exam Details</title>
 	<meta charSet="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" type="text/css"
-	th:href="@{/CSS file/footer.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS file/footer.css}">
 
 	<link rel="stylesheet" th:href="@{/SlickGrid2/css/smoothness/jquery-ui-1.8.16.custom.css}" type="text/css" />
 	<link rel="stylesheet" th:href="@{/SlickGrid2/slick.grid.css}" type="text/css" />
@@ -99,7 +98,7 @@
 			top: 0;
 			/* Stay at the top */
 			left: 0;
-			background: linear-gradient(180deg, #000000,#272d3f,#1e2436,#1e2436);
+			background: linear-gradient(180deg, #000000, #272d3f, #1e2436, #1e2436);
 			/* Black*/
 			overflow-x: hidden;
 			/* Disable horizontal scroll */
@@ -151,20 +150,89 @@
 		}
 
 		.container {
+			padding-left: 15px;
 			padding-top: 15px;
 			padding-bottom: 15px;
+			background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxGztZUWNhl-4kI9iPj99J8Kg8vrYjBhI1hQ&usqp=CAU");
+			background-size: cover;
 		}
 
 		.tablebutton1 {
 			align-items: center;
 			color: #ffffff;
-			background-color: #F81818;
+			background-color: #ff7b00;
+		}
+		
+		/* Button */
+
+		.addButton {
+			background-color: white;
+			color: black;
+			border: 2px solid #0b68e2;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
 		}
 
-		.tablebutton2 {
-			align-items: center;
-			color: #ffffff;
-			background-color: limegreen;
+		.addButton a {
+			color: black;
+		}
+
+		.addButton:hover {
+			background-color: #0b68e2;
+			color: white;
+		}
+
+		.addButton a:hover {
+			color: white;
+		}
+
+		.activeButton {
+			background-color: white;
+			color: black;
+			border: 2px solid #4CAF50;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+		}
+		.activeButton a {
+			color: black;
+		}
+
+		.activeButton:hover {
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		.activeButton a:hover {
+			color: white;
+		}
+
+		.inactiveButton {
+			background-color: white;
+			color: black;
+			border: 2px solid #e20b0b;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+		}
+		.inactiveButton a {
+			color: black;
+		}
+
+		.inactiveButton:hover {
+			background-color: #e20b0b;
+			color: white;
+		}
+
+		.inactiveButton a:hover {
+			color: white;
 		}
 	</style>
 </head>
@@ -175,8 +243,8 @@
 			<ul>
 				<li><a th:href="@{/logout}">Logout</a></li>
 				<li class="menu"><span onclick="openNav()"><img
-							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE3SVASwK26QRvzCN9g96xpBMkouozClzxiQ&usqp=CAU" alt="logo"
-							class="logoimage"> BRIGHT</span></li>
+							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE3SVASwK26QRvzCN9g96xpBMkouozClzxiQ&usqp=CAU"
+							alt="logo" class="logoimage"> BRIGHT</span></li>
 			</ul>
 		</nav>
 	</div>
@@ -196,9 +264,9 @@
 	</div>
 	<div class="container" id="container">
 
-		<button><a th:href="@{/insertExamForm}" class="btn btn-primary btn-sm mb-3"> Add Exam </a></button>
-		<button><a th:href="@{/examlist}" class="btn btn-primary btn-sm mb-3">Active Exams</a></button>
-		<button><a th:href="@{/inactiveExamlist}" class="btn btn-primary btn-sm mb-3"> Inactive Exams</a></button>
+		<button class="addButton"><a th:href="@{/insertExamForm}" class="btn btn-primary btn-sm mb-3"> Add Exam </a></button>
+		<button class="activeButton"><a th:href="@{/examlist}" class="btn btn-primary btn-sm mb-3">Active Exams</a></button>
+		<button class="inactiveButton"><a th:href="@{/inactiveExamlist}" class="btn btn-primary btn-sm mb-3"> Inactive Exams</a></button>
 		<h1>Exam List</h1>
 	</div>
 
@@ -247,7 +315,7 @@
 		<!-- donation table end -->
 
 	</div>
-	
+
 	<div id="contactUs">
 		<div th:replace="footer.html::footer"></div>
 	</div>
@@ -267,7 +335,7 @@
 			document.getElementById("mySidenav").style.width = "0";
 			document.getElementById("exam-info").style.paddingLeft = "0px";
 			document.getElementById("exam-info").style.transition = "0.5s";
-			document.getElementById("container").style.paddingLeft = "0px";
+			document.getElementById("container").style.paddingLeft = "15px";
 			document.getElementById("container").style.transition = "0.5s";
 		}
 	</script>

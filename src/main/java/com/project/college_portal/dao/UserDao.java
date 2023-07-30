@@ -345,7 +345,7 @@ public class UserDao implements UserInterface {
 
 	// method to find Student result
 	public List<StudentResultPojo> findStudentResult(int userid, Model model) throws JsonProcessingException {
-		String select = "select result.exam_id,exam.subject_id,subjects.name,subjects.semester_id,result.marks from result left join exam left join subjects on exam.subject_id = subjects.id on result.exam_id = exam.id  where (result.user_id=?) ; ";
+		String select = "select result.exam_id,exam.name as exam_name,exam.type,exam.subject_id,subjects.name,subjects.semester_id,result.marks from result left join exam left join subjects on exam.subject_id = subjects.id on result.exam_id = exam.id  where (result.user_id=?) ;";
 		List<StudentResultPojo> resultList = jdbcTemplate.query(select, new StudentResultMapper(), userid);
 		ObjectMapper object = new ObjectMapper();
 		String result = object.writeValueAsString(resultList);
@@ -355,8 +355,13 @@ public class UserDao implements UserInterface {
 	}
 
 	// method to find Student attendance
-	public List<AttendancePojo> findStudentAttendance(int userId, int semester, Model model)
+	public List<AttendancePojo> findStudentAttendance(int userId, Model model, HttpSession session)
 			throws JsonProcessingException, AttendanceUserIdException {
+		
+		int semester = findStudentSemesterById(userId, model);
+		if (semester <=0 ) {
+			throw new AttendanceUserIdException("User Id dosen't exist");
+		}
 		String select = "Select user_id,semester,total_days,days_attended,days_leave,attendance,is_active from attendance";
 		List<AttendancePojo> attendanceList = jdbcTemplate.query(select, new AttendanceMapper());
 		List<AttendancePojo> attendanceList1 = attendanceList.stream().filter(userid -> userid.getUserId() == (userId))

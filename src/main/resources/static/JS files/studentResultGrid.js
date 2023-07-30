@@ -22,7 +22,6 @@ function studentResultGrid() {
 
 	// Use the updated items array list with unique ids
 	console.log(data);
-	//console.log(dataList);
 	/* unique id end */
 	
 	
@@ -32,6 +31,16 @@ function studentResultGrid() {
 		field: "examId",
 		type: 'numberColumn',
 		width: 100,
+		sortable: true
+	},{
+		id: "examName",
+		name: "Exam Name",
+		field: "examName",
+		sortable: true
+	},{
+		id: "examType",
+		name: "Exam Type",
+		field: "examType",
 		sortable: true
 	}, {
 		id: "subjectId",
@@ -70,21 +79,13 @@ function studentResultGrid() {
 	let columnFilters = {};
 
 	let sortcol = "title";
-	let sortdir = 1;
-	let percentCompleteThreshold = 0;
-	let searchString = "";
-
-	
-
-	
 
 	
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
-		return (x === y ? 0 : (x > y ? 1 : -1));
+		if (x === y) { return 0; }
+		return (x > y ? 1 : -1);
 	}
-
-	
 
 	$(".grid-header .ui-icon")
 		.addClass("ui-state-default ui-corner-all")
@@ -177,7 +178,6 @@ function studentResultGrid() {
 		});
 
 		grid.onSort.subscribe(function(e, args) {
-			sortdir = args.sortAsc ? 1 : -1;
 			sortcol = args.sortCol.field;
 
 			if ($.browser.msie && $.browser.version <= 8) {

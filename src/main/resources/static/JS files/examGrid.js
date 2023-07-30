@@ -6,8 +6,8 @@ function examGrid() {
 	let data = JSON.parse(data1);
 	console.log(data);
 
-	
-	
+
+
 	/*date formator start */
 	function dateFormatter(row, cell, value, columnDef, dataContext) {
 		const date = new Date(value);
@@ -18,59 +18,39 @@ function examGrid() {
 		return formattedDate; // Return the formatted date string
 	}
 	/*date formator end */
-	
-	function messageFormatter(row, cell, value, columnDef, dataContext) {
-		let status = dataContext.isActive;
-		if (status) {
-			return '<span>Active</span>';
-		} else {
-			return '<span>Inactive</span>';
-		}
-	}
 
 	function buttonFormatter(row, cell, value, columnDef, dataContext) {
 		let a = dataContext.id;
-		let status = dataContext.isActive;
-		if (status) {
-			return '<form action="/activateDeactivateExam" metod="get"><button type="submit" class="tablebutton1" name="examId"  value="' + a + '" >Deactivate</button></form>';
-		} else {
-			return '<form action="/activateDeactivateExam" metod="get"><button type="submit" class="tablebutton2" name="examId"  value="' + a + '" >Activate</button></form>';
-		}
+		return '<form action="/activateDeactivateExam" metod="get"><button type="submit" class="tablebutton1" name="examId"  value="' + a + '" >Activate/Deactivate</button></form>';
 	}
-	
+
 	let columns = [{
 		id: "id",
 		name: "Id",
 		field: "id",
 		type: 'numberColumn',
 		width: 100,
-		sortable:true
+		sortable: true
 	}, {
 		id: "subjectId",
 		name: "Subject Id",
 		field: "subjectId",
-		sortable:true
-	},{
+		sortable: true
+	}, {
 		id: "name",
 		name: "Exam Name",
 		field: "name",
-		sortable:true
-	},{
+		sortable: true
+	}, {
 		id: "date",
 		name: "Exam Date",
 		field: "date",
-		sortable:true,
-		formatter:dateFormatter
+		sortable: true,
+		formatter: dateFormatter
 	}, {
 		id: "type",
 		name: "Exam Type",
 		field: "type",
-		sortable:true
-	},{
-		id: "isActive",
-		name: "Status",
-		field: "isActive",
-		//formatter: messageFormatter,
 		sortable: true
 	},{
 		id: "actions",
@@ -95,7 +75,6 @@ function examGrid() {
 	let columnFilters = {};
 
 	let sortcol = "title";
-	let sortdir = 1;
 
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
@@ -260,7 +239,7 @@ function examGrid() {
 		grid.init();
 		dataView.beginUpdate();
 		dataView.setItems(data);
-		
+
 		dataView.setFilter(filter);
 		dataView.endUpdate();
 

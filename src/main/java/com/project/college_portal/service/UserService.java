@@ -68,6 +68,6 @@ public class UserService {
 	public void updateStudentSemester(Model model) throws JsonProcessingException {
 		userDao.updateStudentSemester(model);
 	}
-	public List<AttendancePojo> findStudentAttendance(int userId,int semester, Model model) throws JsonProcessingException, AttendanceUserIdException{
-		return userDao.findStudentAttendance(userId, semester, model);}
+	public List<AttendancePojo> findStudentAttendance(int userId, Model model, HttpSession session) throws JsonProcessingException, AttendanceUserIdException{
+		return userDao.findStudentAttendance(userId, model,session);}
 }

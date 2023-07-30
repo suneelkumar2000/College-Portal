@@ -98,8 +98,7 @@ public class HomeController {
 	@GetMapping(path = "/attendance")
 	public String attendance(Model model, HttpSession session) throws JsonProcessingException, AttendanceUserIdException {
 		int userId = (int) session.getAttribute(sessionUserId);
-		int semester = (int) session.getAttribute(sessionSemester);
-		model.addAttribute(modelAttendanceDetails,userService.findStudentAttendance(userId ,semester , model));
+		model.addAttribute(modelAttendanceDetails,userService.findStudentAttendance(userId , model,session));
 		return "attendance";
 	}
 

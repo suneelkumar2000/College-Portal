@@ -2,6 +2,8 @@ package com.project.college_portal.model;
 
 public class StudentResultPojo {
 	private int examId ;
+	private String examName;
+	private String examType;
 	private String subjectId ;
 	private String subjectName;
 	private int semesterId ;
@@ -9,9 +11,11 @@ public class StudentResultPojo {
 	
 	public StudentResultPojo() {}
 
-	public StudentResultPojo(int examId, String subjectId, String subjectName, int semesterId, int marks) {
+	public StudentResultPojo(int examId,String examName,String examType, String subjectId, String subjectName, int semesterId, int marks) {
 		super();
 		this.examId = examId;
+		this.examName=examName;
+		this.examType=examType;
 		this.subjectId = subjectId;
 		this.subjectName = subjectName;
 		this.semesterId = semesterId;
@@ -58,10 +62,27 @@ public class StudentResultPojo {
 		this.marks = marks;
 	}
 
+	public String getExamName() {
+		return examName;
+	}
+
+	public void setExamName(String examName) {
+		this.examName = examName;
+	}
+
+	public String getExamType() {
+		return examType;
+	}
+
+	public void setExamType(String examType) {
+		this.examType = examType;
+	}
+
 	@Override
 	public String toString() {
-		return "StudentResult [examId=" + examId + ", subjectId=" + subjectId + ", subjectName=" + subjectName + ", semesterId="
-				+ semesterId + ", marks=" + marks + "]";
+		return "StudentResultPojo [examId=" + examId + ", examName=" + examName + ", examType=" + examType
+				+ ", subjectId=" + subjectId + ", subjectName=" + subjectName + ", semesterId=" + semesterId
+				+ ", marks=" + marks + "]";
 	}
 	
 	

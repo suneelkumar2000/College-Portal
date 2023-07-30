@@ -6,28 +6,10 @@ function subjectGrid() {
 	let data = JSON.parse(data1);
 	console.log(data);
 
-
-
-
-
-
-	function messageFormatter(row, cell, value, columnDef, dataContext) {
-		let status = dataContext.isActive;
-		if (status) {
-			return '<span>Active</span>';
-		} else {
-			return '<span>Inactive</span>';
-		}
-	}
-
 	function buttonFormatter(row, cell, value, columnDef, dataContext) {
 		let a = dataContext.id;
-		let status = dataContext.isActive;
-		if (status) {
-			return '<form action="/activateDeactivateSubject" metod="get"><button type="submit" class="tablebutton1" name="subjectId"  value="' + a + '" >Deactivate</button></form>';
-		} else {
-			return '<form action="/activateDeactivateSubject" metod="get"><button type="submit" class="tablebutton2" name="subjectId"  value="' + a + '" >Activate</button></form>';
-		}
+		return '<form action="/activateDeactivateSubject" metod="get"><button type="submit" class="tablebutton1" name="subjectId"  value="' + a + '" >Activate/Deactivate</button></form>';
+
 	}
 
 	let columns = [{
@@ -53,12 +35,6 @@ function subjectGrid() {
 		field: "department",
 		sortable: true
 	}, {
-		id: "isActive",
-		name: "Status",
-		field: "isActive",
-		//formatter: messageFormatter,
-		sortable: true
-	}, {
 		id: "actions",
 		name: "Action",
 		field: "actions",
@@ -81,9 +57,6 @@ function subjectGrid() {
 	let columnFilters = {};
 
 	let sortcol = "title";
-	let sortdir = 1;
-	let percentCompleteThreshold = 0;
-	let searchString = "";
 
 
 	function comparer(a, b) {
@@ -166,7 +139,7 @@ function subjectGrid() {
 		grid.onCellChange.subscribe(function(e, args) {
 			dataView.updateItem(args.item.id, args.item);
 		});
-		
+
 		grid.onKeyDown.subscribe(function(e) {
 			// select all rows on ctrl-a
 			if (e.which !== 65 || !e.ctrlKey) {
@@ -183,7 +156,6 @@ function subjectGrid() {
 		});
 
 		grid.onSort.subscribe(function(e, args) {
-			sortdir = args.sortAsc ? 1 : -1;
 			sortcol = args.sortCol.field;
 
 			if ($.browser.msie && $.browser.version <= 8) {
@@ -229,7 +201,7 @@ function subjectGrid() {
 			if (options.enableAddRow !== enableAddRow) {
 				grid.setOptions({ enableAddRow: enableAddRow });
 			}
-		});		
+		});
 
 		$("#btnSelectRows").click(function() {
 			if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
@@ -249,7 +221,7 @@ function subjectGrid() {
 		grid.init();
 		dataView.beginUpdate();
 		dataView.setItems(data);
-		
+
 		dataView.setFilter(filter);
 		dataView.endUpdate();
 

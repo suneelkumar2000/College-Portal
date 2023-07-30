@@ -78,7 +78,6 @@ function resultGrid() {
 	let columnFilters = {};
 
 	let sortcol = "title";
-	let sortdir = 1;
 
 	function comparer(a, b) {
 		let x = a[sortcol], y = b[sortcol];
@@ -178,7 +177,6 @@ function resultGrid() {
 		});
 
 		grid.onSort.subscribe(function(e, args) {
-			sortdir = args.sortAsc ? 1 : -1;
 			sortcol = args.sortCol.field;
 
 			if ($.browser.msie && $.browser.version <= 8) {

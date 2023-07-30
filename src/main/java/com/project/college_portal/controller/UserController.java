@@ -63,7 +63,7 @@ public class UserController {
 		int value = userService.saveUser(userPojo);
 
 		if (value == 1) {
-			return index;
+			return "sucesspopup";
 		}
 		return "signup";
 
