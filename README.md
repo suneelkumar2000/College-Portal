@@ -32,9 +32,9 @@
 - [x] Staff login
 - [x] Higher Authority Staff login using email
 - [x] View Students list
-- [ ] Approve Students
-- [ ] Manage Student Attendence
-- [ ] Manage Student Result
+- [x] Approve Students
+- [x] Manage Student Attendence
+- [x] Manage Student Result
 - [x] Manage departments
 - [x] View departments
 - [x] Manage subjects
@@ -48,8 +48,8 @@
 - [x] Manage Student Profile
 - [x] Find Current Semester
 - [x] View Current Semester Subject Details
-- [ ] View Attendence
-- [ ] View Result
+- [x] View Attendence
+- [x] View Result
       
 
 
